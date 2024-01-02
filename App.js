@@ -28,8 +28,8 @@ export default function App() {
     <View style={styles.container}>
       {list.map((item) => {
         return (
-          <View>
-            <Text key={item.id}>{item.id}</Text>
+          <View key={item.id}>
+            <Text >{item.id}</Text>
           </View>
         )
       })}
