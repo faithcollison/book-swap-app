@@ -26,11 +26,13 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <ul>
-        {list.map((item) => {
-          return <li><Text>{item.id}</Text></li>
-        })}
-      </ul>
+      {list.map((item) => {
+        return (
+          <View>
+            <Text key={item.id}>{item.id}</Text>
+          </View>
+        )
+      })}
       <Text>Hi!</Text>
       <StatusBar style="auto" />
     </View>
