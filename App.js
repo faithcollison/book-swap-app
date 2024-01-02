@@ -1,39 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import supabase from './config/supabaseClient';
-import { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import Welcome from './components/Welcome';
+import Login from './components/Login';
+import SignUp from './components/SignUp';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [list, setList] = useState([])
-
-  useEffect(() => {
-    const fetchItems = async () => {
-      const { data, error } = await supabase
-        .from('Test')
-        .select('*')
-
-        if (error) {
-          alert('There was an error!')
-        }
-        if (data) {
-          setList(data)
-          console.log(data)
-        }
-    }
-
-    fetchItems()
-  }, [])
-
   return (
-    <View style={styles.container}>
-      {list.map((item) => {
-        return (
-          <View key={item.id}>
-            <Text >{item.id}</Text>
-          </View>
-        )
-      })}
-      <Text>Hi!</Text>
+    <View >
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name='Welcome' component={Welcome}/>
+          <Stack.Screen name='Login' component={Login}/>
+          <Stack.Screen name='SignUp' component={SignUp}/>
+          {/* <Stack.Screen name='Home' component={Home}/> */}
+        </Stack.Navigator>
+      </NavigationContainer>
       <StatusBar style="auto" />
     </View>
   );
@@ -41,9 +27,8 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+})
