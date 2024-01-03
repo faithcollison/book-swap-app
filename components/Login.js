@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Alert } from "react-native";
 import { Button, Input } from "react-native-elements";
 import supabase from "../config/supabaseClient";
 import Ionicons from '@expo/vector-icons/Ionicons';
