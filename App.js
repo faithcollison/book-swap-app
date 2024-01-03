@@ -29,7 +29,16 @@ export default function App() {
           component={SignUp}
           options={{ headerTitleAlign: "center" }}
         />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} options={{
+          title: 'Home',
+          headerStyle: {
+            backgroundColor: '#72d5ff',
+          },
+          headerTintColor: 'black',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}  />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
