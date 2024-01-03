@@ -12,9 +12,9 @@ export default function Footer () {
         <View style={styles.footer}>
             <View style={styles.footerContent}>
                 <Feather name="home" size={30} style={styles.icon} onPress={() => navigation.navigate('Home')}/>
-                <Feather name="message-circle" size={30} onPress={() => navigation.navigate('Home')}/>
-                <Feather name="plus-circle" size={45} onPress={() => navigation.navigate('Home')}/>
-                <Feather name="bell" size={30} onPress={() => navigation.navigate('Home')}/>
+                <Feather name="message-circle" size={30} onPress={() => navigation.navigate('Messages')}/>
+                <Feather name="plus-circle" size={45} onPress={() => navigation.navigate('CreateListing')}/>
+                <Feather name="bell" size={30} onPress={() => navigation.navigate('Notifications')}/>
                 <Feather name="user" size={30} onPress={() => navigation.navigate('UserProfile')}/>
             </View>
         </View>
