@@ -2,7 +2,7 @@ import supabase from "../config/supabaseClient";
 
 import { useState } from "react";
 import { Alert, View } from "react-native";
-import { Button, Input } from "react-native-elements"
+import { Button, Input } from "react-native-elements";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
@@ -27,9 +27,15 @@ export default function SignUp() {
     }
   }
 
-  async function signUpWithDiscord() {
+  async function signUpWithGoogle() {
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "discord",
+      provider: "google",
+      options: {
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent",
+        },
+      },
     });
   }
 
@@ -62,7 +68,10 @@ export default function SignUp() {
       </View>
       <View>
         <Button title="Sign Up" onPress={() => signUpWithEmail()} />
-        <Button title="Sign Up With Discord" onPress={() => signUpWithDiscord()}/>
+        <Button
+          title="Sign Up With Google"
+          onPress={() => signUpWithGoogle()}
+        />
       </View>
     </View>
   );
