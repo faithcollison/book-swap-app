@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Welcome from "./components/Welcome";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
+import HomeScreen from "./components/Home";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +29,7 @@ export default function App() {
           component={SignUp}
           options={{ headerTitleAlign: "center" }}
         />
-        {/* <Stack.Screen name='Home' component={Home}/> */}
+        <Stack.Screen name="Home" component={HomeScreen} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
