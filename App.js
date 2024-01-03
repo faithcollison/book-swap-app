@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions, ScrollView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -10,7 +10,9 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import HomeScreen from "./components/Home";
 import WishList from "./components/WishList";
-import Account from "./components/Account";
+import Footer from "./components/Footer";
+import UserProfile from "./components/UserProfile";
+
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -24,17 +26,43 @@ function DrawerNavigator() {
 				options={{ headerTitleAlign: "center" }}
 			/>
 			<Drawer.Screen
-				name="Account"
-				component={Account}
-				options={{ headerTitleAlign: "center" }}
-			/>
-			<Drawer.Screen
 				name="Wish List"
 				component={WishList}
 				options={{ headerTitleAlign: "center" }}
 			/>
 		</Drawer.Navigator>
 	);
+
+export default function App() {
+  return (
+    <NavigationContainer style={styles.container}>
+      <Stack.Navigator style={styles.main}>
+        <Stack.Screen
+          name="Welcome"
+          component={Welcome}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+        />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen} 
+        />
+        <Stack.Screen
+          name="UserProfile"
+          component={UserProfile}
+          options={{ headerTitleAlign: "center" }}
+        />
+      </Stack.Navigator>
+      <Footer style={styles.footer}/>
+      <StatusBar style="auto" />
+    </NavigationContainer>
+  );
 }
 
 function App() {
@@ -83,4 +111,11 @@ const styles = StyleSheet.create({
 	text: {
 		alignItems: "center",
 	},
+  container: {
+    flex: 1,
+  },
+  main: {
+    headerTitleAlign: "center",
+    flexGrow: 1,
+  },
 });
