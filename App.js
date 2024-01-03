@@ -13,7 +13,6 @@ import WishList from "./components/WishList";
 import Footer from "./components/Footer";
 import UserProfile from "./components/UserProfile";
 
-
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -32,37 +31,6 @@ function DrawerNavigator() {
 			/>
 		</Drawer.Navigator>
 	);
-
-export default function App() {
-  return (
-    <NavigationContainer style={styles.container}>
-      <Stack.Navigator style={styles.main}>
-        <Stack.Screen
-          name="Welcome"
-          component={Welcome}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-        />
-        <Stack.Screen
-          name="SignUp"
-          component={SignUp}
-        />
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen} 
-        />
-        <Stack.Screen
-          name="UserProfile"
-          component={UserProfile}
-          options={{ headerTitleAlign: "center" }}
-        />
-      </Stack.Navigator>
-      <Footer style={styles.footer}/>
-      <StatusBar style="auto" />
-    </NavigationContainer>
-  );
 }
 
 function App() {
@@ -99,7 +67,9 @@ function App() {
 						},
 					}}
 				/>
+				<Stack.Screen name="UserProfile" component={UserProfile} />
 			</Stack.Navigator>
+			<Footer style={styles.footer} />
 			<StatusBar style="auto" />
 		</NavigationContainer>
 	);
@@ -111,11 +81,11 @@ const styles = StyleSheet.create({
 	text: {
 		alignItems: "center",
 	},
-  container: {
-    flex: 1,
-  },
-  main: {
-    headerTitleAlign: "center",
-    flexGrow: 1,
-  },
+	container: {
+		flex: 1,
+	},
+	main: {
+		headerTitleAlign: "center",
+		flexGrow: 1,
+	},
 });
