@@ -3,13 +3,14 @@ import { View, Text, Pressable, StyleSheet } from "react-native";
 export default function Welcome({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.centerText}>Welcome!</Text>
+      {/* <Text style={styles.centerText}>Welcome!</Text> */}
 
       <View style={styles.buttonContainer}>
         <Pressable
           onPress={() => {
             navigation.navigate("Login");
           }}
+          style={styles.button}
         >
           <Text>Log In</Text>
         </Pressable>
@@ -20,6 +21,7 @@ export default function Welcome({ navigation }) {
           onPress={() => {
             navigation.navigate("SignUp");
           }}
+          style={styles.button}
         >
           <Text>Sign Up</Text>
         </Pressable>
@@ -34,16 +36,22 @@ const styles = StyleSheet.create({
     height: 68,
     marginHorizontal: 20,
     padding: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'blue'
+    justifyContent: "center",
+    alignItems: "center",
   },
   container: {
-    // borderColor: "black",
-    // borderCurve: "12px",
-    alignItems: 'center'
+    alignItems: "center",
   },
-  centerText: {
-    textAlign: 'left'
-  }
+  button: {
+    backgroundColor: "lightgrey",
+    width: 100,
+    alignItems: "center",
+    paddingTop: 7,
+    paddingBottom: 7,
+    paddingLeft: 15,
+    paddingRight: 15,
+    borderRadius: 10,
+    borderColor: "grey",
+    borderWidth: 2,
+  },
 });

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -13,9 +13,21 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Welcome" component={Welcome}/>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen
+          name="Welcome"
+          component={Welcome}
+          options={{ headerTitleAlign: "center" }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerTitleAlign: "center" }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{ headerTitleAlign: "center" }}
+        />
         {/* <Stack.Screen name='Home' component={Home}/> */}
       </Stack.Navigator>
       <StatusBar style="auto" />
@@ -24,5 +36,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
- 
+  text: {
+    alignItems: "center",
+  },
 });
