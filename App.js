@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import HomeScreen from "./components/Home";
 import Footer from "./components/Footer";
+import UserProfile from "./components/UserProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,11 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={HomeScreen} 
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
+          name="UserProfile"
+          component={UserProfile}
+          options={{ headerTitleAlign: "center" }}
         />
       </Stack.Navigator>
       <Footer style={styles.footer}/>
