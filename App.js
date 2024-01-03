@@ -7,6 +7,7 @@ import Welcome from "./components/Welcome";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import HomeScreen from "./components/Home";
+import UserProfile from "./components/UserProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,11 @@ export default function App() {
           options={{ headerTitleAlign: "center" }}
         />
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
+          name="UserProfile"
+          component={UserProfile}
+          options={{ headerTitleAlign: "center" }}
+        />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
