@@ -1,11 +1,9 @@
-import { View, Text } from "react-native-web"
+import { View, Text } from "react-native"
 
 export default function UserProfile() {
     return(
-        <View>
-            <Text>
-                Hi
-            </Text>
-        </View>
+    <View>
+      <Text>You will sign up here</Text>
+    </View>
     )
 }
