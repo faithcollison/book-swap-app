@@ -1,49 +1,43 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import supabase from './config/supabaseClient';
-import { useEffect, useState } from 'react';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import Welcome from "./components/Welcome";
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
+import HomeScreen from "./components/Home";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [list, setList] = useState([])
-
-  useEffect(() => {
-    const fetchItems = async () => {
-      const { data, error } = await supabase
-        .from('Test')
-        .select('*')
-
-        if (error) {
-          alert('There was an error!')
-        }
-        if (data) {
-          setList(data)
-          console.log(data)
-        }
-    }
-
-    fetchItems()
-  }, [])
-
   return (
-    <View style={styles.container}>
-      {list.map((item) => {
-        return (
-          <View key={item.id}>
-            <Text >{item.id}</Text>
-          </View>
-        )
-      })}
-      <Text>Hi!</Text>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Welcome"
+          component={Welcome}
+          options={{ headerTitleAlign: "center" }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerTitleAlign: "center" }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{ headerTitleAlign: "center" }}
+        />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
       <StatusBar style="auto" />
-    </View>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  text: {
+    alignItems: "center",
   },
 });
