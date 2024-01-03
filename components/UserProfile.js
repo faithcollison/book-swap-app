@@ -1,3 +1,4 @@
+
 import { Pressable, Text, View } from "react-native";
 import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
@@ -117,3 +118,6 @@ export default function UserProfile() {
     </View>
   );
 }
+
+
+
