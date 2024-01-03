@@ -31,7 +31,7 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={HomeScreen} 
-        <Stack.Screen name="Home" component={HomeScreen} />
+        />
         <Stack.Screen
           name="UserProfile"
           component={UserProfile}
