@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions, ScrollView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -7,37 +7,43 @@ import Welcome from "./components/Welcome";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import HomeScreen from "./components/Home";
+import Footer from "./components/Footer";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
+    <NavigationContainer style={styles.container}>
+      <Stack.Navigator style={styles.main}>
         <Stack.Screen
           name="Welcome"
           component={Welcome}
-          options={{ headerTitleAlign: "center" }}
         />
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{ headerTitleAlign: "center" }}
         />
         <Stack.Screen
           name="SignUp"
           component={SignUp}
-          options={{ headerTitleAlign: "center" }}
         />
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen} 
+        />
       </Stack.Navigator>
+      <Footer style={styles.footer}/>
       <StatusBar style="auto" />
     </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  text: {
-    alignItems: "center",
+  container: {
+    flex: 1,
+  },
+  main: {
+    headerTitleAlign: "center",
+    flexGrow: 1,
   },
 });

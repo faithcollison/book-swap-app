@@ -3,8 +3,6 @@ import { View, Text, Pressable, StyleSheet } from "react-native";
 export default function Welcome({ navigation }) {
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.centerText}>Welcome!</Text> */}
-
       <View style={styles.buttonContainer}>
         <Pressable
           onPress={() => {
