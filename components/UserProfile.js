@@ -4,7 +4,7 @@ import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
 import { Input } from "react-native-elements";
 
-export default function UserProfile() {
+export default function UserProfile({ session }) {
   const [id, setId] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -23,6 +23,7 @@ export default function UserProfile() {
     async function getData() {
       const { data, error } = await supabase.auth.getSession();
       const { session } = data;
+      setUsername(session.user.user_metadata.username);
       setEmail(session.user.email);
       setId(session.user.id);
       return session.user.id;
