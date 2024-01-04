@@ -2,8 +2,8 @@ import { View, Text } from "react-native";
 import { useEffect } from "react";
 import { Button } from "react-native-elements";
 import supabase from "../config/supabaseClient";
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet } from "react-native";
 
 const HomeScreen = ({ navigation }) => {
   useEffect(() => {
@@ -36,8 +36,8 @@ const HomeScreen = ({ navigation }) => {
       <Button
         title="sign out"
         onPress={() => {
-          //   supabase.auth.signOut();
-          navigation.navigate("UserProfile");
+          supabase.auth.signOut();
+          navigation.navigate("Welcome");
         }}
       />
       <StatusBar style="auto" />
@@ -49,8 +49,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
