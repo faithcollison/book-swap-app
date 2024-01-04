@@ -53,7 +53,7 @@ function App() {
 				<Stack.Screen name="UserProfile" component={UserProfile} />
 				<Stack.Screen name="Messages" component={Messages} />
 				<Stack.Screen name="Notifications" component={Notifications} />
-				<Stack.Screen name="CreateListing" component={CreateListing} />
+				<Stack.Screen name="CreateListing" component={CreateListing} initialParams={{session: session}}/>
 			</Stack.Navigator>
 			<Footer style={styles.footer} />
 			<StatusBar style="auto" />

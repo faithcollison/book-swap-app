@@ -9,11 +9,6 @@ function DrawerNavigator() {
 	return (
 		<Drawer.Navigator>
 			<Drawer.Screen
-				name="Home"
-				component={HomeScreen}
-				options={{ headerTitleAlign: "center" }}
-			/>
-			<Drawer.Screen
 				name="Wish List"
 				component={WishList}
 				options={{ headerTitleAlign: "center" }}
