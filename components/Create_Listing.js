@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {Alert, Button, View, Text, Image, FlatList, TouchableOpacity, TextInput, StyleSheet, SafeAreaView} from "react-native";
+import { View, Text, Image, FlatList, TouchableOpacity, TextInput, StyleSheet, SafeAreaView} from "react-native";
 import { SearchBar } from 'react-native-elements';
-import Form from './Form'
-const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
-console.log(apiKey, "api key")
+// const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
+// console.log(apiKey, "api key")
 
 const CreateListing = ({navigation}) => {
 	const [searchQuery, setSearchQuery] = useState("")
