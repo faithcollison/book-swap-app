@@ -58,6 +58,17 @@ function DrawerNavigator() {
                     />
                 )}
             </Drawer.Screen>
+            <Drawer.Screen
+                name="Wishlist"
+                options={{ headerTitleAlign: 'center' }}
+            >
+                {props => (
+                    <WishList
+                        {...props}
+                        session={session}
+                    />
+                )}
+            </Drawer.Screen>
         </Drawer.Navigator>
     );
 }

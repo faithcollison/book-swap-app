@@ -1,7 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import supabase from '../config/supabaseClient';
 import { Text, View, Image } from 'react-native';
-// import { Session } from '@supabase/supabase-js';
 
 const UserLibrary = ({ session }) => {
     const [books, setBooks] = useState([]);
