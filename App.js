@@ -15,6 +15,7 @@ import UserProfile from "./components/UserProfile";
 import Messages from "./components/Messages";
 import Notifications from "./components/Notifications";
 import CreateListing from "./components/Create_Listing";
+import Form from "./components/Form";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -74,6 +75,7 @@ function App() {
         <Stack.Screen name="Messages" component={Messages} />
         <Stack.Screen name="Notifications" component={Notifications} />
         <Stack.Screen name="CreateListing" component={CreateListing} />
+        <Stack.Screen name="Form" component={Form} />
       </Stack.Navigator>
       <Footer style={styles.footer} />
       <StatusBar style="auto" />
