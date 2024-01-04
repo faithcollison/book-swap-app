@@ -1,6 +1,19 @@
+import { useEffect } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
+import supabase from "../config/supabaseClient";
 
 export default function Welcome({ navigation }) {
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: session } = await supabase.auth.getSession();
+      if (session.session.user) {
+        navigation.navigate("Home");
+      }
+    };
+
+    checkUser();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
