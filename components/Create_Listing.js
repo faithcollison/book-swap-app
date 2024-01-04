@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Alert, Button, View, Text, Image, FlatList, TouchableOpacity, TextInput } from "react-native";
+import {Alert, Button, View, Text, Image, FlatList, TouchableOpacity, TextInput, StyleSheet, SafeAreaView} from "react-native";
 import { SearchBar } from 'react-native-elements';
 import Form from './Form'
 const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
@@ -50,25 +50,56 @@ const CreateListing = ({navigation}) => {
 			value={searchQuery}
 			onSubmitEditing={handleSearch}
 			/>
+			<SafeAreaView style={styles.container}>
 			<FlatList 
 				data={searchResults}
-				keyExtractor={(item, index) => index.toString()}
-				renderItem={({item}) => (
+				keyExtractor={item => item.id}
+				renderItem={({item}) => <View style={styles.item}> 
 					<TouchableOpacity onPress={() => handleSelectBook(item)}>
-						<View >
-							<Text>{item.volumeInfo.title}</Text>
-							<Text>WRITTEN BY: {item.volumeInfo.authors && item.volumeInfo.authors.join(', ')}</Text>
-							<Text>PUBLISHED: {item.volumeInfo.publishedDate}</Text>
-							<Text>ABOUT: {item.volumeInfo.description}</Text>
+						<View style={styles.container}>
+							<Text style={styles.bookTitle}>{item.volumeInfo.title}</Text>
+							<Text style={styles.authorAndPublishDate}>WRITTEN BY: {item.volumeInfo.authors && item.volumeInfo.authors.join(', ')}</Text>
+							<Text style={styles.authorAndPublishDate}>PUBLISHED: {item.volumeInfo.publishedDate}</Text>
+							<Text style={styles.description}>ABOUT: {item.volumeInfo.description}</Text>
 							{item.volumeInfo.imageLinks.smallThumbnail? <Image source={{uri: item.volumeInfo.imageLinks.smallThumbnail}} style={{width: 200, height: 200}}/> : null}
+							
        					</View>
 					</TouchableOpacity>
-				)}
+					</View>
+				}
 			/>
+			</SafeAreaView>
 		</View>
 			
 	);
 };
-
-
+const styles = StyleSheet.create({
+	container: {
+	  flex: 2,
+	  justifyContent: 'center',
+	  alignItems: 'center',
+	  backgroundColor: '#F5FCFF',
+	},
+	item: {
+		backgroundColor: '#f9c2ff',
+		padding: 20,
+		marginVertical: 8,
+		marginHorizontal: 16,
+	  },
+	bookTitle: {
+	  fontSize: 20,
+	  fontWeight: 'bold',
+	},
+	authorAndPublishDate: {
+	  fontSize: 16,
+	},
+	description: {
+	  fontSize: 14,
+	},
+	thumbnail: {
+	  width: 200,
+	  height: 200,
+	},
+   });
+   
 export default CreateListing;
