@@ -2,8 +2,8 @@ import { View, Text, Pressable, Dimensions } from "react-native";
 import { useEffect, useState } from "react";
 import { Button } from "react-native-elements";
 import supabase from "../config/supabaseClient";
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet } from "react-native";
 
 import BookList from "./BookList";
 import { ScrollView } from "react-native-gesture-handler";
