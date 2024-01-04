@@ -58,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.header}>Categories</Text>
         {categories.map(category => {
           return (
-            <BookList categoryName={category}/>
+            <BookList categoryName={category} key={Math.random()}/>
           )
         })}
         <StatusBar style="auto" />
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
     paddingBottom: 10,
-    marginBottom: screenHeight * 0.09,
+    marginBottom: screenHeight,
   },
 });
 
