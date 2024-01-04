@@ -28,13 +28,9 @@ function DrawerNavigator() {
     const [session, setSession] = useState(null);
     useEffect(() => {
         supabase.auth.getSession().then(session => {
-            console.log(session);
-
             setSession(session);
         });
         supabase.auth.onAuthStateChange((event, session) => {
-            console.log(session);
-
             setSession(session);
         });
     }, []);
@@ -70,13 +66,9 @@ function App() {
     const [session, setSession] = useState(null);
     useEffect(() => {
         supabase.auth.getSession().then(session => {
-            console.log(session);
-
             setSession(session);
         });
         supabase.auth.onAuthStateChange((event, session) => {
-            console.log(session);
-
             setSession(session);
         });
     }, []);
