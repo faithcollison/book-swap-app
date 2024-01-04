@@ -11,7 +11,6 @@ const WishList = ({ session }) => {
 
     const getWishList = async username => {
         const { data, error } = await supabase.from('Users').select('wishlist').eq('username', username).limit(1).single();
-        // .eq('username', username).order('date_posted', { ascending: false })
 
         if (error) {
             alert(error);
