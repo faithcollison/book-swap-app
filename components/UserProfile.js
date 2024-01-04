@@ -1,4 +1,3 @@
-
 import { Pressable, Text, View } from "react-native";
 import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
@@ -49,6 +48,13 @@ export default function UserProfile() {
       .select();
   }
 
+  async function updateData(userid) {
+    const { data, error } = await supabase
+      .from("Users")
+      .update({ username: username, email_address: email, phone_number: phone })
+      .eq("user_id", userid);
+  }
+
   if (editing) {
     return (
       <View>
@@ -83,10 +89,16 @@ export default function UserProfile() {
           />
         </View>
         <View>
+        </View>
+        <View>
           <Pressable
             onPress={() => {
               setIsEditing(false);
-              sendNewData();
+              if (id) {
+                updateData(id);
+              } else {
+                sendNewData()
+              }
             }}
           >
             <Text>Save</Text>
@@ -118,6 +130,3 @@ export default function UserProfile() {
     </View>
   );
 }
-
-
-
