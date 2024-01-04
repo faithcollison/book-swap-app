@@ -33,7 +33,7 @@ export default function BookList ({ categoryName }) {
             </View>
             <ScrollView showsHorizontalScrollIndicator={false} style={styles.categoryList} horizontal={true}>
                 {bookList.map(listing => {
-                    return <Image style={styles.bookCard} source={{uri: listing.img_url}} />
+                    return <Image style={styles.bookCard} source={{uri: listing.img_url}} key={listing.book_id}/>
                 })}
             </ScrollView>
         </View>
