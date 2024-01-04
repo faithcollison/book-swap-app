@@ -1,11 +1,18 @@
-import { View, Text } from "react-native";
-import { useEffect } from "react";
+import { View, Text, Pressable, Dimensions } from "react-native";
+import { useEffect, useState } from "react";
 import { Button } from "react-native-elements";
 import supabase from "../config/supabaseClient";
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet } from 'react-native';
 
+import BookList from "./BookList";
+import { ScrollView } from "react-native-gesture-handler";
+
+const screenHeight = Dimensions.get('window').height;
+
 const HomeScreen = ({ navigation }) => {
+  const [categories, setCategories] = useState([])
+
   useEffect(() => {
     async function compareId(id) {
       const { data, error } = await supabase
@@ -30,18 +37,33 @@ const HomeScreen = ({ navigation }) => {
       });
   }, []);
 
+  useEffect(() => {
+    async function getCategories() {
+      const { data, error } = await supabase
+        .from('Listings')
+        .select('Category')
+      const catArr = [];
+      data.forEach(obj => {
+        if (!catArr.includes(obj.Category)) catArr.push(obj.Category)
+      })
+      setCategories(catArr)
+    }
+
+    getCategories();
+  }, [])
+
   return (
-    <View style={styles.container}>
-      <Text>You're in the home screen!</Text>
-      <Button
-        title="sign out"
-        onPress={() => {
-          //   supabase.auth.signOut();
-          navigation.navigate("UserProfile");
-        }}
-      />
-      <StatusBar style="auto" />
-    </View>
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <Text style={styles.header}>Categories</Text>
+        {categories.map(category => {
+          return (
+            <BookList categoryName={category}/>
+          )
+        })}
+        <StatusBar style="auto" />
+      </View>
+    </ScrollView>
   );
 };
 
@@ -50,7 +72,9 @@ const styles = StyleSheet.create({
     flex: 1,
     // backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginBottom: screenHeight * 0.09,
   },
 });
 
