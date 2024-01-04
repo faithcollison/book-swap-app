@@ -1,7 +1,11 @@
-import { Pressable, Text, View } from "react-native";
+import { Dimensions, Pressable, Text, View, StyleSheet } from "react-native";
 import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
 import { Input } from "react-native-elements";
+import { AntDesign } from "@expo/vector-icons";
+
+const screenHeight = Dimensions.get("window").height;
+const screenWidth = Dimensions.get("window").width;
 
 export default function UserProfile() {
   const [id, setId] = useState("");
@@ -58,7 +62,7 @@ export default function UserProfile() {
   if (editing) {
     return (
       <View>
-        <View>
+        <View style={styles.edit_container}>
           <Input
             title="Username"
             placeholder="Username"
@@ -70,63 +74,113 @@ export default function UserProfile() {
         </View>
         <View>
           <Input
-            title="Email"
-            placeholder="Email@address.com"
-            value={email}
-            onChangeText={(text) => {
-              setEmail(text);
-            }}
-          />
-        </View>
-        <View>
-          <Input
             title="Phone Number"
             placeholder="+44.............."
             value={phone}
+            inputMode="numeric"
             onChangeText={(text) => {
               setPhone(text);
             }}
           />
         </View>
-        <View>
-        </View>
-        <View>
+
+        <View style={styles.buttonContainer}>
           <Pressable
             onPress={() => {
               setIsEditing(false);
               if (id) {
                 updateData(id);
               } else {
-                sendNewData()
+                sendNewData();
               }
             }}
+            style={styles.edit_button}
           >
-            <Text>Save</Text>
+            <AntDesign name="save" size={24} color="black" />
           </Pressable>
         </View>
       </View>
     );
   }
   return (
-    <View>
+    <View style={styles.container}>
       <View>
-        <Text>Username: {username}</Text>
+        <Text style={styles.username}>{username}</Text>
       </View>
       <View>
-        <Text>Email: {email}</Text>
+        <View>
+          <Text style={styles.contact_info}>Contact Info</Text>
+          <Text style={styles.title}>Email:</Text>
+          <Text style={styles.email}>{email}</Text>
+          <Text style={styles.title}>Mobile:</Text>
+          <Text style={styles.phone}>{phone}</Text>
+        </View>
       </View>
-      <View>
-        <Text>Phone Number: {phone}</Text>
-      </View>
-      <View>
+      <View style={styles.buttonContainer}>
         <Pressable
           onPress={() => {
             setIsEditing(true);
           }}
+          style={styles.edit_button}
         >
-          <Text>Edit</Text>
+          <AntDesign name="edit" size={24} color="black" />
         </Pressable>
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: screenWidth,
+    height: screenHeight * 0.7,
+    display: "flex",
+  },
+  username: {
+    marginLeft: 5,
+    fontSize: 36,
+    textDecorationLine: "underline",
+  },
+  email: {
+    fontSize: 24,
+    marginLeft: 25,
+    marginBottom: 20,
+  },
+  phone: {
+    fontSize: 24,
+    marginLeft: 25,
+    marginBottom: 7,
+  },
+  edit_button: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    width: 40,
+    height: 40,
+    borderRadius: 100,
+    borderColor: "grey",
+    borderWidth: 2,
+    padding: 4,
+    alignItems: "center",
+  },
+  buttonContainer: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
+  contact_info: {
+    marginLeft: 5,
+    marginTop: screenHeight * 0.3,
+    textDecorationLine: "underline",
+    fontSize: 34,
+    marginBottom: 8,
+  },
+  title: {
+    marginLeft: 7,
+    marginBottom: 7,
+    fontSize: 24,
+  },
+  edit_container: {
+    marginTop: 30,
+  }
+});
