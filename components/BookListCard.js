@@ -41,7 +41,7 @@ export default function BookListCard ({listing}) {
     return (
         <View style={styles.cardContainer}>
             <Pressable onPress={() => navigation.navigate('SingleBookListings')}>
-                <Image style={styles.bookCard} source={{uri: listing.img_url}} />
+                <Image style={styles.bookCard} source={{uri: listing.img_url}}/>
             </Pressable>
             <Pressable style={styles.heartContainer} onPress={() => handleWishListButton(listing)}>
                 <FontAwesome name="circle" size={37} color="white" style={{opacity: 0.8}}/>

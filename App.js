@@ -20,6 +20,7 @@ import Notifications from './components/Notifications';
 import CreateListing from './components/Create_Listing';
 import UserLibrary from './components/UserLibrary';
 import SingleBookListings from './components/SingleBookListings';
+import ListedBook from './components/ListedBook';
 // import { supabase } from '@supabase/auth-ui-shared';
 
 const Stack = createNativeStackNavigator();
@@ -81,7 +82,7 @@ function App() {
     }, []);
 
     return (
-      <NavigationContainer>
+    <NavigationContainer>
         {session && session.user ? (
             <Stack.Navigator>
                 <Stack.Screen
@@ -124,8 +125,12 @@ function App() {
                     component={CreateListing}
                 />
                 <Stack.Screen 
-                  name='SingleBookListings'
-                  component={SingleBookListings}
+                    name='SingleBookListings'
+                    component={SingleBookListings}
+                />
+                <Stack.Screen 
+                    name="ListedBook"
+                    component={ListedBook}
                 />
             </Stack.Navigator>
         ) : (
@@ -149,7 +154,7 @@ function App() {
         )}
         {session && session.user && <Footer />}
         <StatusBar style="auto" />
-      </NavigationContainer>
+    </NavigationContainer>
     );
 }
 
