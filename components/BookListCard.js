@@ -9,9 +9,8 @@ import { useState } from "react";
 export default function BookListCard ({listing}) {
     const session = supabase.auth.getSession()
         .then(session => {
-            console.log(session)
+            
         })
-    console.log(session, '<<<<<')
     const [wishListed, setWishListed] = useState(false);
 
     function handleWishListButton (listing) {

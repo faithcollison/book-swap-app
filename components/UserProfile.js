@@ -14,6 +14,7 @@ export default function UserProfile({ route }) {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState();
   const [editing, setIsEditing] = useState(false);
+  const [exists, setExists] = useState(false)
 
   const {session} = route.params
 
@@ -39,6 +40,7 @@ export default function UserProfile({ route }) {
       })
       .then((data) => {
         if (data.length > 0) {
+          setExists(true)
           setUsername(data[0].username);
           setEmail(data[0].email_address);
           setPhone(data[0].phone_number);
@@ -56,12 +58,13 @@ export default function UserProfile({ route }) {
   }
 
   async function updateData(userid) {
+    
     const { data, error } = await supabase
-      .from("Users")
-      .update({ username: username, email_address: email, phone_number: phone })
-      .eq("user_id", userid);
+    .from("Users")
+    .update({ username: username, email_address: email, phone_number: phone })
+    .eq("user_id", userid);
   }
-
+  
   if (editing) {
     return (
       <View>
@@ -73,7 +76,7 @@ export default function UserProfile({ route }) {
             onChangeText={(text) => {
               setUsername(text);
             }}
-          />
+            />
         </View>
         <View>
           <Input
@@ -84,14 +87,13 @@ export default function UserProfile({ route }) {
             onChangeText={(text) => {
               setPhone(text);
             }}
-          />
+            />
         </View>
-
         <View style={styles.buttonContainer}>
           <Pressable
             onPress={() => {
               setIsEditing(false);
-              if (id) {
+              if (exists) {
                 updateData(id);
               } else {
                 sendNewData();
