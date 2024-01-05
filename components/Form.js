@@ -31,12 +31,6 @@ console.log(title? false: true)
                 editable={authors? false : true}
                 value={authors? authors : ""}
             />
-            {/* <Input  label="Category"
-                placeholder="Book category"
-                autoCapitalize={"none"}
-                value={category}
-                onChangeText={setCategory}
-            /> */}
             <Text> Choose Category: </Text>
             <SelectDropdown data={categories} />
             <Text> Choose Condition of Book: </Text>
