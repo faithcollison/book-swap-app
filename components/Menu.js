@@ -6,15 +6,15 @@ import WishList from "./WishList";
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigator() {
-	return (
-		<Drawer.Navigator>
-			<Drawer.Screen
-				name="Wish List"
-				component={WishList}
-				options={{ headerTitleAlign: "center" }}
-			/>
-		</Drawer.Navigator>
-	);
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen
+        name="Wish List"
+        component={WishList}
+        options={{ headerTitleAlign: "center" }}
+      />
+    </Drawer.Navigator>
+  );
 }
 
-export default DrawerNavigator
+export default DrawerNavigator;
