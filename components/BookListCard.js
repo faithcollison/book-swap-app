@@ -69,8 +69,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 10,
         right: 10,
-        justifyContent: "center",
-        alignItems: "center",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
