@@ -9,6 +9,7 @@ import {
   TextInput,
   StyleSheet,
   SafeAreaView,
+  Input,
   Dimensions,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
@@ -50,13 +51,17 @@ const Search_Existing_Book = ({ navigation }) => {
     }
   };
 
+  useEffect(() => {
+    handleSearch();
+  }, [page]);
+
   const handleSelectBook = (book) => {
     setSelectedBook(book);
     setTitle(book.volumeInfo.title);
     setAuthors(book.volumeInfo.authors?.join(", ") || "");
     setDescription(book.volumeInfo.description);
     setImgUrl(
-      book.volumeInfo.imageLinks.smallThumbnail
+      book.volumeInfo.imageLinks
         ? book.volumeInfo.imageLinks.smallThumbnail
         : "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg"
     );
