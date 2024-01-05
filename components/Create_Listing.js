@@ -11,8 +11,6 @@ import {
   SafeAreaView,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
-// const api = process.env.GOOGLE_BOOKS_API_KEY;
-// console.log(api, "api key");
 
 
 const CreateListing = ({ navigation }) => {
@@ -35,9 +33,6 @@ const CreateListing = ({ navigation }) => {
         }&maxResults=20&key=AIzaSyBMR5p0dW3LjnGfX74FAk5GGeB2veYACIk`
       );
       const data = await response.json();
-      //  if(data.items.length === 0) {
-      // 	navigation.navigate("Form")
-      //  }
       setTotalItems(data.totalItems);
       setSearchResults(data.items);
       if (data.totalItems <= page * 20 + 20) {
@@ -109,7 +104,7 @@ const CreateListing = ({ navigation }) => {
                   <Text style={styles.description}>
                     ABOUT: {item.volumeInfo.description}
                   </Text>
-                  {/* {item.volumeInfo.imageLinks.smallThumbnail ? (
+                  {item.volumeInfo.imageLinks.smallThumbnail ? (
                     <Image
                       source={{
                         uri: item.volumeInfo.imageLinks.smallThumbnail,
@@ -123,7 +118,7 @@ const CreateListing = ({ navigation }) => {
                       }}
                       style={{ width: 200, height: 200 }}
                     />
-                  )} */}
+                  )}
                 </View>
               </TouchableOpacity>
             </View>
