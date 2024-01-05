@@ -20,6 +20,7 @@ import Notifications from "./components/Notifications";
 import CreateListing from "./components/Create_Listing";
 import UserLibrary from "./components/UserLibrary";
 // import { supabase } from '@supabase/auth-ui-shared';
+import Form from "./components/Form";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -114,7 +115,8 @@ function App() {
             component={SignUp}
             options={{ headerTitleAlign: "center" }}
           />
-        </Stack.Navigator>
+          <Stack.Screen name="Form" component={Form} />
+      </Stack.Navigator>
       )}
 
       {session && session.user && <Footer style={styles.footer} />}
