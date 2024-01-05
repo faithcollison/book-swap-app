@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { SearchBar } from "react-native-elements";
 
-
 const Search_Existing_Book = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -59,12 +58,13 @@ const Search_Existing_Book = ({ navigation }) => {
   };
 
   useEffect(() => {
-    if (title && authors && description) {
-      navigation.navigate("Form", {
-        title: title,
+    if (title || authors || description) {
+      navigation.navigate("CreateListing", {
+        currTitle: title,
         authors: authors,
-        description: description,
+        currDescription: description,
         imgUrl: imgUrl,
+        navigatoin: navigation,
       });
     }
   }, [title, authors, description, imgUrl]);
