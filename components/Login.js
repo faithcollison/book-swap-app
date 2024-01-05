@@ -2,9 +2,9 @@ import { useState } from "react";
 import { View, Text, ScrollView, StyleSheet, Alert } from "react-native";
 import { Button, Input } from "react-native-elements";
 import supabase from "../config/supabaseClient";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 

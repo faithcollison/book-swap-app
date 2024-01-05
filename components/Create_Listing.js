@@ -66,8 +66,8 @@ const CreateListing = ({ route, navigation }) => {
           Category: category,
           condition: condition,
           description: description,
-		  img_url: currImgUrl,
-		  no_of_wishlists: 0,
+          img_url: currImgUrl,
+          no_of_wishlists: 0,
         },
       ])
       .select();
