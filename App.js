@@ -1,12 +1,12 @@
-import "react-native-gesture-handler";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Dimensions, ScrollView } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import React, { useEffect, useState } from "react";
-import { Session } from "@supabase/supabase-js";
-import supabase from "./config/supabaseClient";
+import 'react-native-gesture-handler';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Dimensions, ScrollView, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import React, { useEffect, useState } from 'react';
+import { Session } from '@supabase/supabase-js';
+import supabase from './config/supabaseClient';
 
 import Welcome from "./components/Welcome";
 import Login from "./components/Login";
@@ -90,10 +90,9 @@ function App() {
           />
           <Stack.Screen
             name="UserProfile"
-            // component={UserProfile}
-          >
-            {(props) => <UserProfile {...props} session={session} />}
-          </Stack.Screen>
+            component={UserProfile}
+            initialParams={{session: session}}
+          />
           <Stack.Screen name="Messages" component={Messages} />
           <Stack.Screen name="Notifications" component={Notifications} />
           <Stack.Screen name="CreateListing" component={CreateListing} />

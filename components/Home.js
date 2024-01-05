@@ -1,12 +1,12 @@
-import { View, Text, Pressable, Dimensions } from "react-native";
+import { View, Text, Pressable, Dimensions, Platform } from "react-native";
 import { useEffect, useState } from "react";
-import { Button } from "react-native-elements";
 import supabase from "../config/supabaseClient";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 import BookList from "./BookList";
-import { ScrollView } from "react-native-gesture-handler";
+import Footer from "./Footer";
 
 const screenHeight = Dimensions.get('window').height;
 
@@ -53,29 +53,34 @@ const HomeScreen = ({ navigation }) => {
   }, [])
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
-        <Text style={styles.header}>Categories</Text>
-        {categories.map(category => {
-          return (
-            <BookList categoryName={category} key={Math.random()}/>
-          )
-        })}
-        <StatusBar style="auto" />
-      </View>
-    </ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={Platform.OS === 'android' || Platform.OS === 'ios' ? styles.container : styles.webFix}>
+          <Text style={styles.header}>Categories</Text>
+          {categories.map(category => {
+            return (
+              <BookList categoryName={category} key={category}/>
+            )
+          })}
+          <StatusBar style="auto" />
+        </View>
+      </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: '#fff',
     alignItems: 'center',
     paddingTop: 10,
     paddingBottom: 10,
-    marginBottom: screenHeight,
   },
+  webFix: {
+    flex: 1,
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginBottom: screenHeight * 0.09,
+  }
 });
 
 export default HomeScreen;
