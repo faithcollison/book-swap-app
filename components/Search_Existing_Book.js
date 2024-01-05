@@ -13,7 +13,7 @@ import {
 import { SearchBar } from "react-native-elements";
 
 
-const CreateListing = ({ navigation }) => {
+const Search_Existing_Book = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedBook, setSelectedBook] = useState({});
@@ -168,4 +168,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateListing;
+export default Search_Existing_Book;

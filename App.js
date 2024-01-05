@@ -17,10 +17,10 @@ import Footer from "./components/Footer";
 import UserProfile from "./components/UserProfile";
 import Messages from "./components/Messages";
 import Notifications from "./components/Notifications";
-import CreateListing from "./components/Create_Listing";
 import UserLibrary from "./components/UserLibrary";
 // import { supabase } from '@supabase/auth-ui-shared';
 import Form from "./components/Form";
+import Search_Existing_Book from './components/Search_Existing_Book';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -95,7 +95,7 @@ function App() {
           />
           <Stack.Screen name="Messages" component={Messages} />
           <Stack.Screen name="Notifications" component={Notifications} />
-          <Stack.Screen name="CreateListing" component={CreateListing} />
+          <Stack.Screen name="Search_Existing_Book" component={Search_Existing_Book} />
         </Stack.Navigator>
       ) : (
         <Stack.Navigator>
