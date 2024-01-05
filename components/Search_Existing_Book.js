@@ -9,8 +9,10 @@ import {
   TextInput,
   StyleSheet,
   SafeAreaView,
+  Input,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
+import "whatwg-fetch";
 
 const Search_Existing_Book = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -45,13 +47,17 @@ const Search_Existing_Book = ({ navigation }) => {
     }
   };
 
+  useEffect(() => {
+    handleSearch();
+  }, [page]);
+
   const handleSelectBook = (book) => {
     setSelectedBook(book);
     setTitle(book.volumeInfo.title);
     setAuthors(book.volumeInfo.authors?.join(", ") || "");
     setDescription(book.volumeInfo.description);
     setImgUrl(
-      book.volumeInfo.imageLinks.smallThumbnail
+      book.volumeInfo.imageLinks
         ? book.volumeInfo.imageLinks.smallThumbnail
         : "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg"
     );
@@ -84,6 +90,7 @@ const Search_Existing_Book = ({ navigation }) => {
         value={searchQuery}
         onSubmitEditing={handleSearch}
       />
+
       <View style={styles.container}>
         <FlatList
           data={searchResults}
@@ -104,21 +111,18 @@ const Search_Existing_Book = ({ navigation }) => {
                   <Text style={styles.description}>
                     ABOUT: {item.volumeInfo.description}
                   </Text>
-                  {item.volumeInfo.imageLinks.smallThumbnail ? (
-                    <Image
-                      source={{
-                        uri: item.volumeInfo.imageLinks.smallThumbnail,
-                      }}
-                      style={{ width: 200, height: 200 }}
-                    />
-                  ) : (
-                    <Image
-                      source={{
-                        uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
-                      }}
-                      style={{ width: 200, height: 200 }}
-                    />
-                  )}
+                  <Image
+                    source={
+                      item.volumeInfo.imageLinks
+                        ? {
+                            uri: item.volumeInfo.imageLinks.smallThumbnail,
+                          }
+                        : {
+                            uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
+                          }
+                    }
+                    style={{ width: 200, height: 200 }}
+                  />
                 </View>
               </TouchableOpacity>
             </View>
@@ -128,10 +132,10 @@ const Search_Existing_Book = ({ navigation }) => {
           title="Load More"
           onPress={() => {
             setPage((prevPage) => prevPage + 1);
-            handleSearch();
           }}
           disabled={!hasMore}
         />
+
         {Array.from({ length: Math.ceil(totalItems / 20) }).map((curr, i) => (
           <Button
             key={i}
