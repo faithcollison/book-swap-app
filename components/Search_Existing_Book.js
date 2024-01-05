@@ -65,7 +65,7 @@ const Search_Existing_Book = ({ navigation }) => {
         authors: authors,
         currDescription: description,
         imgUrl: imgUrl,
-        navigatoin: navigation,
+        navigation: navigation,
       });
     }
   }, [title, authors, description, imgUrl]);
@@ -91,6 +91,7 @@ const Search_Existing_Book = ({ navigation }) => {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.item}>
+              {console.log(item.volumeInfo.imageLinks)}
               <TouchableOpacity onPress={() => handleSelectBook(item)}>
                 <View style={styles.container}>
                   <Text style={styles.bookTitle}>{item.volumeInfo.title}</Text>
@@ -105,21 +106,7 @@ const Search_Existing_Book = ({ navigation }) => {
                   <Text style={styles.description}>
                     ABOUT: {item.volumeInfo.description}
                   </Text>
-                  {item.volumeInfo.imageLinks.smallThumbnail ? (
-                    <Image
-                      source={{
-                        uri: item.volumeInfo.imageLinks.smallThumbnail,
-                      }}
-                      style={{ width: 200, height: 200 }}
-                    />
-                  ) : (
-                    <Image
-                      source={{
-                        uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
-                      }}
-                      style={{ width: 200, height: 200 }}
-                    />
-                  )}
+                  <Image source={item.volumeInfo.imageLinks !== undefined? {uri: item.volumeInfo.imageLinks.smallThumbnail} : {uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg"}} style={{ width: 200, height: 200 }} />
                 </View>
               </TouchableOpacity>
             </View>
