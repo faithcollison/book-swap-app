@@ -9,8 +9,10 @@ import {
   TextInput,
   StyleSheet,
   SafeAreaView,
+  Dimensions,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
+const screenHeight = Dimensions.get('window').height;
 
 const Search_Existing_Book = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -23,8 +25,10 @@ const Search_Existing_Book = ({ navigation }) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [totalItems, setTotalItems] = useState(0);
-  const api= process.env.GOOGLE_BOOKS_API_KEY
-  // AIzaSyBMR5p0dW3LjnGfX74FAk5GGeB2veYACIk
+  let totalPages = Math.ceil(totalItems / 20);
+
+  const api = process.env.GOOGLE_BOOKS_API_KEY;
+
   const handleSearch = async () => {
     try {
       const response = await fetch(
@@ -76,7 +80,7 @@ const Search_Existing_Book = ({ navigation }) => {
   };
 
   return (
-    <View>
+    <View style={styles.wrapperContainer}>
       <Text> ADD A NEW BOOK! </Text>
       <Text> Search for title here: </Text>
       <SearchBar
@@ -85,74 +89,125 @@ const Search_Existing_Book = ({ navigation }) => {
         value={searchQuery}
         onSubmitEditing={handleSearch}
       />
-      <View style={styles.container}>
-        <FlatList
-          data={searchResults}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.item}>
-              {console.log(item.volumeInfo.imageLinks)}
-              <TouchableOpacity onPress={() => handleSelectBook(item)}>
-                <View style={styles.container}>
-                  <Text style={styles.bookTitle}>{item.volumeInfo.title}</Text>
-                  <Text style={styles.authorAndPublishDate}>
-                    WRITTEN BY:{" "}
-                    {item.volumeInfo.authors &&
-                      item.volumeInfo.authors.join(", ")}
-                  </Text>
-                  <Text style={styles.authorAndPublishDate}>
-                    PUBLISHED: {item.volumeInfo.publishedDate}
-                  </Text>
-                  <Text style={styles.description}>
-                    ABOUT: {item.volumeInfo.description}
-                  </Text>
-                  <Image source={item.volumeInfo.imageLinks !== undefined? {uri: item.volumeInfo.imageLinks.smallThumbnail} : {uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg"}} style={{ width: 200, height: 200 }} />
-                </View>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
-        <Button
-          title="Load More"
-          onPress={() => {
-            setPage((prevPage) => prevPage + 1);
-            handleSearch();
-          }}
-          disabled={!hasMore}
-        />
-        {Array.from({ length: Math.ceil(totalItems / 20) }).map((curr, i) => (
-          <Button
-            key={i}
-            title={`${i + 1}`}
-            onPress={() => handlePageChange(i + 1)}
+      <View style={styles.marginBottom}>
+        <View style={styles.container}>
+          <FlatList
+            data={searchResults}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <View style={styles.item}>
+                <TouchableOpacity onPress={() => handleSelectBook(item)}>
+                  <View
+                    style={[
+                      styles.container,
+                      {
+                        borderTopWidth: 1,
+                        borderBottomWidth: 1,
+                        borderColor: "black",
+                      },
+                    ]}
+                  >
+                    <Text style={styles.bookTitle}>{item.volumeInfo.title}</Text>
+                    <Text style={styles.author}>
+                      Written by{" "}
+                      {item.volumeInfo.authors &&
+                        item.volumeInfo.authors.join(", ")}
+                    </Text>
+                    <Image
+                      source={
+                        item.volumeInfo.imageLinks !== undefined
+                          ? { uri: item.volumeInfo.imageLinks.smallThumbnail }
+                          : {
+                              uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
+                            }
+                      }
+                      style={[styles.image, { width: 100, height: 100 }]}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
           />
-        ))}
+          <View style={styles.button}>
+            {/* <Button
+              title="Load More"
+              onPress={() => {
+                setPage((prevPage) => prevPage + 1);
+                handleSearch();
+              }}
+              disabled={!hasMore}
+            /> */}
+            <Button
+              title="Previous"
+              onPress={() => {
+                setPage((prevPage) => prevPage - 1);
+                handleSearch()
+              }}
+              disabled={page === 1}
+            />
+            <Text>Page: {page}</Text>
+            <Button
+              title="Next"
+              onPress={() => {
+                setPage((prevPage) => prevPage + 1);
+                handleSearch()
+              }}
+              disabled={page === totalPages}
+            />
+          </View>
+        </View>
       </View>
     </View>
   );
 };
+{
+  /* {Array.from({ length: Math.ceil(totalItems / 20) }).map((curr, i) => (
+  <Button
+    key={i}
+    title={`${i + 1}`}
+    onPress={() => handlePageChange(i + 1)}
+  />
+))} */
+}
 const styles = StyleSheet.create({
+  // wrapperContainer: {
+  //   marginBottom: screenHeight * 0.09
+  // },
+  marginBottom: {
+    marginBottom: screenHeight * 0.09
+  },
   container: {
-    flex: 2,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F5FCFF",
+    // marginBottom: screenHeight * 0.09
   },
   item: {
-    backgroundColor: "#f9c2ff",
+    flex: 1,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    margin: 0,
   },
   bookTitle: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "bold",
+    textAlign: "center",
+    fontFamily: "Arial",
   },
-  authorAndPublishDate: {
+  author: {
     fontSize: 16,
   },
-  description: {
-    fontSize: 14,
+  image: {
+    margin: 20,
+    borderRadius: 20,
+  },
+  button: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 10, // add some padding
+    paddingVertical: 20, // add some vertical padding
   },
 });
 
