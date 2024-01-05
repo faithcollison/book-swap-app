@@ -1,56 +1,48 @@
-import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Dimensions, ScrollView, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import React, { useEffect, useState } from 'react';
-import { Session } from '@supabase/supabase-js';
-import supabase from './config/supabaseClient';
+import "react-native-gesture-handler";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, Dimensions, ScrollView, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import React, { useEffect, useState } from "react";
+import { Session } from "@supabase/supabase-js";
+import supabase from "./config/supabaseClient";
 
-import Welcome from './components/Welcome';
-import Login from './components/Login';
-import SignUp from './components/SignUp';
-import HomeScreen from './components/Home';
-import WishList from './components/WishList';
-import Footer from './components/Footer';
-import UserProfile from './components/UserProfile';
-import Messages from './components/Messages';
-import Notifications from './components/Notifications';
-import CreateListing from './components/Create_Listing';
-import UserLibrary from './components/UserLibrary';
+import Welcome from "./components/Welcome";
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
+import HomeScreen from "./components/Home";
+import WishList from "./components/WishList";
+import Footer from "./components/Footer";
+import UserProfile from "./components/UserProfile";
+import Messages from "./components/Messages";
+import Notifications from "./components/Notifications";
+import UserLibrary from "./components/UserLibrary";
+import CreateListing from "./components/Create_Listing";
+import Form from "./components/Form";
+import Search_Existing_Book from "./components/Search_Existing_Book";
 import SingleBookListings from './components/SingleBookListings';
 import ListedBook from './components/ListedBook';
-// import { supabase } from '@supabase/auth-ui-shared';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigator() {
-    const [session, setSession] = useState(null);
-    useEffect(() => {
-        supabase.auth.getSession().then(session => {
-            console.log(session);
-
-            setSession(session);
-        });
-        supabase.auth.onAuthStateChange((event, session) => {
-            console.log(session);
-
-            setSession(session);
-        });
-    }, []);
+	const [session, setSession] = useState(null);
+	useEffect(() => {
+		supabase.auth.getSession().then((session) => {
+			setSession(session);
+		});
+		supabase.auth.onAuthStateChange((event, session) => {
+			setSession(session);
+		});
+	}, []);
 
     return (
         <Drawer.Navigator>
             <Drawer.Screen
                 name="Home"
                 component={HomeScreen}
-                options={{ headerTitleAlign: 'center' }}
-            />
-            <Drawer.Screen
-                name="Wish List"
-                component={WishList}
                 options={{ headerTitleAlign: 'center' }}
             />
             <Drawer.Screen
@@ -64,22 +56,31 @@ function DrawerNavigator() {
                     />
                 )}
             </Drawer.Screen>
+            <Drawer.Screen
+                name="Wishlist"
+                options={{ headerTitleAlign: 'center' }}
+            >
+                {props => (
+                    <WishList
+                        {...props}
+                        session={session}
+                    />
+                )}
+            </Drawer.Screen>
         </Drawer.Navigator>
     );
 }
 
 function App() {
-    const [session, setSession] = useState(null);
-    useEffect(() => {
-        supabase.auth.getSession().then(session => {
-            console.log(session);
-            setSession(session);
-        });
-        supabase.auth.onAuthStateChange((event, session) => {
-            console.log(session);
-            setSession(session);
-        });
-    }, []);
+	const [session, setSession] = useState(null);
+	useEffect(() => {
+		supabase.auth.getSession().then((session) => {
+			setSession(session);
+		});
+		supabase.auth.onAuthStateChange((event, session) => {
+			setSession(session);
+		});
+	}, []);
 
     return (
     <NavigationContainer>
@@ -104,14 +105,7 @@ function App() {
                     name="UserProfile"
                     component={UserProfile}
                     initialParams={{session: session}}
-                >
-                    {/* {props => (
-                        <UserProfile
-                            {...props}
-                            session={session}
-                        />
-                    )} */}
-                </Stack.Screen>
+                />
                 <Stack.Screen
                     name="Messages"
                     component={Messages}
@@ -123,6 +117,7 @@ function App() {
                 <Stack.Screen
                     name="CreateListing"
                     component={CreateListing}
+                    initialParams={{ session: session }}
                 />
                 <Stack.Screen 
                     name='SingleBookListings'
@@ -131,6 +126,10 @@ function App() {
                 <Stack.Screen 
                     name="ListedBook"
                     component={ListedBook}
+                />
+                <Stack.Screen
+                    name="Search_Existing_Book"
+                    component={Search_Existing_Book}
                 />
             </Stack.Navigator>
         ) : (
@@ -161,14 +160,14 @@ function App() {
 export default App;
 
 const styles = StyleSheet.create({
-    text: {
-        alignItems: 'center',
-    },
-    container: {
-        flex: 1,
-    },
-    main: {
-        headerTitleAlign: 'center',
-        flexGrow: 1,
-    },
+	text: {
+		alignItems: "center",
+	},
+	container: {
+		flex: 1,
+	},
+	main: {
+		headerTitleAlign: "center",
+		flexGrow: 1,
+	},
 });
