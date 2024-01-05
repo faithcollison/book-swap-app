@@ -19,7 +19,6 @@ import Messages from "./components/Messages";
 import Notifications from "./components/Notifications";
 import UserLibrary from "./components/UserLibrary";
 import CreateListing from "./components/Create_Listing";
-// import { supabase } from '@supabase/auth-ui-shared';
 import Form from "./components/Form";
 import Search_Existing_Book from "./components/Search_Existing_Book";
 
