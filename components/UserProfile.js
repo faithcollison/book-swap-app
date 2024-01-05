@@ -7,7 +7,7 @@ import { AntDesign } from "@expo/vector-icons";
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
-export default function UserProfile({ session }) {
+export default function UserProfile({ route }) {
   const [id, setId] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -15,6 +15,8 @@ export default function UserProfile({ session }) {
   const [phone, setPhone] = useState();
   const [editing, setIsEditing] = useState(false);
   const [exists, setExists] = useState(false)
+
+  const {session} = route.params
 
   useEffect(() => {
     async function compareId(id) {
