@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
-const screenHeight = Dimensions.get('window').height;
+const screenHeight = Dimensions.get("window").height;
 
 const Search_Existing_Book = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -78,6 +78,9 @@ const Search_Existing_Book = ({ navigation }) => {
     setPage(newPage);
     handleSearch();
   };
+  useEffect(() => {
+    handleSearch();
+  }, [page]);
 
   return (
     <View style={styles.wrapperContainer}>
@@ -107,7 +110,9 @@ const Search_Existing_Book = ({ navigation }) => {
                       },
                     ]}
                   >
-                    <Text style={styles.bookTitle}>{item.volumeInfo.title}</Text>
+                    <Text style={styles.bookTitle}>
+                      {item.volumeInfo.title}
+                    </Text>
                     <Text style={styles.author}>
                       Written by{" "}
                       {item.volumeInfo.authors &&
@@ -141,7 +146,6 @@ const Search_Existing_Book = ({ navigation }) => {
               title="Previous"
               onPress={() => {
                 setPage((prevPage) => prevPage - 1);
-                handleSearch()
               }}
               disabled={page === 1}
             />
@@ -150,7 +154,6 @@ const Search_Existing_Book = ({ navigation }) => {
               title="Next"
               onPress={() => {
                 setPage((prevPage) => prevPage + 1);
-                handleSearch()
               }}
               disabled={page === totalPages}
             />
@@ -174,7 +177,7 @@ const styles = StyleSheet.create({
   //   marginBottom: screenHeight * 0.09
   // },
   marginBottom: {
-    marginBottom: screenHeight * 0.09
+    marginBottom: screenHeight * 0.09,
   },
   container: {
     flex: 1,
