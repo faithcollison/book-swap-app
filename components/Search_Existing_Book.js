@@ -23,13 +23,14 @@ const Search_Existing_Book = ({ navigation }) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [totalItems, setTotalItems] = useState(0);
-
+  const api= process.env.GOOGLE_BOOKS_API_KEY
+  // AIzaSyBMR5p0dW3LjnGfX74FAk5GGeB2veYACIk
   const handleSearch = async () => {
     try {
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${searchQuery}&startIndex=${
           page * 20
-        }&maxResults=20&key=AIzaSyBMR5p0dW3LjnGfX74FAk5GGeB2veYACIk`
+        }&maxResults=20&key=${api}`
       );
       const data = await response.json();
       setTotalItems(data.totalItems);
