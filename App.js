@@ -43,11 +43,6 @@ function DrawerNavigator() {
                 options={{ headerTitleAlign: 'center' }}
             />
             <Drawer.Screen
-                name="Wish List"
-                component={WishList}
-                options={{ headerTitleAlign: 'center' }}
-            />
-            <Drawer.Screen
                 name="User Library"
                 options={{ headerTitleAlign: 'center' }}
             >

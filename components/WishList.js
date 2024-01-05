@@ -15,7 +15,8 @@ const WishList = ({ session }) => {
         if (error) {
             alert(error);
         } else {
-            setBooks(data.wishlist);
+            const uniqueBooks = [...new Set(data.wishlist)];
+            setBooks(uniqueBooks);
         }
     };
     return (
@@ -24,7 +25,6 @@ const WishList = ({ session }) => {
             {books.map(book => (
                 <View key={book}>
                     <Text>{book}</Text>
-                    
                 </View>
             ))}
         </View>
