@@ -21,6 +21,8 @@ import UserLibrary from "./components/UserLibrary";
 import CreateListing from "./components/Create_Listing";
 import Form from "./components/Form";
 import Search_Existing_Book from "./components/Search_Existing_Book";
+import SingleBookListings from './components/SingleBookListings';
+import ListedBook from './components/ListedBook';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -80,67 +82,79 @@ function App() {
 		});
 	}, []);
 
-	return (
-		<NavigationContainer>
-			{session && session.user ? (
-				<Stack.Navigator>
-					<Stack.Screen
-						name="Home"
-						component={DrawerNavigator}
-						options={{
-							title: "Home",
-							headerShown: false,
-							headerStyle: {
-								backgroundColor: "#72d5ff",
-							},
-							headerTintColor: "black",
-							headerTitleStyle: {
-								fontWeight: "bold",
-							},
-						}}
-					/>
-					<Stack.Screen
-						name="UserProfile"
-						component={UserProfile}
-						initialParams={{ session: session }}
-					/>
-					<Stack.Screen name="Messages" component={Messages} />
-					<Stack.Screen name="Notifications" component={Notifications} />
-					<Stack.Screen
-						name="Search_Existing_Book"
-						component={Search_Existing_Book}
-					/>
-					<Stack.Screen
-						name="CreateListing"
-						component={CreateListing}
-						initialParams={{ session: session }}
-					/>
-				</Stack.Navigator>
-			) : (
-				<Stack.Navigator>
-					<Stack.Screen
-						name="Welcome"
-						component={Welcome}
-						options={{ headerTitleAlign: "center" }}
-					/>
-					<Stack.Screen
-						name="Login"
-						component={Login}
-						options={{ headerTitleAlign: "center" }}
-					/>
-					<Stack.Screen
-						name="SignUp"
-						component={SignUp}
-						options={{ headerTitleAlign: "center" }}
-					/>
-					<Stack.Screen name="Form" component={Form} />
-				</Stack.Navigator>
-			)}
-
-			{session && session.user && <Footer style={styles.footer} />}
-			<StatusBar style="auto" />
-		</NavigationContainer>
-	);
+    return (
+    <NavigationContainer>
+        {session && session.user ? (
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Home"
+                    component={DrawerNavigator}
+                    options={{
+                        title: 'Home',
+                        headerShown: false,
+                        headerStyle: {
+                            backgroundColor: '#72d5ff',
+                        },
+                        headerTintColor: 'black',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                        },
+                    }}
+                />
+                <Stack.Screen
+                    name="UserProfile"
+                    component={UserProfile}
+                    initialParams={{session: session}}
+                />
+                <Stack.Screen
+                    name="Messages"
+                    component={Messages}
+                />
+                <Stack.Screen
+                    name="Notifications"
+                    component={Notifications}
+                />
+                <Stack.Screen
+                    name="CreateListing"
+                    component={CreateListing}
+                    initialParams={{ session: session }}
+                />
+                <Stack.Screen 
+                    name='SingleBookListings'
+                    component={SingleBookListings}
+                />
+                <Stack.Screen 
+                    name="ListedBook"
+                    component={ListedBook}
+                />
+                <Stack.Screen
+                    name="Search_Existing_Book"
+                    component={Search_Existing_Book}
+                />
+            </Stack.Navigator>
+        ) : (
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Welcome"
+                    component={Welcome}
+                    options={{ headerTitleAlign: 'center' }}
+                />
+                <Stack.Screen
+                    name="Login"
+                    component={Login}
+                    options={{ headerTitleAlign: 'center' }}
+                />
+                <Stack.Screen
+                    name="SignUp"
+                    component={SignUp}
+                    options={{ headerTitleAlign: 'center' }}
+                />
+            </Stack.Navigator>
+        )}
+        {session && session.user && <Footer />}
+        <StatusBar style="auto" />
+    </NavigationContainer>
+    );
 }
 
 export default App;
