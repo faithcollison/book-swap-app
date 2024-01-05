@@ -36,23 +36,37 @@ function DrawerNavigator() {
 		});
 	}, []);
 
-	return (
-		<Drawer.Navigator>
-			<Drawer.Screen
-				name="Home"
-				component={HomeScreen}
-				options={{ headerTitleAlign: "center" }}
-			/>
-			<Drawer.Screen
-				name="Wish List"
-				component={WishList}
-				options={{ headerTitleAlign: "center" }}
-			/>
-			<Drawer.Screen name="User Library" options={{ headerTitleAlign: "center" }}>
-				{(props) => <UserLibrary {...props} session={session} />}
-			</Drawer.Screen>
-		</Drawer.Navigator>
-	);
+    return (
+        <Drawer.Navigator>
+            <Drawer.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{ headerTitleAlign: 'center' }}
+            />
+            <Drawer.Screen
+                name="User Library"
+                options={{ headerTitleAlign: 'center' }}
+            >
+                {props => (
+                    <UserLibrary
+                        {...props}
+                        session={session}
+                    />
+                )}
+            </Drawer.Screen>
+            <Drawer.Screen
+                name="Wishlist"
+                options={{ headerTitleAlign: 'center' }}
+            >
+                {props => (
+                    <WishList
+                        {...props}
+                        session={session}
+                    />
+                )}
+            </Drawer.Screen>
+        </Drawer.Navigator>
+    );
 }
 
 function App() {
