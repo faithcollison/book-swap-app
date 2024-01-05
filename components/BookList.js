@@ -35,7 +35,7 @@ export default function BookList ({ categoryName }) {
             <View style={styles.categoryList}>
                 <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
                     {bookList.map(listing => {
-                        return <BookListCard listing={listing}/>
+                        return <BookListCard listing={listing} key={listing.book_id}/>
                     })}
                 </ScrollView>
             </View>

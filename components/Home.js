@@ -53,20 +53,17 @@ const HomeScreen = ({ navigation }) => {
   }, [])
 
   return (
-    // <View style={{flex: 1, flexDirection: 'column'}}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={Platform.OS === 'android' || Platform.OS === 'ios' ? styles.container : styles.webFix}>
           <Text style={styles.header}>Categories</Text>
           {categories.map(category => {
             return (
-              <BookList categoryName={category}/>
+              <BookList categoryName={category} key={category}/>
             )
           })}
           <StatusBar style="auto" />
         </View>
       </ScrollView>
-    //   <Footer />
-    // </View>
   );
 };
 
