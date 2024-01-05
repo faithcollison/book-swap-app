@@ -4,6 +4,9 @@ import { StyleSheet, Dimensions, ScrollView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import React, { useEffect, useState } from "react";
+import { Session } from "@supabase/supabase-js";
+import supabase from "./config/supabaseClient";
 
 import Welcome from "./components/Welcome";
 import Login from "./components/Login";
@@ -15,12 +18,24 @@ import UserProfile from "./components/UserProfile";
 import Messages from "./components/Messages";
 import Notifications from "./components/Notifications";
 import CreateListing from "./components/Create_Listing";
+import UserLibrary from "./components/UserLibrary";
+// import { supabase } from '@supabase/auth-ui-shared';
 import Form from "./components/Form";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigator() {
+  const [session, setSession] = useState(null);
+  useEffect(() => {
+    supabase.auth.getSession().then((session) => {
+      setSession(session);
+    });
+    supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+    });
+  }, []);
+
   return (
     <Drawer.Navigator>
       <Drawer.Screen
@@ -33,51 +48,78 @@ function DrawerNavigator() {
         component={WishList}
         options={{ headerTitleAlign: "center" }}
       />
+      <Drawer.Screen
+        name="User Library"
+        options={{ headerTitleAlign: "center" }}
+      >
+        {(props) => <UserLibrary {...props} session={session} />}
+      </Drawer.Screen>
     </Drawer.Navigator>
   );
 }
 
 function App() {
+  const [session, setSession] = useState(null);
+  useEffect(() => {
+    supabase.auth.getSession().then((session) => {
+      setSession(session);
+    });
+    supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+    });
+  }, []);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Welcome"
-          component={Welcome}
-          options={{ headerTitleAlign: "center" }}
-        />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerTitleAlign: "center" }}
-        />
-        <Stack.Screen
-          name="SignUp"
-          component={SignUp}
-          options={{ headerTitleAlign: "center" }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={DrawerNavigator}
-          options={{
-            title: "Home",
-            headerShown: false,
-            headerStyle: {
-              backgroundColor: "#72d5ff",
-            },
-            headerTintColor: "black",
-            headerTitleStyle: {
-              fontWeight: "bold",
-            },
-          }}
-        />
-        <Stack.Screen name="UserProfile" component={UserProfile} />
-        <Stack.Screen name="Messages" component={Messages} />
-        <Stack.Screen name="Notifications" component={Notifications} />
-        <Stack.Screen name="CreateListing" component={CreateListing} />
-        <Stack.Screen name="Form" component={Form} />
+      {session && session.user ? (
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={DrawerNavigator}
+            options={{
+              title: "Home",
+              headerShown: false,
+              headerStyle: {
+                backgroundColor: "#72d5ff",
+              },
+              headerTintColor: "black",
+              headerTitleStyle: {
+                fontWeight: "bold",
+              },
+            }}
+          />
+          <Stack.Screen
+            name="UserProfile"
+            // component={UserProfile}
+          >
+            {(props) => <UserProfile {...props} session={session} />}
+          </Stack.Screen>
+          <Stack.Screen name="Messages" component={Messages} />
+          <Stack.Screen name="Notifications" component={Notifications} />
+          <Stack.Screen name="CreateListing" component={CreateListing} />
+        </Stack.Navigator>
+      ) : (
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Welcome"
+            component={Welcome}
+            options={{ headerTitleAlign: "center" }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerTitleAlign: "center" }}
+          />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUp}
+            options={{ headerTitleAlign: "center" }}
+          />
+          <Stack.Screen name="Form" component={Form} />
       </Stack.Navigator>
-      <Footer style={styles.footer} />
+      )}
+
+      {session && session.user && <Footer style={styles.footer} />}
       <StatusBar style="auto" />
     </NavigationContainer>
   );
