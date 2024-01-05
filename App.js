@@ -19,6 +19,7 @@ import Messages from './components/Messages';
 import Notifications from './components/Notifications';
 import CreateListing from './components/Create_Listing';
 import UserLibrary from './components/UserLibrary';
+import SingleBookListings from './components/SingleBookListings';
 // import { supabase } from '@supabase/auth-ui-shared';
 
 const Stack = createNativeStackNavigator();
@@ -121,6 +122,10 @@ function App() {
                 <Stack.Screen
                     name="CreateListing"
                     component={CreateListing}
+                />
+                <Stack.Screen 
+                  name='SingleBookListings'
+                  component={SingleBookListings}
                 />
             </Stack.Navigator>
         ) : (

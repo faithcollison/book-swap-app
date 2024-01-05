@@ -1,25 +1,29 @@
 import { StyleSheet, View, Image, Pressable } from "react-native";
 import { ScreenWidth } from "react-native-elements/dist/helpers";
 import supabase from "../config/supabaseClient";
+import { useNavigation } from "@react-navigation/native";
 
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { useState } from "react";
 
 export default function BookListCard ({listing}) {
-    const session = supabase.auth.getSession()
-        .then(session => {
-            console.log(session)
-        })
-    console.log(session, '<<<<<')
+
+    // function to add books to user wish list
+    // const session = supabase.auth.getSession()
+    //     .then(session => {
+    //     })
+    // console.log(session, '<<<<<')
+
     const [wishListed, setWishListed] = useState(false);
+    const navigation = useNavigation();
 
     function handleWishListButton (listing) {
         async function updateWishList (num) {
             const {data, error} = await supabase
             .from('Listings')
             .update({no_of_wishlists: listing.no_of_wishlists + num})
-            .eq('book_id', listing.book_id)
+            .eq('listing_id', listing.listing_id)
         }
 
         // async function updateWishList(user_id)
@@ -36,7 +40,9 @@ export default function BookListCard ({listing}) {
 
     return (
         <View style={styles.cardContainer}>
-            <Image style={styles.bookCard} source={{uri: listing.img_url}} />
+            <Pressable onPress={() => navigation.navigate('SingleBookListings')}>
+                <Image style={styles.bookCard} source={{uri: listing.img_url}} />
+            </Pressable>
             <Pressable style={styles.heartContainer} onPress={() => handleWishListButton(listing)}>
                 <FontAwesome name="circle" size={37} color="white" style={{opacity: 0.8}}/>
                 {!wishListed ? 
