@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -71,82 +71,80 @@ function App() {
     useEffect(() => {
         supabase.auth.getSession().then(session => {
             console.log(session);
-
             setSession(session);
         });
         supabase.auth.onAuthStateChange((event, session) => {
             console.log(session);
-
             setSession(session);
         });
     }, []);
 
     return (
-        <NavigationContainer>
-            {session && session.user ? (
-                <Stack.Navigator>
-                    <Stack.Screen
-                        name="Home"
-                        component={DrawerNavigator}
-                        options={{
-                            title: 'Home',
-                            headerShown: false,
-                            headerStyle: {
-                                backgroundColor: '#72d5ff',
-                            },
-                            headerTintColor: 'black',
-                            headerTitleStyle: {
-                                fontWeight: 'bold',
-                            },
-                        }}
-                    />
-                    <Stack.Screen
-                        name="UserProfile"
-                        // component={UserProfile}
-                    >
-                        {props => (
-                            <UserProfile
-                                {...props}
-                                session={session}
-                            />
-                        )}
-                    </Stack.Screen>
-                    <Stack.Screen
-                        name="Messages"
-                        component={Messages}
-                    />
-                    <Stack.Screen
-                        name="Notifications"
-                        component={Notifications}
-                    />
-                    <Stack.Screen
-                        name="CreateListing"
-                        component={CreateListing}
-                    />
-                </Stack.Navigator>
-            ) : (
-                <Stack.Navigator>
-                    <Stack.Screen
-                        name="Welcome"
-                        component={Welcome}
-                        options={{ headerTitleAlign: 'center' }}
-                    />
-                    <Stack.Screen
-                        name="Login"
-                        component={Login}
-                        options={{ headerTitleAlign: 'center' }}
-                    />
-                    <Stack.Screen
-                        name="SignUp"
-                        component={SignUp}
-                        options={{ headerTitleAlign: 'center' }}
-                    />
-                </Stack.Navigator>
-            )}
-
-            {session && session.user && <Footer style={styles.footer} />}
-            <StatusBar style="auto" />
-        </NavigationContainer>
+      <NavigationContainer>
+        {session && session.user ? (
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Home"
+                    component={DrawerNavigator}
+                    options={{
+                        title: 'Home',
+                        headerShown: false,
+                        headerStyle: {
+                            backgroundColor: '#72d5ff',
+                        },
+                        headerTintColor: 'black',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                        },
+                    }}
+                />
+                <Stack.Screen
+                    name="UserProfile"
+                    component={UserProfile}
+                    initialParams={{session: session}}
+                >
+                    {/* {props => (
+                        <UserProfile
+                            {...props}
+                            session={session}
+                        />
+                    )} */}
+                </Stack.Screen>
+                <Stack.Screen
+                    name="Messages"
+                    component={Messages}
+                />
+                <Stack.Screen
+                    name="Notifications"
+                    component={Notifications}
+                />
+                <Stack.Screen
+                    name="CreateListing"
+                    component={CreateListing}
+                />
+            </Stack.Navigator>
+        ) : (
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Welcome"
+                    component={Welcome}
+                    options={{ headerTitleAlign: 'center' }}
+                />
+                <Stack.Screen
+                    name="Login"
+                    component={Login}
+                    options={{ headerTitleAlign: 'center' }}
+                />
+                <Stack.Screen
+                    name="SignUp"
+                    component={SignUp}
+                    options={{ headerTitleAlign: 'center' }}
+                />
+            </Stack.Navigator>
+        )}
+        {session && session.user && <Footer />}
+        <StatusBar style="auto" />
+      </NavigationContainer>
     );
 }
 
