@@ -38,14 +38,12 @@ const Search_Existing_Book = ({ navigation }) => {
         }&maxResults=20&key=${api}`
       );
       const data = await response.json();
+      console.log(data);
       setTotalItems(data.totalItems);
       setSearchResults(data.items);
       if (data.totalItems <= page * 20 + 20) {
         setHasMore(false);
       }
-      // if no results => render manual form to fill in
-      // otherwise :
-      //   return data
     } catch (error) {
       console.error(error);
     }
@@ -101,7 +99,10 @@ const Search_Existing_Book = ({ navigation }) => {
         <View style={styles.container}>
           <FlatList
             data={searchResults}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) =>
+              `${item.title}-${item.author}-${Math.random()}`
+            }
+            extraData={totalItems}
             renderItem={({ item }) => (
               <View style={styles.item}>
                 <TouchableOpacity onPress={() => handleSelectBook(item)}>
@@ -139,14 +140,6 @@ const Search_Existing_Book = ({ navigation }) => {
             )}
           />
           <View style={styles.button}>
-            {/* <Button
-              title="Load More"
-              onPress={() => {
-                setPage((prevPage) => prevPage + 1);
-                handleSearch();
-              }}
-              disabled={!hasMore}
-            /> */}
             <Button
               title="Previous"
               onPress={() => {
@@ -168,15 +161,6 @@ const Search_Existing_Book = ({ navigation }) => {
     </View>
   );
 };
-{
-  /* {Array.from({ length: Math.ceil(totalItems / 20) }).map((curr, i) => (
-  <Button
-    key={i}
-    title={`${i + 1}`}
-    onPress={() => handlePageChange(i + 1)}
-  />
-))} */
-}
 const styles = StyleSheet.create({
   // wrapperContainer: {
   //   marginBottom: screenHeight * 0.09
@@ -202,7 +186,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
     textAlign: "center",
-    fontFamily: "Arial",
   },
   author: {
     fontSize: 16,

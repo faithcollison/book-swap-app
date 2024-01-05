@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 10,
     paddingBottom: 10,
+    fontFamily: 'sans-serif'
   },
   webFix: {
     flex: 1,
