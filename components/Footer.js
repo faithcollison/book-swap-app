@@ -26,11 +26,11 @@ const styles = StyleSheet.create({
         height: screenHeight * 0.09,
         justifyContent: "center",
         alignItems: "center",
-        position: 'absolute',
+        position: 'fixed',
         bottom: 0,
         width: screenWidth,
         borderTopWidth: 2,
-        borderRadius: 20,
+        backgroundColor: 'white',
     },
     footerContent: {
         width: screenWidth * 0.8,

@@ -7,6 +7,8 @@ import { Button, Input } from "react-native-elements";
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+
 
   async function signUpWithEmail() {
     const {
@@ -15,6 +17,11 @@ export default function SignUp() {
     } = await supabase.auth.signUp({
       email: email,
       password: password,
+      options: {
+        data: {
+          username: username,
+        },
+      }
     });
 
     setEmail("");
@@ -37,6 +44,8 @@ export default function SignUp() {
         },
       },
     });
+
+    
   }
 
   return (
@@ -50,6 +59,18 @@ export default function SignUp() {
           value={email}
           onChangeText={(text) => {
             setEmail(text);
+          }}
+        />
+      </View>
+      <View>
+        <Input
+          label="Username"
+          leftIcon={{ type: "font-awesome", name: "user" }}
+          placeholder="enter username"
+          autoCapitalize={"none"}
+          value={username}
+          onChangeText={(text) => {
+            setUsername(text);
           }}
         />
       </View>
