@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { View, StyleSheet, Pressable, Text, Dimensions, Image, ScrollView } from "react-native"
-import { SafeAreaProvider } from "react-native-safe-area-context"
 import supabase from "../config/supabaseClient";
+
+import BookListCard from "./BookListCard";
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -31,18 +32,21 @@ export default function BookList ({ categoryName }) {
                     <Text>See More</Text>
                 </Pressable>
             </View>
-            <ScrollView showsHorizontalScrollIndicator={false} style={styles.categoryList} horizontal={true}>
-                {bookList.map(listing => {
-                    return <Image style={styles.bookCard} source={{uri: listing.img_url}} />
-                })}
-            </ScrollView>
+            <View style={styles.categoryList}>
+                <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
+                    {bookList.map(listing => {
+                        return <BookListCard listing={listing} key={listing.book_id}/>
+                    })}
+                </ScrollView>
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     categoryContainer: {
-        alignItems: "center"
+        alignItems: "center",
+        flex: 1
     },
     categoryHeader: {
         flexDirection: 'row',
@@ -56,9 +60,4 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 10,
     },
-    bookCard: {
-        width: screenWidth / 3,
-        height: 150,
-        resizeMode: 'contain',
-    }
 })
