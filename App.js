@@ -27,6 +27,7 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   const [session, setSession] = useState(null);
+  const [newNotif, setNewNotif] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then((session) => {
@@ -55,7 +56,6 @@ function App() {
                 fontWeight: "bold",
               },
             }}
-            initialParams={{ session: session }}
           />
           <Stack.Screen
             name="UserProfile"
@@ -63,7 +63,11 @@ function App() {
             initialParams={{ session: session }}
           />
           <Stack.Screen name="Messages" component={Messages} />
-          <Stack.Screen name="Notifications" component={Notifications} />
+          <Stack.Screen
+            name="Notifications"
+            component={Notifications}
+            initialParams={{ session: session, setNewNotif: setNewNotif }}
+          />
           <Stack.Screen
             name="CreateListing"
             component={CreateListing}
@@ -99,7 +103,7 @@ function App() {
           />
         </Stack.Navigator>
       )}
-      {session && session.user && <Footer />}
+      {session && session.user && <Footer newNotif={newNotif}/>}
       <StatusBar style="auto" />
     </NavigationContainer>
   );

@@ -5,7 +5,7 @@ import { Feather } from "@expo/vector-icons";
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
-export default function Footer() {
+export default function Footer({newNotif}) {
   const navigation = useNavigation();
 
   return (
@@ -30,8 +30,9 @@ export default function Footer() {
         <Feather
           name="bell"
           size={30}
+          color={newNotif ? 'red' : 'black'}
           onPress={() => navigation.navigate("Notifications")}
-        />
+          />
         <Feather
           name="user"
           size={30}
