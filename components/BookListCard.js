@@ -31,6 +31,7 @@ export default function BookListCard({ listing, id }) {
       if (res.includes(listing.book_title)) {
         return;
       }
+      
       const sendArray =
         res.length === 0 ? [listing.book_title] : [...res, listing.book_title];
 

@@ -25,7 +25,7 @@ const WishList = ({ session }) => {
       .single();
 
     if (error) {
-      alert(error);
+      console.log(error);
     } else {
       const uniqueBooks = [...new Set(data.wishlist)];
       setBooks(uniqueBooks);
