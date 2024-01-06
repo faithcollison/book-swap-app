@@ -23,6 +23,7 @@ import Form from "./components/Form";
 import Search_Existing_Book from "./components/Search_Existing_Book";
 import SingleBookListings from "./components/SingleBookListings";
 import ListedBook from "./components/ListedBook";
+import SwapNegotiationPage from "./components/SwapNegotiationPage";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -105,6 +106,7 @@ function App() {
             component={SingleBookListings}
           />
           <Stack.Screen name="ListedBook" component={ListedBook} />
+          <Stack.Screen name="SwapNegotiationPage" component={SwapNegotiationPage} />
           <Stack.Screen
             name="Search_Existing_Book"
             component={Search_Existing_Book}
