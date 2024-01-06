@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useCallback, useEffect, useState } from "react";
 import supabase from "../config/supabaseClient";
 import {
   Text,
@@ -7,13 +7,37 @@ import {
   StyleSheet,
   ScrollView,
   Dimensions,
+  RefreshControl,
 } from "react-native";
 
 const WishList = ({ session }) => {
   const [books, setBooks] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [username, setUsername] = useState("");
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    const { data, error } = await supabase
+      .from("Users")
+      .select("wishlist")
+      .eq("username", username)
+      .limit(1)
+      .single();
+
+    if (error) {
+      alert(error);
+    } else {
+      const uniqueBooks = [...new Set(data.wishlist)];
+      setBooks(uniqueBooks);
+    }
+    setRefreshing(false);
+  }, []);
 
   useEffect(() => {
-    if (session) getWishList(session?.user?.user_metadata?.username);
+    if (session) {
+      getWishList(session?.user?.user_metadata?.username);
+      setUsername(session?.user?.user_metadata?.username);
+    }
   }, []);
 
   const getWishList = async (username) => {
@@ -32,7 +56,12 @@ const WishList = ({ session }) => {
     }
   };
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View>
         <Text style={styles.header}>Wishlist</Text>
         {books.map((book) => (
