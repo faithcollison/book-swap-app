@@ -11,46 +11,43 @@ User 1 Picks a book from users 2 library
 
 
 */
-export default function ListedBook({route}) {
+export default function ListedBook({ route }) {
   const navigation = useNavigation();
-  const { session, listing } = route.params
-  const [userName, setUserName] = useState()
-  const [swapState, setSwapState] = useState(false)
+  const { session, listing } = route.params;
+  const [userName, setUserName] = useState();
+  const [swapState, setSwapState] = useState(false);
 
   useEffect(() => {
     async function checkSwapExists() {
-      const {data, error} = await supabase
-      .from("Pending_Swaps")
-      .select()
-      .eq("user1_id", listing.user_id)
-      .eq("user2_id", session.user.id)
-      .eq("user1_listing_id", listing.listing_id)
+      const { data, error } = await supabase
+        .from("Pending_Swaps")
+        .select()
+        .eq("user1_id", listing.user_id)
+        .eq("user2_id", session.user.id)
+        .eq("user1_listing_id", listing.book_id);
       if (data.length > 0) {
-        setSwapState(true)
-      }
-      else {
-        setSwapState(false)
+        setSwapState(true);
+      } else {
+        setSwapState(false);
       }
     }
-    checkSwapExists()
-  }, [])
-
+    checkSwapExists();
+  }, []);
 
   // retrieves the username of the book lister
   async function getBookOwner() {
     const { data, error } = await supabase
-        .from("Users")
-        .select("username")
-        .eq("user_id", listing.user_id);
-        setUserName(data[0].username)
-      }
-      getBookOwner()
-      
-      // inserts info into pending swaps
-      const reqSwap = async () => {
-        
-        if (swapState) {
-      return
+      .from("Users")
+      .select("username")
+      .eq("user_id", listing.user_id);
+    setUserName(data[0].username);
+  }
+  getBookOwner();
+
+  // inserts info into pending swaps
+  const reqSwap = async () => {
+    if (swapState) {
+      return;
     }
 
     const { data, error } = await supabase
@@ -61,8 +58,9 @@ export default function ListedBook({route}) {
           user1_book_title: listing.book_title,
           user1_listing_id: listing.listing_id,
           user1_book_imgurl: listing.img_url,
+          user1_username: userName,
           user2_id: session.user.id,
-          user2_username: session.user.user_metadata.username
+          user2_username: session.user.user_metadata.username,
         },
       ])
       .select();
@@ -71,13 +69,13 @@ export default function ListedBook({route}) {
       console.error("Error inserting data: ", error);
       return;
     }
-    setSwapState(true)
+    setSwapState(true);
   };
 
   return (
     <View>
       {/* <Text>{listing.book_title}</Text> */}
-      <Pressable style={styles.button} onPress= {reqSwap}>
+      <Pressable style={styles.button} onPress={reqSwap}>
         <Text>Button to request swap</Text>
       </Pressable>
     </View>

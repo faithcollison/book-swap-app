@@ -21,7 +21,8 @@ import ListedBook from "./components/ListedBook";
 import SwapNegotiationPage from "./components/SwapNegotiationPage";
 import DrawerNavigator from "./components/Menu";
 import AvailableListings from "./components/AvailableListings";
-
+import SwapOffer from "./components/SwapOffer";
+import User2LibraryPage from "./components/User2Library";
 
 const Stack = createNativeStackNavigator();
 
@@ -78,14 +79,30 @@ function App() {
             component={AvailableListings}
             initialParams={{ session: session }}
           />
-          <Stack.Screen 
-          name="ListedBook" 
-          component={ListedBook}
-          initialParams={{ session: session }} />
-          <Stack.Screen name="SwapNegotiationPage" component={SwapNegotiationPage} />
+          <Stack.Screen
+            name="ListedBook"
+            component={ListedBook}
+            initialParams={{ session: session }}
+          />
+          <Stack.Screen
+            name="SwapNegotiationPage"
+            component={SwapNegotiationPage}
+          />
           <Stack.Screen
             name="Search_Existing_Book"
             component={Search_Existing_Book}
+          />
+          <Stack.Screen name="SwapOffer" component={SwapOffer} />
+          <Stack.Screen
+            name="User2Library"
+            component={User2LibraryPage}
+            initialParams={{ session: session }}
+            options={{
+              headerTintColor: "#000",
+              headerTitleStyle: {
+                color: "#fff",
+              },
+            }}
           />
         </Stack.Navigator>
       ) : (
@@ -107,7 +124,7 @@ function App() {
           />
         </Stack.Navigator>
       )}
-      {session && session.user && <Footer newNotif={newNotif}/>}
+      {session && session.user && <Footer newNotif={newNotif} />}
       <StatusBar style="auto" />
     </NavigationContainer>
   );
