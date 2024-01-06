@@ -27,6 +27,7 @@ function DrawerNavigator() {
 				name="Home"
 				component={HomeScreen}
 				options={{ headerTitleAlign: "center" }}
+				initialParams={{ session: session }}
 			/>
 			<Drawer.Screen name="User Library" options={{ headerTitleAlign: "center" }}>
 				{(props) => <UserLibrary {...props} session={session} />}

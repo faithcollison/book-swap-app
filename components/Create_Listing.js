@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, Picker } from "react-native";
+import { View, TextInput, Text, Platform } from "react-native";
 import { Button } from "react-native-elements";
 import supabase from "../config/supabaseClient";
 import { StyleSheet } from "react-native-web";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const CreateListing = ({ route, navigation }) => {
   const { currTitle, authors, currDescription, imgUrl } = route.params;
@@ -13,6 +14,8 @@ const CreateListing = ({ route, navigation }) => {
   const [condition, setCondition] = useState("");
   const [description, setDescription] = useState(currDescription);
   const [currImgUrl, setcurrImgUrl] = useState(imgUrl);
+  const [categoryOpen, setCategoryOpen] = useState(false);
+  const [conditionOpen, setConditionOpen] = useState(false);
 
   //   setTitle(currTitle);
   //   setAuthor(authors);
@@ -100,37 +103,35 @@ const CreateListing = ({ route, navigation }) => {
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Category</Text>
-        <Picker
-          style={styles.input}
-          selectedValue={category}
-          onValueChange={(itemValue) => setCategory(itemValue)}
-        >
-          <Picker.Item label="Select Category" value="" />
-          {categories.map((categoryItem, index) => (
-            <Picker.Item
-              key={index}
-              label={categoryItem}
-              value={categoryItem}
-            />
-          ))}
-        </Picker>
+        <DropDownPicker
+          open={categoryOpen}
+          value={category}
+          items={categories.map((categoryItem, index) => ({
+            label: categoryItem,
+            value: categoryItem,
+            key: index,
+          }))}
+          setOpen={setCategoryOpen}
+          setValue={setCategory}
+          style={{...styles.input, zIndex: 1}}
+          dropDownContainerStyle={styles.dropDownContainer}
+        />
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Condition</Text>
-        <Picker
-          style={styles.input}
-          selectedValue={condition}
-          onValueChange={(itemValue) => setCondition(itemValue)}
-        >
-          <Picker.Item label="Select Condition" value="" />
-          {conditions.map((conditionItem, index) => (
-            <Picker.Item
-              key={index}
-              label={conditionItem}
-              value={conditionItem}
-            />
-          ))}
-        </Picker>
+        <DropDownPicker
+          open={conditionOpen}
+          value={condition}
+          items={conditions.map((conditionItem, index) => ({
+            label: conditionItem,
+            value: conditionItem,
+            key: index,
+          }))}
+          setOpen={setConditionOpen}
+          setValue={setCondition}
+          style={{...styles.input, zIndex: 1}}
+          dropDownContainerStyle={styles.dropDownContainer}
+        />
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Description</Text>
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 5,
-    color: "#333",
+    color: "black",
   },
 
   input: {

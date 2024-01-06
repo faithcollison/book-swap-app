@@ -10,8 +10,9 @@ import Footer from "./Footer";
 
 const screenHeight = Dimensions.get("window").height;
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({  navigation }) => {
   const [categories, setCategories] = useState([]);
+  const [currSession, setCurrSession] = useState()
 
   useEffect(() => {
     async function compareId(id) {
@@ -24,6 +25,7 @@ const HomeScreen = ({ navigation }) => {
     async function getData() {
       const { data, error } = await supabase.auth.getSession();
       const { session } = data;
+      setCurrSession(session.user.id)
       return session.user.id;
     }
     getData()
@@ -63,7 +65,13 @@ const HomeScreen = ({ navigation }) => {
       >
         <Text style={styles.header}>Categories</Text>
         {categories.map((category) => {
-          return <BookList categoryName={category} key={category} />;
+          return (
+            <BookList
+              categoryName={category}
+              key={category}
+              id={currSession}
+            />
+          );
         })}
         <StatusBar style="auto" />
       </View>

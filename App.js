@@ -24,16 +24,16 @@ import DrawerNavigator from "./components/Menu";
 const Stack = createNativeStackNavigator();
 
 function App() {
-	const [session, setSession] = useState(null);
+  const [session, setSession] = useState(null);
 
-	useEffect(() => {
-		supabase.auth.getSession().then((session) => {
-			setSession(session);
-		});
-		supabase.auth.onAuthStateChange((event, session) => {
-			setSession(session);
-		});
-	}, []);
+  useEffect(() => {
+    supabase.auth.getSession().then((session) => {
+      setSession(session);
+    });
+    supabase.auth.onAuthStateChange((event, session) => {
+      setSession(session);
+    });
+  }, []);
 
   return (
     <NavigationContainer>
@@ -53,6 +53,7 @@ function App() {
                 fontWeight: "bold",
               },
             }}
+            initialParams={{ session: session }}
           />
           <Stack.Screen
             name="UserProfile"

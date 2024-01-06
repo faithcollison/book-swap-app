@@ -20,7 +20,7 @@ const UserLibrary = ({ session }) => {
     const { data, error } = await supabase
       .from("Listings")
       .select("*")
-      .eq("username", username)
+      .eq("user_id", session.user.id)
       .order("date_posted", { ascending: false });
 
     if (error) {
