@@ -25,6 +25,7 @@ export default function SignUp() {
 
         setEmail('');
         setPassword('');
+        setUsername('');
 
         if (error) {
             Alert.alert(error.message);

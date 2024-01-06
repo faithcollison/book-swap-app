@@ -7,13 +7,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { useState } from "react";
 
-export default function BookListCard({ listing }) {
-  // function to add books to user wish list
-  // const session = supabase.auth.getSession()
-  //     .then(session => {
-  //     })
-  // console.log(session, '<<<<<')
-
+export default function BookListCard({ listing, id }) {
   const [wishListed, setWishListed] = useState(false);
   const navigation = useNavigation();
 
@@ -25,14 +19,48 @@ export default function BookListCard({ listing }) {
         .eq("listing_id", listing.listing_id);
     }
 
-    // async function updateWishList(user_id)
+    async function getUserWishList() {
+      const { data, error } = await supabase
+        .from("Users")
+        .select("wishlist")
+        .eq("user_id", id);
+      return data[0].wishlist;
+    }
+
+    async function updateUserWishList(res) {
+      if (res.includes(listing.book_title)) {
+        return;
+      }
+      const sendArray =
+        res.length === 0 ? [listing.book_title] : [...res, listing.book_title];
+
+      const { data, error } = await supabase
+        .from("Users")
+        .update({ wishlist: sendArray })
+        .eq("user_id", id);
+    }
+
+    async function removeItemFromWishList(res) {
+      const sendArray = res.filter((item) => item !== listing.book_title);
+
+      const { data, error } = await supabase
+        .from("Users")
+        .update({ wishlist: sendArray })
+        .eq("user_id", id);
+    }
 
     if (!wishListed) {
       setWishListed(true);
       updateWishList(1);
+      getUserWishList().then((res) => {
+        updateUserWishList(res);
+      });
     } else {
       setWishListed(false);
       updateWishList(0);
+      getUserWishList().then((res) => {
+        removeItemFromWishList(res);
+      });
     }
   }
 

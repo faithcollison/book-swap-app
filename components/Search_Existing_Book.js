@@ -8,11 +8,13 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
+  ScrollView,
   SafeAreaView,
   Input,
+  Dimensions,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
-import "whatwg-fetch";
+const screenHeight = Dimensions.get("window").height;
 
 const Search_Existing_Book = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,22 +28,25 @@ const Search_Existing_Book = ({ navigation }) => {
   const [hasMore, setHasMore] = useState(true);
   const [totalItems, setTotalItems] = useState(0);
 
+  let totalPages = Math.ceil(totalItems / 20);
+
+  const api = process.env.GOOGLE_BOOKS_API_KEY;
+
   const handleSearch = async () => {
     try {
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${searchQuery}&startIndex=${
           page * 20
-        }&maxResults=20&key=AIzaSyBMR5p0dW3LjnGfX74FAk5GGeB2veYACIk`
+        }&maxResults=20&key=${api}`
       );
       const data = await response.json();
       setTotalItems(data.totalItems);
-      setSearchResults(data.items);
+
+      const newSearchResults = [...data.items];
+      setSearchResults(newSearchResults);
       if (data.totalItems <= page * 20 + 20) {
         setHasMore(false);
       }
-      // if no results => render manual form to fill in
-      // otherwise :
-      //   return data
     } catch (error) {
       console.error(error);
     }
@@ -70,7 +75,7 @@ const Search_Existing_Book = ({ navigation }) => {
         authors: authors,
         currDescription: description,
         imgUrl: imgUrl,
-        navigatoin: navigation,
+        navigation: navigation,
       });
     }
   }, [title, authors, description, imgUrl]);
@@ -79,9 +84,15 @@ const Search_Existing_Book = ({ navigation }) => {
     setPage(newPage);
     handleSearch();
   };
+  useEffect(() => {
+    handleSearch();
+  }, [page]);
+
+  //Leave this comment in for future. Decision was made to map this instead of FlatList as FlatList refused to rerender when data/extradata was updated.
+  //This was the only solution I could come up with
 
   return (
-    <View>
+    <View style={styles.wrapperContainer}>
       <Text> ADD A NEW BOOK! </Text>
       <Text> Search for title here: </Text>
       <SearchBar
@@ -90,85 +101,107 @@ const Search_Existing_Book = ({ navigation }) => {
         value={searchQuery}
         onSubmitEditing={handleSearch}
       />
-
-      <View style={styles.container}>
-        <FlatList
-          data={searchResults}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.item}>
-              <TouchableOpacity onPress={() => handleSelectBook(item)}>
-                <View style={styles.container}>
-                  <Text style={styles.bookTitle}>{item.volumeInfo.title}</Text>
-                  <Text style={styles.authorAndPublishDate}>
-                    WRITTEN BY:{" "}
-                    {item.volumeInfo.authors &&
-                      item.volumeInfo.authors.join(", ")}
-                  </Text>
-                  <Text style={styles.authorAndPublishDate}>
-                    PUBLISHED: {item.volumeInfo.publishedDate}
-                  </Text>
-                  <Text style={styles.description}>
-                    ABOUT: {item.volumeInfo.description}
-                  </Text>
-                  <Image
-                    source={
-                      item.volumeInfo.imageLinks
-                        ? {
-                            uri: item.volumeInfo.imageLinks.smallThumbnail,
-                          }
-                        : {
-                            uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
-                          }
-                    }
-                    style={{ width: 200, height: 200 }}
-                  />
+      <ScrollView>
+        <View style={styles.marginBottom}>
+          <View style={styles.container}>
+            {searchResults.map((item) => {
+              return (
+                <View style={styles.item}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleSelectBook(item);
+                    }}
+                  >
+                    <View
+                      style={[
+                        styles.container,
+                        {
+                          borderTopWidth: 1,
+                          borderBottomWidth: 1,
+                          borderColor: "black",
+                        },
+                      ]}
+                    >
+                      <Text style={styles.bookTitle}>
+                        {item.volumeInfo.title}
+                      </Text>
+                      <Text style={styles.author}>
+                        Written by{" "}
+                        {item.volumeInfo.authors &&
+                          item.volumeInfo.authors.join(", ")}
+                      </Text>
+                      <Image
+                        source={
+                          item.volumeInfo.imageLinks !== undefined
+                            ? { uri: item.volumeInfo.imageLinks.smallThumbnail }
+                            : {
+                                uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
+                              }
+                        }
+                        style={[styles.image, { width: 100, height: 100 }]}
+                      />
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
+              );
+            })}
+            <View style={styles.button}>
+              <Button
+                title="Previous"
+                onPress={() => {
+                  setPage((prevPage) => prevPage - 1);
+                }}
+                disabled={page === 1}
+              />
+              <Text>Page: {page}</Text>
+              <Button
+                title="Next"
+                onPress={() => {
+                  setPage((prevPage) => prevPage + 1);
+                }}
+                disabled={page === totalPages}
+              />
             </View>
-          )}
-        />
-        <Button
-          title="Load More"
-          onPress={() => {
-            setPage((prevPage) => prevPage + 1);
-          }}
-          disabled={!hasMore}
-        />
-
-        {Array.from({ length: Math.ceil(totalItems / 20) }).map((curr, i) => (
-          <Button
-            key={i}
-            title={`${i + 1}`}
-            onPress={() => handlePageChange(i + 1)}
-          />
-        ))}
-      </View>
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };
 const styles = StyleSheet.create({
+  marginBottom: {
+    marginBottom: screenHeight * 0.11,
+  },
   container: {
-    flex: 2,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F5FCFF",
   },
   item: {
-    backgroundColor: "#f9c2ff",
+    flex: 1,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    margin: 0,
   },
   bookTitle: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "bold",
+    textAlign: "center",
   },
-  authorAndPublishDate: {
+  author: {
     fontSize: 16,
   },
-  description: {
-    fontSize: 14,
+  image: {
+    margin: 20,
+    borderRadius: 20,
+  },
+  button: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 10, // add some padding
+    paddingVertical: 20, // add some vertical padding
   },
 });
 

@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import { React, useCallback, useEffect, useState } from "react";
 import supabase from "../config/supabaseClient";
 import {
   Text,
@@ -7,20 +7,38 @@ import {
   ScrollView,
   Dimensions,
   StyleSheet,
+  RefreshControl,
 } from "react-native";
 
 const UserLibrary = ({ session }) => {
   const [books, setBooks] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     if (session) getListings(session?.user?.user_metadata?.username);
+  }, []);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    const { data, error } = await supabase
+      .from("Listings")
+      .select("*")
+      .eq("user_id", session.user.id)
+      .order("date_posted", { ascending: false });
+
+    if (error) {
+      alert(error);
+    } else {
+      setBooks(data);
+    }
+    setRefreshing(false);
   }, []);
 
   async function getListings(username) {
     const { data, error } = await supabase
       .from("Listings")
       .select("*")
-      .eq("username", username)
+      .eq("user_id", session.user.id)
       .order("date_posted", { ascending: false });
 
     if (error) {
@@ -30,7 +48,12 @@ const UserLibrary = ({ session }) => {
     }
   }
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <Text style={styles.headerText}>User Library</Text>
       {books.map((book) => (
         <View key={book.book_id} style={styles.bookContainer}>
