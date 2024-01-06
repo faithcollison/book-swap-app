@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, Pressable, Alert } from "react-native";
 import supabase from "../config/supabaseClient";
@@ -49,11 +50,12 @@ const Notifications = ({ route }) => {
     )
     .subscribe();
 
+
   return (
     <View>
       <Text>This is Notifications Screen</Text>
-      <Pressable>
-        <Text>Swap notification card</Text>
+      <Pressable onPress={() => navigation.navigate("SwapNegotiationPage")} style={styles.button}>
+        <Text>Swap Offer notification card</Text>
       </Pressable>
       {notifications.map((notification) => (
         <View key={notification.offer_date}>
@@ -63,5 +65,13 @@ const Notifications = ({ route }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    borderWidth: 2,
+    borderColor:'blue',
+    backgroundColor:'blue'
+  }
+})
 
 export default Notifications;
