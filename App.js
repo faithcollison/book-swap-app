@@ -17,10 +17,10 @@ import Notifications from "./components/Notifications";
 import CreateListing from "./components/Create_Listing";
 import Form from "./components/Form";
 import Search_Existing_Book from "./components/Search_Existing_Book";
-import SingleBookListings from "./components/SingleBookListings";
 import ListedBook from "./components/ListedBook";
 import SwapNegotiationPage from "./components/SwapNegotiationPage";
 import DrawerNavigator from "./components/Menu";
+import AvailableListings from "./components/AvailableListings";
 
 
 const Stack = createNativeStackNavigator();
@@ -74,10 +74,14 @@ function App() {
             initialParams={{ session: session }}
           />
           <Stack.Screen
-            name="SingleBookListings"
-            component={SingleBookListings}
+            name="AvailableListings"
+            component={AvailableListings}
+            initialParams={{ session: session }}
           />
-          <Stack.Screen name="ListedBook" component={ListedBook} />
+          <Stack.Screen 
+          name="ListedBook" 
+          component={ListedBook}
+          initialParams={{ session: session }} />
           <Stack.Screen name="SwapNegotiationPage" component={SwapNegotiationPage} />
           <Stack.Screen
             name="Search_Existing_Book"

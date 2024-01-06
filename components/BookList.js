@@ -23,7 +23,6 @@ export default function BookList({ categoryName, id }) {
         .from("Listings")
         .select("*")
         .eq("Category", categoryName);
-
       setBookList(data);
     }
 

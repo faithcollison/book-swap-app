@@ -67,7 +67,7 @@ export default function BookListCard({ listing, id }) {
 
   return (
     <View style={styles.cardContainer}>
-      <Pressable onPress={() => navigation.navigate("SingleBookListings")}>
+      <Pressable onPress={() => navigation.navigate("AvailableListings", {listing: listing})}>
         <Image style={styles.bookCard} source={{ uri: listing.img_url }} />
       </Pressable>
       <Pressable
