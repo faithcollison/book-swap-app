@@ -14,7 +14,7 @@ import BookListCard from "./BookListCard";
 
 const screenWidth = Dimensions.get("window").width;
 
-export default function BookList({ categoryName }) {
+export default function BookList({ categoryName, id }) {
   const [bookList, setBookList] = useState([]);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function BookList({ categoryName }) {
       <View style={styles.categoryList}>
         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
           {bookList.map((listing) => {
-            return <BookListCard listing={listing} key={listing.book_id} />;
+            return <BookListCard listing={listing} key={listing.book_id} id={id} />;
           })}
         </ScrollView>
       </View>

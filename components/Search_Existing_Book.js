@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
+  ScrollView,
   SafeAreaView,
   Input,
   Dimensions,
@@ -26,6 +27,7 @@ const Search_Existing_Book = ({ navigation }) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [totalItems, setTotalItems] = useState(0);
+
   let totalPages = Math.ceil(totalItems / 20);
 
   const api = process.env.GOOGLE_BOOKS_API_KEY;
@@ -38,9 +40,10 @@ const Search_Existing_Book = ({ navigation }) => {
         }&maxResults=20&key=${api}`
       );
       const data = await response.json();
-      console.log(data);
       setTotalItems(data.totalItems);
-      setSearchResults(data.items);
+
+      const newSearchResults = [...data.items];
+      setSearchResults(newSearchResults);
       if (data.totalItems <= page * 20 + 20) {
         setHasMore(false);
       }
@@ -85,6 +88,9 @@ const Search_Existing_Book = ({ navigation }) => {
     handleSearch();
   }, [page]);
 
+  //Leave this comment in for future. Decision was made to map this instead of FlatList as FlatList refused to rerender when data/extradata was updated.
+  //This was the only solution I could come up with
+
   return (
     <View style={styles.wrapperContainer}>
       <Text> ADD A NEW BOOK! </Text>
@@ -95,85 +101,82 @@ const Search_Existing_Book = ({ navigation }) => {
         value={searchQuery}
         onSubmitEditing={handleSearch}
       />
-      <View style={styles.marginBottom}>
-        <View style={styles.container}>
-          <FlatList
-            data={searchResults}
-            keyExtractor={(item) =>
-              `${item.title}-${item.author}-${Math.random()}`
-            }
-            extraData={totalItems}
-            renderItem={({ item }) => (
-              <View style={styles.item}>
-                <TouchableOpacity onPress={() => handleSelectBook(item)}>
-                  <View
-                    style={[
-                      styles.container,
-                      {
-                        borderTopWidth: 1,
-                        borderBottomWidth: 1,
-                        borderColor: "black",
-                      },
-                    ]}
+      <ScrollView>
+        <View style={styles.marginBottom}>
+          <View style={styles.container}>
+            {searchResults.map((item) => {
+              return (
+                <View style={styles.item}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleSelectBook(item);
+                    }}
                   >
-                    <Text style={styles.bookTitle}>
-                      {item.volumeInfo.title}
-                    </Text>
-                    <Text style={styles.author}>
-                      Written by{" "}
-                      {item.volumeInfo.authors &&
-                        item.volumeInfo.authors.join(", ")}
-                    </Text>
-                    <Image
-                      source={
-                        item.volumeInfo.imageLinks !== undefined
-                          ? { uri: item.volumeInfo.imageLinks.smallThumbnail }
-                          : {
-                              uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
-                            }
-                      }
-                      style={[styles.image, { width: 100, height: 100 }]}
-                    />
-                  </View>
-                </TouchableOpacity>
-              </View>
-            )}
-          />
-          <View style={styles.button}>
-            <Button
-              title="Previous"
-              onPress={() => {
-                setPage((prevPage) => prevPage - 1);
-              }}
-              disabled={page === 1}
-            />
-            <Text>Page: {page}</Text>
-            <Button
-              title="Next"
-              onPress={() => {
-                setPage((prevPage) => prevPage + 1);
-              }}
-              disabled={page === totalPages}
-            />
+                    <View
+                      style={[
+                        styles.container,
+                        {
+                          borderTopWidth: 1,
+                          borderBottomWidth: 1,
+                          borderColor: "black",
+                        },
+                      ]}
+                    >
+                      <Text style={styles.bookTitle}>
+                        {item.volumeInfo.title}
+                      </Text>
+                      <Text style={styles.author}>
+                        Written by{" "}
+                        {item.volumeInfo.authors &&
+                          item.volumeInfo.authors.join(", ")}
+                      </Text>
+                      <Image
+                        source={
+                          item.volumeInfo.imageLinks !== undefined
+                            ? { uri: item.volumeInfo.imageLinks.smallThumbnail }
+                            : {
+                                uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
+                              }
+                        }
+                        style={[styles.image, { width: 100, height: 100 }]}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+            <View style={styles.button}>
+              <Button
+                title="Previous"
+                onPress={() => {
+                  setPage((prevPage) => prevPage - 1);
+                }}
+                disabled={page === 1}
+              />
+              <Text>Page: {page}</Text>
+              <Button
+                title="Next"
+                onPress={() => {
+                  setPage((prevPage) => prevPage + 1);
+                }}
+                disabled={page === totalPages}
+              />
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
 const styles = StyleSheet.create({
-  // wrapperContainer: {
-  //   marginBottom: screenHeight * 0.09
-  // },
   marginBottom: {
-    marginBottom: screenHeight * 0.09,
+    marginBottom: screenHeight * 0.11,
   },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F5FCFF",
-    // marginBottom: screenHeight * 0.09
   },
   item: {
     flex: 1,
