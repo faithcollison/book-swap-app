@@ -1,11 +1,19 @@
 import { Text, StyleSheet, Pressable, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import supabase from "../config/supabaseClient";
+import { useEffect, useState } from "react";
 
 export default function SwapNegotiationPage({ route }) {
+  const [title, setTitle] = useState([]);
   const navigation = useNavigation();
 
   const { user1_book, user2_book, info, session } = route.params;
+
+  useEffect(() => {
+    getTransferData().then((res) => {
+      setTitle([`${res.user1_book_title}`, `${res.user2_book_title}`]);
+    });
+  });
 
   // console.log(user1_book, user2_book);
 
@@ -36,36 +44,48 @@ export default function SwapNegotiationPage({ route }) {
   }
 
   async function removeData(infoResponse) {
-    console.log(infoResponse)
+    console.log(infoResponse);
     await Promise.all([
       supabase
         .from("Pending_Swaps")
         .delete()
         .eq("pending_swap_id", infoResponse.pending_swap_id),
-      supabase.from("Listings").delete().eq("book_id", infoResponse.user1_listing_id),
-      supabase.from("Listings").delete().eq("book_id", infoResponse.user2_listing_id),
+      supabase
+        .from("Listings")
+        .delete()
+        .eq("book_id", infoResponse.user1_listing_id),
+      supabase
+        .from("Listings")
+        .delete()
+        .eq("book_id", infoResponse.user2_listing_id),
     ]);
   }
 
   async function rejectBook(info) {
-    console.log(info)
+    console.log(info);
     await Promise.all([
       supabase.from("Notifications").insert([
         {
           type: "Offer_Rejected",
           user_id:
-          info.user1_id === session.user.id ? info.user2_id : info.user1_id,
+            info.user1_id === session.user.id ? info.user2_id : info.user1_id,
           username: session.user.user_metadata.username,
         },
       ]),
-      supabase.from("Notifications").delete().eq("swap_offer_id", info.pending_swap_id),
-      supabase.from("Pending_Swaps").delete().eq("pending_swap_id", info.pending_swap_id),
+      supabase
+        .from("Notifications")
+        .delete()
+        .eq("swap_offer_id", info.pending_swap_id),
+      supabase
+        .from("Pending_Swaps")
+        .delete()
+        .eq("pending_swap_id", info.pending_swap_id),
     ]);
   }
 
   return (
     <View>
-      <Text>This is the swap negotiation page</Text>
+      <Text>{title}</Text>
 
       <View style={styles.buttonContainer}>
         <Pressable
@@ -85,7 +105,13 @@ export default function SwapNegotiationPage({ route }) {
         >
           <Text style={styles.button}>Accept</Text>
         </Pressable>
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            getTransferData().then((res) => {
+              navigation.navigate("ReconsiderLibrary", { info: res });
+            });
+          }}
+        >
           <Text style={styles.button}>Reconsider</Text>
         </Pressable>
         <Pressable
