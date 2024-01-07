@@ -32,7 +32,7 @@ export default function BookList({ categoryName, id }) {
   return (
     <View style={styles.categoryContainer}>
       <View style={styles.categoryHeader}>
-        <Text style={styles.categoryHeaderTitle}>{categoryName}</Text>
+        <Text style={styles.categoryHeader}>{categoryName}</Text>
         <Pressable>
           <Text>See More</Text>
         </Pressable>

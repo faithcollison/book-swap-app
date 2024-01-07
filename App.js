@@ -5,7 +5,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import supabase from "./config/supabaseClient";
-import { Session } from "@supabase/supabase-js";
 
 import Welcome from "./components/Welcome";
 import Login from "./components/Login";
@@ -15,13 +14,13 @@ import UserProfile from "./components/UserProfile";
 import Messages from "./components/Messages";
 import Notifications from "./components/Notifications";
 import CreateListing from "./components/Create_Listing";
-import Form from "./components/Form";
 import Search_Existing_Book from "./components/Search_Existing_Book";
 import ListedBook from "./components/ListedBook";
 import SwapNegotiationPage from "./components/SwapNegotiationPage";
 import DrawerNavigator from "./components/Menu";
 import AvailableListings from "./components/AvailableListings";
-
+import SwapOffer from "./components/SwapOffer";
+import User2LibraryPage from "./components/User2Library";
 
 const Stack = createNativeStackNavigator();
 
@@ -78,14 +77,30 @@ function App() {
             component={AvailableListings}
             initialParams={{ session: session }}
           />
-          <Stack.Screen 
-          name="ListedBook" 
-          component={ListedBook}
-          initialParams={{ session: session }} />
-          <Stack.Screen name="SwapNegotiationPage" component={SwapNegotiationPage} />
+          <Stack.Screen
+            name="ListedBook"
+            component={ListedBook}
+            initialParams={{ session: session }}
+          />
+          <Stack.Screen
+            name="SwapNegotiationPage"
+            component={SwapNegotiationPage}
+          />
           <Stack.Screen
             name="Search_Existing_Book"
             component={Search_Existing_Book}
+          />
+          <Stack.Screen name="SwapOffer" component={SwapOffer} />
+          <Stack.Screen
+            name="User2Library"
+            component={User2LibraryPage}
+            initialParams={{ session: session }}
+            options={{
+              headerTintColor: "#000",
+              headerTitleStyle: {
+                color: "#fff",
+              },
+            }}
           />
         </Stack.Navigator>
       ) : (
@@ -107,7 +122,7 @@ function App() {
           />
         </Stack.Navigator>
       )}
-      {session && session.user && <Footer newNotif={newNotif}/>}
+      {session && session.user && <Footer newNotif={newNotif} />}
       <StatusBar style="auto" />
     </NavigationContainer>
   );

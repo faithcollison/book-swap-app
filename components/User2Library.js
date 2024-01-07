@@ -1,29 +1,29 @@
-import { React, useCallback, useEffect, useState } from "react";
-import supabase from "../config/supabaseClient";
 import {
   Text,
-  View,
-  Image,
-  ScrollView,
-  Dimensions,
   StyleSheet,
+  Pressable,
+  View,
   RefreshControl,
+  ScrollView,
+  Image,
+  Dimensions,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useCallback, useEffect, useState } from "react";
+import supabase from "../config/supabaseClient";
 
-const UserLibrary = ({ session }) => {
+export default function User2LibraryPage({ route }) {
+  const navigation = useNavigation();
   const [books, setBooks] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-
-  useEffect(() => {
-    if (session) getListings(session?.user?.user_metadata?.username);
-  }, []);
+  const { info, session } = route.params;
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     const { data, error } = await supabase
       .from("Listings")
       .select("*")
-      .eq("user_id", session.user.id)
+      .eq("user_id", info.user2_id)
       .order("date_posted", { ascending: false });
 
     if (error) {
@@ -34,19 +34,40 @@ const UserLibrary = ({ session }) => {
     setRefreshing(false);
   }, []);
 
-  async function getListings(username) {
+  useEffect(() => {
+    async function getListings() {
+      const { data, error } = await supabase
+        .from("Listings")
+        .select("*")
+        .eq("user_id", info.user2_id)
+        .order("date_posted", { ascending: false });
+
+      if (error) {
+        alert(error);
+      } else {
+        setBooks(data);
+      }
+    }
+
+    getListings();
+  }, []);
+
+  async function updateSwapInfo(book) {
     const { data, error } = await supabase
-      .from("Listings")
-      .select("*")
-      .eq("user_id", session.user.id)
-      .order("date_posted", { ascending: false });
+      .from("Pending_Swaps")
+      .update({
+        user2_book_title: book.book_title,
+        user2_book_imgurl: book.img_url,
+        user2_listing_id: book.book_id,
+      })
+      .eq("user1_id", session.user.id)
+      .eq("user2_id", book.user_id);
 
     if (error) {
-      alert(error);
-    } else {
-      setBooks(data);
+      console.log(error);
     }
   }
+
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -54,19 +75,29 @@ const UserLibrary = ({ session }) => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      <Text style={styles.headerText}>User Library</Text>
+      <Text style={styles.headerText}>{info.user2_username}'s Library</Text>
       {books.map((book) => (
         <View key={book.book_id} style={styles.bookContainer}>
           <Text style={styles.titleText}>{book.book_title}</Text>
           <Text style={styles.authorText}>{book.author}</Text>
           <Image source={{ uri: book.img_url }} style={styles.image} />
           <Text style={styles.descriptionText}>{book.description}</Text>
-          <Text style={styles.categoryText}>{book.Category}</Text>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("SwapNegotiationPage", {
+                user1_book: info,
+                user2_book: book,
+              });
+              updateSwapInfo(book);
+            }}
+          >
+            <Text style={styles.buttonContainer}>Choose book</Text>
+          </Pressable>
         </View>
       ))}
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -112,6 +143,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  buttonContainer: {
+    borderColor: "grey",
+    borderWidth: 2,
+    borderRadius: 12,
+    padding: 3,
+  },
 });
-
-export default UserLibrary;

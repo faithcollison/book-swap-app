@@ -1,8 +1,12 @@
 import { Text, StyleSheet, Pressable, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function SwapNegotiationPage() {
+export default function SwapNegotiationPage({ route }) {
   const navigation = useNavigation();
+
+  const { user1_book, user2_book } = route.params;
+
+
 
   return (
     <View>
