@@ -5,7 +5,7 @@ import supabase from "../config/supabaseClient";
 export default function SwapNegotiationPage({ route }) {
   const navigation = useNavigation();
 
-  const { user1_book, user2_book } = route.params;
+  const { user1_book, user2_book, info, session } = route.params;
 
   // console.log(user1_book, user2_book);
 
@@ -23,7 +23,10 @@ export default function SwapNegotiationPage({ route }) {
     const { data, error } = await supabase
       .from("Pending_Swaps")
       .select()
-      .eq("pending_swap_id", user1_book.pending_swap_id);
+      .eq(
+        "pending_swap_id",
+        user1_book ? user1_book.pending_swap_id : info.swap_offer_id
+      );
 
     return data[0];
   }
@@ -32,14 +35,31 @@ export default function SwapNegotiationPage({ route }) {
     const { data, error } = await supabase.from("Swap_History").insert([info]);
   }
 
-  async function removeData(info) {
+  async function removeData(infoResponse) {
+    console.log(infoResponse)
     await Promise.all([
       supabase
         .from("Pending_Swaps")
         .delete()
-        .eq("pending_swap_id", info.pending_swap_id),
-      supabase.from("Listings").delete().eq("book_id", info.user1_listing_id),
-      supabase.from("Listings").delete().eq("book_id", info.user2_listing_id),
+        .eq("pending_swap_id", infoResponse.pending_swap_id),
+      supabase.from("Listings").delete().eq("book_id", infoResponse.user1_listing_id),
+      supabase.from("Listings").delete().eq("book_id", infoResponse.user2_listing_id),
+    ]);
+  }
+
+  async function rejectBook(info) {
+    console.log(info)
+    await Promise.all([
+      supabase.from("Notifications").insert([
+        {
+          type: "Offer_Rejected",
+          user_id:
+          info.user1_id === session.user.id ? info.user2_id : info.user1_id,
+          username: session.user.user_metadata.username,
+        },
+      ]),
+      supabase.from("Notifications").delete().eq("swap_offer_id", info.pending_swap_id),
+      supabase.from("Pending_Swaps").delete().eq("pending_swap_id", info.pending_swap_id),
     ]);
   }
 
@@ -57,9 +77,10 @@ export default function SwapNegotiationPage({ route }) {
               })
               .then((res) => {
                 removeData(res);
-              }).then(() => {
-                navigation.navigate('Home')
               })
+              .then(() => {
+                navigation.navigate("Home");
+              });
           }}
         >
           <Text style={styles.button}>Accept</Text>
@@ -67,7 +88,13 @@ export default function SwapNegotiationPage({ route }) {
         <Pressable>
           <Text style={styles.button}>Reconsider</Text>
         </Pressable>
-        <Pressable>
+        <Pressable
+          onPress={() => {
+            getTransferData().then((res) => {
+              rejectBook(res);
+            });
+          }}
+        >
           <Text style={styles.button}>Reject</Text>
         </Pressable>
       </View>

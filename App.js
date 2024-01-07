@@ -85,6 +85,7 @@ function App() {
           <Stack.Screen
             name="SwapNegotiationPage"
             component={SwapNegotiationPage}
+            initialParams={{session: session}}
           />
           <Stack.Screen
             name="Search_Existing_Book"

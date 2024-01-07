@@ -158,8 +158,8 @@ const Notifications = ({ route }) => {
                   <Pressable
                     style={styles.container}
                     onPress={() => {
-                      navigation.navigate("SwapOffer", {
-                        info: notification.swapData,
+                      navigation.navigate("SwapNegotiationPage", {
+                        info: notification
                       });
                     }}
                   >
