@@ -1,20 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, Text, Pressable, Alert, StyleSheet, Image } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  Alert,
+  StyleSheet,
+  Image,
+  ScrollView,
+} from "react-native";
 import supabase from "../config/supabaseClient";
 import { useNavigation } from "@react-navigation/native";
 
 const Notifications = ({ route }) => {
   const [notifications, setNotifications] = useState([]);
   const { session, setNewNotif } = route.params;
+  const [processedNotifications, setProcessedNotifications] = useState([]);
+
   const navigation = useNavigation();
 
   useEffect(() => {
     setNewNotif(false);
     async function loadNotifications() {
       const { data, error } = await supabase
-        .from("Pending_Swaps")
+        .from("Notifications")
         .select()
-        .eq("user1_id", session.user.id);
+        .eq("user_id", session.user.id);
       return data;
     }
 
@@ -25,9 +35,9 @@ const Notifications = ({ route }) => {
 
   async function getNotifications(length) {
     const { data, error } = await supabase
-      .from("Pending_Swaps")
+      .from("Notifications")
       .select()
-      .eq("user1_id", session.user.id);
+      .eq("user_id", session.user.id);
 
     if (data.length > length) {
       setNewNotif(true);
@@ -42,45 +52,79 @@ const Notifications = ({ route }) => {
     setNotifications(res);
   };
 
+  const getSwapInfo = async (id) => {
+    const { data, error } = await supabase
+      .from("Pending_Swaps")
+      .select()
+      .eq("pending_swap_id", id);
+
+    return data[0];
+  };
+
   supabase
-    .channel("Pending_Swaps")
+    .channel("Notifications")
     .on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "Pending_Swaps" },
+      { event: "INSERT", schema: "public", table: "Notifications" },
       handlePostgresChanges
     )
     .subscribe();
 
+  useEffect(() => {
+    Promise.all(
+      notifications.map((notification) =>
+        notification.type === "Swap_Request"
+          ? getSwapInfo(notification.swap_offer_id).then((swapData) => ({
+              ...notification,
+              swapData,
+            }))
+          : notification
+      )
+    ).then((newNotifications) => {
+      setProcessedNotifications(newNotifications);
+    });
+  }, [notifications]);
+
   return (
-    <View>
-      <Text>This is Notifications Screen</Text>
-      <Pressable
-        onPress={() => navigation.navigate("SwapNegotiationPage")}
-        style={styles.button}
-      >
-        <Text>Swap Offer notification card</Text>
-      </Pressable>
-      {notifications.map((notification) => (
+    <ScrollView style={{ flex: 1 }}>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <Text>This is Notifications Screen</Text>
         <Pressable
-          style={styles.container}
-          onPress={() => {
-            navigation.navigate("SwapOffer", { info: notification });
-          }}
+          onPress={() => navigation.navigate("SwapNegotiationPage")}
+          style={styles.button}
         >
-          <View key={notification.offer_date}>
-            <Text>
-              {notification.user2_username} would like{" "}
-              {notification.user1_book_title}
-            </Text>
-            <Image
-              source={{ uri: notification.user1_book_imgurl }}
-              style={styles.image}
-            />
-            <Text></Text>
-          </View>
+          <Text>Swap Offer notification card</Text>
         </Pressable>
-      ))}
-    </View>
+      </View>
+      <View style={{ justifyContent: "flex-start" }}>
+        {processedNotifications.map((notification) =>
+          notification.type === "Swap_Request" && notification.swapData ? (
+            <Pressable
+              style={styles.container}
+              onPress={() => {
+                navigation.navigate("SwapOffer", {
+                  info: notification.swapData,
+                });
+              }}
+            >
+              <View key={notification.swapData.offer_date}>
+                <Text>
+                  {notification.swapData.user2_username} would like{" "}
+                  {notification.swapData.user1_book_title}
+                </Text>
+                <Image
+                  source={{ uri: notification.swapData.user1_book_imgurl }}
+                  style={styles.image}
+                />
+                <Text></Text>
+              </View>
+            </Pressable>
+          ) : (
+            <View></View>
+          )
+        )}
+      </View>
+    </ScrollView>
   );
 };
 

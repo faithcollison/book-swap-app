@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function AvailableListings({route}) {
   const navigation = useNavigation();
   const { session, listing } = route.params
-  console.log(listing)
+  
 
   return (
     <View>

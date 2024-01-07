@@ -1,5 +1,4 @@
-import { Text, StyleSheet, Pressable } from "react-native";
-import { View } from "react-native-web";
+import { Text, StyleSheet, Pressable, View } from "react-native";
 import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -46,6 +45,7 @@ export default function ListedBook({ route }) {
 
   // inserts info into pending swaps
   const reqSwap = async () => {
+    console.log(listing)
     if (swapState) {
       return;
     }
@@ -56,26 +56,48 @@ export default function ListedBook({ route }) {
         {
           user1_id: listing.user_id,
           user1_book_title: listing.book_title,
-          user1_listing_id: listing.listing_id,
+          user1_listing_id: listing.book_id,
           user1_book_imgurl: listing.img_url,
           user1_username: userName,
           user2_id: session.user.id,
           user2_username: session.user.user_metadata.username,
         },
       ])
-      .select();
+      .select("pending_swap_id");
 
     if (error) {
-      console.error("Error inserting data: ", error);
-      return;
+      console.log(error);
     }
     setSwapState(true);
+
+    return data[0].pending_swap_id
+  };
+
+  const sendNotification = async (id) => {
+    if (swapState) {
+      return;
+    }
+
+    const { data, error } = await supabase.from("Notifications").insert([
+      {
+        swap_offer_id: id,
+        type: "Swap_Request",
+        user_id: listing.user_id,
+      },
+    ]);
   };
 
   return (
     <View>
       {/* <Text>{listing.book_title}</Text> */}
-      <Pressable style={styles.button} onPress={reqSwap}>
+      <Pressable
+        style={styles.button}
+        onPress={() => {
+          reqSwap().then((id) => {
+            sendNotification(id);
+          });
+        }}
+      >
         <Text>Button to request swap</Text>
       </Pressable>
     </View>

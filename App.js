@@ -5,7 +5,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
 import supabase from "./config/supabaseClient";
-import { Session } from "@supabase/supabase-js";
 
 import Welcome from "./components/Welcome";
 import Login from "./components/Login";
@@ -15,7 +14,6 @@ import UserProfile from "./components/UserProfile";
 import Messages from "./components/Messages";
 import Notifications from "./components/Notifications";
 import CreateListing from "./components/Create_Listing";
-import Form from "./components/Form";
 import Search_Existing_Book from "./components/Search_Existing_Book";
 import ListedBook from "./components/ListedBook";
 import SwapNegotiationPage from "./components/SwapNegotiationPage";
