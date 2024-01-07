@@ -60,12 +60,25 @@ export default function User2LibraryPage({ route }) {
         user2_book_imgurl: book.img_url,
         user2_listing_id: book.book_id,
       })
+      .select("pending_swap_id")
       .eq("user1_id", session.user.id)
       .eq("user2_id", book.user_id);
 
     if (error) {
       console.log(error);
     }
+    return data[0];
+  }
+
+  async function sendNotification(bookInfo, swapId) {
+    const { data, error } = await supabase.from("Notifications").insert([
+      {
+        swap_offer_id: swapId.pending_swap_id,
+        type: "Chosen_Book",
+        user_id: bookInfo.user_id,
+        username: session.user.user_metadata.username,
+      },
+    ]);
   }
 
   return (
@@ -88,7 +101,9 @@ export default function User2LibraryPage({ route }) {
                 user1_book: info,
                 user2_book: book,
               });
-              updateSwapInfo(book);
+              updateSwapInfo(book).then((res) => {
+                sendNotification(book, res);
+              });
             }}
           >
             <Text style={styles.buttonContainer}>Choose book</Text>

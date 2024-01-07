@@ -61,6 +61,15 @@ const Notifications = ({ route }) => {
     return data[0];
   };
 
+  const getUserInfo = async (id) => {
+    const { data, error } = await supabase
+      .from("Users")
+      .select()
+      .eq("user_id", id);
+
+    return data[0];
+  };
+
   supabase
     .channel("Notifications")
     .on(
@@ -72,14 +81,30 @@ const Notifications = ({ route }) => {
 
   useEffect(() => {
     Promise.all(
-      notifications.map((notification) =>
-        notification.type === "Swap_Request"
-          ? getSwapInfo(notification.swap_offer_id).then((swapData) => ({
-              ...notification,
-              swapData,
-            }))
-          : notification
-      )
+      notifications.map(async (notification) => {
+        switch (notification.type) {
+          case "Swap_Request":
+            if (notification.swap_offer_id) {
+              const swapData = await getSwapInfo(notification.swap_offer_id);
+              return {
+                ...notification,
+                swapData,
+              };
+            }
+            break;
+          case "Chosen_Book":
+            if (notification.user_id) {
+              const swapData = await getUserInfo(notification.user_id);
+              return {
+                ...notification,
+                swapData,
+              };
+            }
+            break;
+          default:
+            return notification;
+        }
+      })
     ).then((newNotifications) => {
       setProcessedNotifications(newNotifications);
     });
@@ -97,32 +122,58 @@ const Notifications = ({ route }) => {
         </Pressable>
       </View>
       <View style={{ justifyContent: "flex-start" }}>
-        {processedNotifications.map((notification) =>
-          notification.type === "Swap_Request" && notification.swapData ? (
-            <Pressable
-              style={styles.container}
-              onPress={() => {
-                navigation.navigate("SwapOffer", {
-                  info: notification.swapData,
-                });
-              }}
-            >
-              <View key={notification.swapData.offer_date}>
-                <Text>
-                  {notification.swapData.user2_username} would like{" "}
-                  {notification.swapData.user1_book_title}
-                </Text>
-                <Image
-                  source={{ uri: notification.swapData.user1_book_imgurl }}
-                  style={styles.image}
-                />
-                <Text></Text>
-              </View>
-            </Pressable>
-          ) : (
-            <View></View>
-          )
-        )}
+        {processedNotifications.map((notification) => {
+          switch (notification.type) {
+            case "Swap_Request":
+              if (notification.swapData) {
+                return (
+                  <Pressable
+                    style={styles.container}
+                    onPress={() => {
+                      navigation.navigate("SwapOffer", {
+                        info: notification.swapData,
+                      });
+                    }}
+                  >
+                    <View key={notification.swapData.offer_date}>
+                      <Text>
+                        {notification.swapData.user2_username} would like{" "}
+                        {notification.swapData.user1_book_title}
+                      </Text>
+                      <Image
+                        source={{
+                          uri: notification.swapData.user1_book_imgurl,
+                        }}
+                        style={styles.image}
+                      />
+                      <Text></Text>
+                    </View>
+                  </Pressable>
+                );
+              }
+              break;
+            case "Chosen_Book":
+              if (notification) {
+                return (
+                  <Pressable
+                    style={styles.container}
+                    onPress={() => {
+                      navigation.navigate("SwapOffer", {
+                        info: notification.swapData,
+                      });
+                    }}
+                  >
+                    <View>
+                      <Text>{notification.username} has chosen a book!</Text>
+                    </View>
+                  </Pressable>
+                );
+              }
+              break;
+            default:
+              return null;
+          }
+        })}
       </View>
     </ScrollView>
   );
