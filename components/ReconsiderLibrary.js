@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useCallback, useEffect, useState } from "react";
 import supabase from "../config/supabaseClient";
 
-export default function User2LibraryPage({ route }) {
+export default function ReconsiderLibrary({ route }) {
   const navigation = useNavigation();
   const [books, setBooks] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -23,7 +23,10 @@ export default function User2LibraryPage({ route }) {
     const { data, error } = await supabase
       .from("Listings")
       .select("*")
-      .eq("user_id", info.user2_id)
+      .eq(
+        "user_id",
+        info.user2_id === session.user.id ? info.user1_id : info.user2_id
+      )
       .order("date_posted", { ascending: false });
 
     if (error) {
@@ -39,7 +42,10 @@ export default function User2LibraryPage({ route }) {
       const { data, error } = await supabase
         .from("Listings")
         .select("*")
-        .eq("user_id", info.user2_id)
+        .eq(
+          "user_id",
+          info.user2_id === session.user.id ? info.user1_id : info.user2_id
+        )
         .order("date_posted", { ascending: false });
 
       if (error) {
@@ -53,16 +59,40 @@ export default function User2LibraryPage({ route }) {
   }, []);
 
   async function updateSwapInfo(book) {
-    const { data, error } = await supabase
-      .from("Pending_Swaps")
-      .update({
+    let updateObject = {};
+
+    if (info.user2_id === session.user.id) {
+      console.log(book);
+      updateObject = {
+        user1_book_title: book.book_title,
+        user1_book_imgurl: book.img_url,
+        user1_listing_id: book.book_id,
+      };
+    } else if (info.user1_id === session.user.id) {
+      console.log(book);
+      updateObject = {
         user2_book_title: book.book_title,
         user2_book_imgurl: book.img_url,
         user2_listing_id: book.book_id,
-      })
-      .select("pending_swap_id")
-      .eq("user1_id", session.user.id)
-      .eq("user2_id", book.user_id);
+      };
+    }
+
+    let query = supabase
+      .from("Pending_Swaps")
+      .update(updateObject)
+      .select("pending_swap_id");
+
+    if (info.user2_id === session.user.id) {
+      query = query
+        .eq("user1_id", book.user_id)
+        .eq("user2_id", session.user.id);
+    } else if (info.user1_id === session.user.id) {
+      query = query
+        .eq("user1_id", session.user.id)
+        .eq("user2_id", book.user_id);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.log(error);
@@ -88,7 +118,12 @@ export default function User2LibraryPage({ route }) {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
-      <Text style={styles.headerText}>{info.user2_username}'s Library</Text>
+      <Text style={styles.headerText}>
+        {info.user2_id === session.user.id
+          ? info.user1_username
+          : info.user2_username}
+        's Library
+      </Text>
       {books.map((book) => (
         <View key={book.book_id} style={styles.bookContainer}>
           <Text style={styles.titleText}>{book.book_title}</Text>

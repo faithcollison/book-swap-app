@@ -21,6 +21,7 @@ import DrawerNavigator from "./components/Menu";
 import AvailableListings from "./components/AvailableListings";
 import SwapOffer from "./components/SwapOffer";
 import User2LibraryPage from "./components/User2Library";
+import ReconsiderLibrary from "./components/ReconsiderLibrary";
 
 const Stack = createNativeStackNavigator();
 
@@ -85,6 +86,7 @@ function App() {
           <Stack.Screen
             name="SwapNegotiationPage"
             component={SwapNegotiationPage}
+            initialParams={{ session: session }}
           />
           <Stack.Screen
             name="Search_Existing_Book"
@@ -101,6 +103,11 @@ function App() {
                 color: "#fff",
               },
             }}
+          />
+          <Stack.Screen
+            name="ReconsiderLibrary"
+            component={ReconsiderLibrary}
+            initialParams={{ session: session }}
           />
         </Stack.Navigator>
       ) : (

@@ -45,7 +45,6 @@ export default function ListedBook({ route }) {
 
   // inserts info into pending swaps
   const reqSwap = async () => {
-    console.log(listing)
     if (swapState) {
       return;
     }
