@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, Platform } from "react-native";
+import { View, TextInput, Text, Platform, ScrollView} from "react-native";
 import { Button } from "react-native-elements";
 import supabase from "../config/supabaseClient";
 import { StyleSheet } from "react-native-web";
@@ -82,77 +82,84 @@ const CreateListing = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Title</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Title"
-          onChangeText={setTitle}
-          value={title}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Author</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Author"
-          onChangeText={setAuthor}
-          value={author}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Category</Text>
-        <DropDownPicker
-          open={categoryOpen}
-          value={category}
-          items={categories.map((categoryItem, index) => ({
-            label: categoryItem,
-            value: categoryItem,
-            key: index,
-          }))}
-          setOpen={setCategoryOpen}
-          setValue={setCategory}
-          style={{...styles.input, zIndex: 1}}
-          dropDownContainerStyle={styles.dropDownContainer}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Condition</Text>
-        <DropDownPicker
-          open={conditionOpen}
-          value={condition}
-          items={conditions.map((conditionItem, index) => ({
-            label: conditionItem,
-            value: conditionItem,
-            key: index,
-          }))}
-          setOpen={setConditionOpen}
-          setValue={setCondition}
-          style={{...styles.input, zIndex: 1}}
-          dropDownContainerStyle={styles.dropDownContainer}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Description</Text>
-        <TextInput
-          style={[styles.input, styles.multilineInput]}
-          placeholder="Enter description"
-          onChangeText={setDescription}
-          value={description}
-          multiline
-        />
-      </View>
-      <Button
-        buttonStyle={styles.submitButton}
-        titleStyle={styles.submitButtonText}
-        title="Add Book"
-        onPress={() => {
-          handleSubmit();
-          navigation.navigate("Home");
-        }}
-      />
-    </View>
+    // <ScrollView>
+      <ScrollView style={styles.container}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Title</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Title"
+            onChangeText={setTitle}
+            value={title}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Author</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Author"
+            onChangeText={setAuthor}
+            value={author}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Description</Text>
+          <TextInput
+            style={[styles.input, styles.multilineInput]}
+            placeholder="Enter description"
+            onChangeText={setDescription}
+            value={description}
+            multiline
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Category</Text>
+          <DropDownPicker
+            open={categoryOpen}
+            value={category}
+            items={categories.map((categoryItem, index) => ({
+              label: categoryItem,
+              value: categoryItem,
+              key: index,
+            }))}
+            onOpen={() => setCategoryOpen(true)}
+            onClose={() => setCategoryOpen(false)}
+            setValue={setCategory}
+            style={{...styles.input, zIndex: 1}}
+            dropDownContainerStyle={styles.dropDownContainer}
+          />
+        </View>
+        <View style={categoryOpen ? styles.formElementWithMargin : styles.inputContainer}>
+          <Text style={styles.label}>Condition</Text>
+          <DropDownPicker
+            open={conditionOpen}
+            value={condition}
+            items={conditions.map((conditionItem, index) => ({
+              label: conditionItem,
+              value: conditionItem,
+              key: index,
+            }))}
+            onOpen={() => setConditionOpen(true)}
+            onClose={() => setConditionOpen(false)}
+            setValue={setCondition}
+            style={{...styles.input, zIndex: 1}}
+            dropDownContainerStyle={styles.dropDownContainer}
+          />
+        </View>
+      
+        <View style={conditionOpen ? styles.formElementWithMargin : styles.inputContainer}>
+          <Button
+            buttonStyle={styles.submitButton}
+            titleStyle={styles.submitButtonText}
+            title="Add Book"
+            onPress={() => {
+              handleSubmit();
+              navigation.navigate("Home");
+            }}
+          />
+        </View>
+      </ScrollView>
+    // </ScrollView>
   );
 };
 
@@ -164,7 +171,7 @@ const styles = StyleSheet.create({
   },
 
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: 30,
   },
 
   label: {
@@ -198,6 +205,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#fff",
     fontWeight: "bold",
+  },
+  formElementWithMargin: {
+    marginTop: 200, // adjust this value as needed
   },
 });
 
