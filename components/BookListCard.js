@@ -16,9 +16,8 @@ export default function BookListCard({ listing, id }) {
       const { data, error } = await supabase
         .from("Listings")
         .update({ no_of_wishlists: listing.no_of_wishlists + num })
-        .eq("listing_id", listing.listing_id);
+        .eq("book_id", listing.book_id);
     }
-
     async function getUserWishList() {
       const { data, error } = await supabase
         .from("Users")
@@ -28,27 +27,26 @@ export default function BookListCard({ listing, id }) {
     }
 
     async function updateUserWishList(res) {
-      if (res.includes(listing.book_title)) {
-        return;
-      }
-      
-      const sendArray =
-        res.length === 0 ? [listing.book_title] : [...res, listing.book_title];
+        if (res.includes(listing.book_title)) {
+          return;
+        }
+     
+    const updatedWishlist = [...res, listing.book_title];
 
-      const { data, error } = await supabase
-        .from("Users")
-        .update({ wishlist: sendArray })
-        .eq("user_id", id);
-    }
+    const { data, error } = await supabase
+    .from("Users")
+    .update({ wishlist: updatedWishlist })
+    .eq("user_id", id);
+}
 
-    async function removeItemFromWishList(res) {
-      const sendArray = res.filter((item) => item !== listing.book_title);
-
-      const { data, error } = await supabase
-        .from("Users")
-        .update({ wishlist: sendArray })
-        .eq("user_id", id);
-    }
+async function removeItemFromWishList(res) {
+    const updatedWishlist = res.filter((item) => item !== listing.book_title);
+  
+    const { data, error } = await supabase
+      .from("Users")
+      .update({ wishlist: updatedWishlist })
+      .eq("user_id", id);
+  }
 
     if (!wishListed) {
       setWishListed(true);
