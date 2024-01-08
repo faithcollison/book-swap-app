@@ -55,6 +55,9 @@ const Search_Existing_Book = ({ navigation }) => {
     try {
       const response = await fetch(apiSearch);
       const data = await response.json();
+      if(data.items === undefined){
+        navigation.navigate("CreateListing")
+      }
       const filtered = data.items.filter(
         (book) => book.volumeInfo.language === "en"
       );
