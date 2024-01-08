@@ -9,7 +9,7 @@ const WishList = ({ session }) => {
 
     useEffect(() => {
         if (session) {
-            getWishList(session?.user?.user_metadata?.username);
+            getWishList();
             setUsername(session?.user?.user_metadata?.username);
         }
     }, []);
@@ -34,11 +34,13 @@ const WishList = ({ session }) => {
         const { data, error } = await supabase
             .from('Users')
             .update({ wishlist: books.filter(item => item !== book) })
-            .eq('username', username);
+            .select('wishlist')
+            .eq('user_id', session.user.id)
         if (error) {
             console.log(error);
         } else {
-            setBooks(data.wishlist);
+            // console.log(data)
+            setBooks(data[0].wishlist);
         }
     };
     return (
