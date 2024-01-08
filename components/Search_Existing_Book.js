@@ -17,7 +17,8 @@ import { SearchBar } from "react-native-elements";
 const screenHeight = Dimensions.get("window").height;
 
 const Search_Existing_Book = ({ navigation }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchTitle, setSearchTitle] = useState("");
+  const [searchAuthor, setSearchAuthor] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedBook, setSelectedBook] = useState({});
   const [title, setTitle] = useState("");
@@ -27,23 +28,39 @@ const Search_Existing_Book = ({ navigation }) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [totalItems, setTotalItems] = useState(0);
+  const [hasSearched, setHasSearched] = useState(false);
 
   let totalPages = Math.ceil(totalItems / 20);
-
   const api = process.env.GOOGLE_BOOKS_API_KEY;
+
+  let apiSearch;
+
+  const apiSearchTitle = searchTitle.replace(/\s/g, "+");
+  const apiSearchAuthor = searchAuthor.replace(/\s/g, "+");
+  if (searchTitle && !searchAuthor) {
+    apiSearch = `https://www.googleapis.com/books/v1/volumes?q=${apiSearchTitle}&startIndex=${
+      page * 20
+    }&maxResults=20&key=${api}`;
+  } else if (!searchTitle && searchAuthor) {
+    apiSearch = `https://www.googleapis.com/books/v1/volumes?q=inauthor:${apiSearchAuthor}&startIndex=${
+      page * 20
+    }&maxResults=20&key=${api}`;
+  } else if (searchTitle && searchAuthor) {
+    apiSearch = `https://www.googleapis.com/books/v1/volumes?q=intitle:${apiSearchTitle}+inauthor:${apiSearchAuthor}&startIndex=${
+      page * 20
+    }&maxResults=20&key=${api}`;
+  }
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${searchQuery}&startIndex=${
-          page * 20
-        }&maxResults=20&key=${api}`
-      );
+      const response = await fetch(apiSearch);
       const data = await response.json();
+      const filtered = data.items.filter(
+        (book) => book.volumeInfo.language === "en"
+      );
       setTotalItems(data.totalItems);
-
-      const newSearchResults = [...data.items];
-      setSearchResults(newSearchResults);
+      setSearchResults(filtered);
+      setHasSearched(true);
       if (data.totalItems <= page * 20 + 20) {
         setHasMore(false);
       }
@@ -97,10 +114,18 @@ const Search_Existing_Book = ({ navigation }) => {
       <Text> Search for title here: </Text>
       <SearchBar
         placeholder="Search for book here.."
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-        onSubmitEditing={handleSearch}
+        onChangeText={setSearchTitle}
+        value={searchTitle}
+        // onSubmitEditing={handleSearch}
       />
+      <Text> Search for author here: </Text>
+      <SearchBar
+        placeholder="Search for book here.."
+        onChangeText={setSearchAuthor}
+        value={searchAuthor}
+        // onSubmitEditing={handleSearch}
+      />
+      <Button title="Search" onPress={handleSearch} />
       <ScrollView>
         <View style={styles.marginBottom}>
           <View style={styles.container}>
@@ -145,23 +170,25 @@ const Search_Existing_Book = ({ navigation }) => {
                 </View>
               );
             })}
-            <View style={styles.button}>
-              <Button
-                title="Previous"
-                onPress={() => {
-                  setPage((prevPage) => prevPage - 1);
-                }}
-                disabled={page === 1}
-              />
-              <Text>Page: {page}</Text>
-              <Button
-                title="Next"
-                onPress={() => {
-                  setPage((prevPage) => prevPage + 1);
-                }}
-                disabled={page === totalPages}
-              />
-            </View>
+            {hasSearched && (
+              <View style={styles.button}>
+                <Button
+                  title="Previous"
+                  onPress={() => {
+                    setPage((prevPage) => prevPage - 1);
+                  }}
+                  disabled={page === 1}
+                />
+                <Text>Page: {page}</Text>
+                <Button
+                  title="Next"
+                  onPress={() => {
+                    setPage((prevPage) => prevPage + 1);
+                  }}
+                  disabled={page === totalPages}
+                />
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>
