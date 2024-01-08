@@ -55,8 +55,8 @@ const Search_Existing_Book = ({ navigation }) => {
     try {
       const response = await fetch(apiSearch);
       const data = await response.json();
-      if(data.items === undefined){
-        navigation.navigate("CreateListing")
+      if (data.items === undefined) {
+        navigation.navigate("CreateListing");
       }
       const filtered = data.items.filter(
         (book) => book.volumeInfo.language === "en"
@@ -129,6 +129,11 @@ const Search_Existing_Book = ({ navigation }) => {
         // onSubmitEditing={handleSearch}
       />
       <Button title="Search" onPress={handleSearch} />
+
+      <Button
+        title="Add book manually"
+        onPress={() => navigation.navigate("CreateListing")}
+      />
       <ScrollView>
         <View style={styles.marginBottom}>
           <View style={styles.container}>
