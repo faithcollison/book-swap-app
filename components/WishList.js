@@ -21,7 +21,7 @@ const WishList = ({ session }) => {
     }, [username]);
 
     const getWishList = async username => {
-        const { data, error } = await supabase.from('Users').select('wishlist').eq('username', username).limit(1).single();
+        const { data, error } = await supabase.from('Users').select('wishlist').eq('user_id', session.user.id).limit(1).single();
 
         if (error) {
             console.log(error);
