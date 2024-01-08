@@ -54,19 +54,19 @@ const Search_Existing_Book = ({ navigation }) => {
   // }
 
   const handleSearch = async () => {
-    console.log('handleSearch called');
-    console.log(searchTerm, "search term")
+    console.log("handleSearch called");
+    console.log(searchTerm, "search term");
     let apiSearch;
-    if(searchTerm !== "") {
+    if (searchTerm !== "") {
       if (searchType === "title") {
-        console.log("title")
+        console.log("title");
         const apiSearchTitle = searchTerm.replace(/\s/g, "+");
         apiSearch = `https://www.googleapis.com/books/v1/volumes?q=${apiSearchTitle}&startIndex=${
           page * 20
         }&maxResults=20&key=${api}`;
-        console.log(apiSearch, "APi search")
+        console.log(apiSearch, "APi search");
       } else if (searchType === "author") {
-        console.log("author")
+        console.log("author");
         const apiSearchAuthor = searchTerm.replace(/\s/g, "+");
         apiSearch = `https://www.googleapis.com/books/v1/volumes?q=inauthor:${apiSearchAuthor}&startIndex=${
           page * 20
@@ -78,7 +78,7 @@ const Search_Existing_Book = ({ navigation }) => {
       // console.log(data.items)
       const data = await response.json();
       if (data.items === undefined) {
-        console.log('No items found, navigating to CreateListing');
+        console.log("No items found, navigating to CreateListing");
         navigation.navigate("CreateListing");
       }
       const filtered = data.items.filter(
@@ -131,124 +131,107 @@ const Search_Existing_Book = ({ navigation }) => {
   //   handleSearch();
   // }, [page]);
 
-
   //Leave this comment in for future. Decision was made to map this instead of FlatList as FlatList refused to rerender when data/extradata was updated.
   //This was the only solution I could come up with
 
   return (
-    <View style={styles.wrapperContainer}>
-      <Text> ADD A NEW BOOK! </Text>
-      {/* <Text> Search for title here: </Text>
-      <SearchBar
-        placeholder="Search for book here.."
-        onChangeText={setSearchTitle}
-        value={searchTitle}
-        // onSubmitEditing={handleSearch}
-      />
-      <Text> Search for author here: </Text> */}
-      {/* <Button
-        title={`Search ${searchType}`}
-        onPress={() =>
-          setSearchType((prevType) =>
-            prevType === "title" ? "author" : "title"
-          )
-        }
-      /> */}
-      <SwitchSelector
-        options={[
-          { label: "Title", value: "title" },
-          { label: "Author", value: "author" },
-        ]}
-        initial={0}
-        onPress={(value) => setSearchType(value)}
-        styles={{
-          borderColor: '#46bdbf',
-          backgroundColor: '#9003fc',
-          buttonColor: '#f1f1f1',
-          selectedLabelColor: '#FFFFFF',
-          unselectedLabelColor: '#FFFFFF',
-         }}
-      />
-      <SearchBar
-        placeholder="Search for book here.."
-        onChangeText={setSearchTerm}
-        value={searchTerm}
-        onSubmitEditing={handleSearch}
-      />
-
-      <Button title="Search" onPress={handleSearch} />
-
-      {/* <Button
-        title="Add book manually"
-        onPress={() => navigation.navigate("CreateListing")}
-      /> */}
-      <ScrollView>
-        <View style={styles.marginBottom}>
-          <View style={styles.container}>
-            {searchResults.map((item) => {
-              return (
-                <View style={styles.item} key={item.id}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      handleSelectBook(item);
-                    }}
-                  >
-                    <View
-                      style={[
-                        styles.container,
-                        {
-                          borderTopWidth: 1,
-                          borderBottomWidth: 1,
-                          borderColor: "black",
-                        },
-                      ]}
+    <ScrollView>
+      <View style={styles.wrapperContainer}>
+        <Text> ADD A NEW BOOK! </Text>
+        <SwitchSelector
+          options={[
+            { label: "Title", value: "title" },
+            { label: "Author", value: "author" },
+          ]}
+          initial={0}
+          onPress={(value) => setSearchType(value)}
+          styles={{
+            borderColor: "#46bdbf",
+            backgroundColor: "#9003fc",
+            buttonColor: "#f1f1f1",
+            selectedLabelColor: "#FFFFFF",
+            unselectedLabelColor: "#FFFFFF",
+          }}
+        />
+        <SearchBar
+          placeholder="Search for book here.."
+          onChangeText={setSearchTerm}
+          value={searchTerm}
+          onSubmitEditing={handleSearch}
+        />
+        <Button title="Search" onPress={handleSearch} />
+        <Button
+          title="Add book manually"
+          onPress={() => navigation.navigate("CreateListing")}
+        />
+        <ScrollView>
+          <View style={styles.marginBottom}>
+            <View style={styles.container}>
+              {searchResults.map((item) => {
+                return (
+                  <View style={styles.item} key={item.id}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        handleSelectBook(item);
+                      }}
                     >
-                      <Text style={styles.bookTitle}>
-                        {item.volumeInfo.title}
-                      </Text>
-                      <Text style={styles.author}>
-                        Written by{" "}
-                        {item.volumeInfo.authors &&
-                          item.volumeInfo.authors.join(", ")}
-                      </Text>
-                      <Image
-                        source={
-                          item.volumeInfo.imageLinks !== undefined
-                            ? { uri: item.volumeInfo.imageLinks.smallThumbnail }
-                            : {
-                                uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
-                              }
-                        }
-                        style={[styles.image, { width: 100, height: 100 }]}
-                      />
-                    </View>
-                  </TouchableOpacity>
+                      <View
+                        style={[
+                          styles.container,
+                          {
+                            borderTopWidth: 1,
+                            borderBottomWidth: 1,
+                            borderColor: "black",
+                          },
+                        ]}
+                      >
+                        <Text style={styles.bookTitle}>
+                          {item.volumeInfo.title}
+                        </Text>
+                        <Text style={styles.author}>
+                          Written by{" "}
+                          {item.volumeInfo.authors &&
+                            item.volumeInfo.authors.join(", ")}
+                        </Text>
+                        <Image
+                          source={
+                            item.volumeInfo.imageLinks !== undefined
+                              ? { uri: item.volumeInfo.imageLinks.smallThumbnail }
+                              : {
+                                  uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
+                                }
+                          }
+                          style={[styles.image, { width: 100, height: 100 }]}
+                        />
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+              {hasSearched && (
+                <View style={styles.button}>
+                  <Button
+                    title="Previous"
+                    onPress={() => {
+                      setPage((prevPage) => prevPage - 1);
+                    }}
+                    disabled={page === 1}
+                  />
+                  <Text>Page: {page}</Text>
+                  <Button
+                    title="Next"
+                    onPress={() => {
+                      setPage((prevPage) => prevPage + 1);
+                    }}
+                    disabled={page === totalPages}
+                  />
                 </View>
-              );
-            })}
-            {hasSearched && (
-              <View style={styles.button}>
-                <Button
-                  title="Previous"
-                  onPress={() => {
-                    setPage((prevPage) => prevPage - 1);
-                  }}
-                  disabled={page === 1}
-                />
-                <Text>Page: {page}</Text>
-                <Button
-                  title="Next"
-                  onPress={() => {
-                    setPage((prevPage) => prevPage + 1);
-                  }}
-                  disabled={page === totalPages}
-                />
-              </View>
-            )}
+              )}
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </View>
+        </ScrollView>
+      </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
