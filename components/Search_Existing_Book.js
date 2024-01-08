@@ -18,7 +18,6 @@ const screenHeight = Dimensions.get("window").height;
 import SwitchSelector from "react-native-switch-selector";
 
 const Search_Existing_Book = ({ navigation }) => {
-  // const [searchTitle, setSearchTitle] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedBook, setSelectedBook] = useState({});
@@ -35,38 +34,15 @@ const Search_Existing_Book = ({ navigation }) => {
   let totalPages = Math.ceil(totalItems / 20);
   const api = process.env.GOOGLE_BOOKS_API_KEY;
 
-  // let apiSearch;
-
-  // const apiSearchTitle = searchTitle.replace(/\s/g, "+");
-  // const apiSearchAuthor = searchAuthor.replace(/\s/g, "+");
-  // if (searchTitle && !searchAuthor) {
-  //   apiSearch = `https://www.googleapis.com/books/v1/volumes?q=${apiSearchTitle}&startIndex=${
-  //     page * 20
-  //   }&maxResults=20&key=${api}`;
-  // } else if (!searchTitle && searchAuthor) {
-  //   apiSearch = `https://www.googleapis.com/books/v1/volumes?q=inauthor:${apiSearchAuthor}&startIndex=${
-  //     page * 20
-  //   }&maxResults=20&key=${api}`;
-  // } else if (searchTitle && searchAuthor) {
-  //   apiSearch = `https://www.googleapis.com/books/v1/volumes?q=intitle:${apiSearchTitle}+inauthor:${apiSearchAuthor}&startIndex=${
-  //     page * 20
-  //   }&maxResults=20&key=${api}`;
-  // }
-
   const handleSearch = async () => {
-    console.log("handleSearch called");
-    console.log(searchTerm, "search term");
     let apiSearch;
     if (searchTerm !== "") {
       if (searchType === "title") {
-        console.log("title");
         const apiSearchTitle = searchTerm.replace(/\s/g, "+");
         apiSearch = `https://www.googleapis.com/books/v1/volumes?q=${apiSearchTitle}&startIndex=${
           page * 20
         }&maxResults=20&key=${api}`;
-        console.log(apiSearch, "APi search");
       } else if (searchType === "author") {
-        console.log("author");
         const apiSearchAuthor = searchTerm.replace(/\s/g, "+");
         apiSearch = `https://www.googleapis.com/books/v1/volumes?q=inauthor:${apiSearchAuthor}&startIndex=${
           page * 20
@@ -75,21 +51,19 @@ const Search_Existing_Book = ({ navigation }) => {
     }
     try {
       const response = await fetch(apiSearch);
-      // console.log(data.items)
       const data = await response.json();
       if (data.items === undefined) {
-        console.log("No items found, navigating to CreateListing");
         navigation.navigate("CreateListing");
       }
-      const filtered = data.items.filter(
-        (book) => book.volumeInfo.language === "en"
-      );
-      setTotalItems(data.totalItems);
-      setSearchResults(filtered);
-      setHasSearched(true);
       if (data.totalItems <= page * 20 + 20) {
         setHasMore(false);
       }
+      setTotalItems(data.totalItems);
+      const filtered = data.items.filter(
+        (book) => book.volumeInfo.language === "en"
+      );
+      setSearchResults(filtered);
+      setHasSearched(true);
     } catch (error) {
       console.error(error);
     }
@@ -123,13 +97,6 @@ const Search_Existing_Book = ({ navigation }) => {
     }
   }, [title, authors, description, imgUrl]);
 
-  // const handlePageChange = (newPage) => {
-  //   setPage(newPage);
-  //   handleSearch();
-  // };
-  // useEffect(() => {
-  //   handleSearch();
-  // }, [page]);
 
   //Leave this comment in for future. Decision was made to map this instead of FlatList as FlatList refused to rerender when data/extradata was updated.
   //This was the only solution I could come up with
