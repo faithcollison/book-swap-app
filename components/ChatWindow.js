@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
-import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import supabase from "../config/supabaseClient";
-import { Input } from "react-native-elements";
+
 
 export default function ChatWindow({ route }) {
   const { sender, receiver, username, session } = route.params;
   const [chatMessages, setChatMessages] = useState([]);
+  const [text, setText] = useState("");
 
   async function fetchChats() {
     const { data, error } = await supabase
@@ -21,7 +29,35 @@ export default function ChatWindow({ route }) {
 
   useEffect(() => {
     fetchChats().then(setChatMessages);
-  }, []);
+  }, [route]);
+
+  const handlePostgresChanges = async () => {
+    const res = await fetchChats();
+    setChatMessages(res);
+  };
+
+  async function sendMessage() {
+      let sendData = {
+          sender_id: receiver,
+          receiver_id: sender,
+          message: text,
+        };
+        
+        if (sender === session.user.id) {
+            sendData = { sender_id: sender, receiver_id: receiver, message: text };
+        }
+        const { data, error } = await supabase.from("Chats").insert([sendData]);
+        setText("")
+    }
+
+  supabase
+    .channel("Chats")
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "Chats" },
+      handlePostgresChanges
+    )
+    .subscribe();
 
   return (
     <View style={{ flex: 1 }}>
@@ -49,7 +85,13 @@ export default function ChatWindow({ route }) {
             </Text>
           );
         })}
-        {/* <Input label="SendMessage" placeholder="Send a message ..." /> */}
+        <TextInput
+          placeholder="Send a message ..."
+          onChangeText={setText}
+          value={text}
+          onSubmitEditing={sendMessage}
+          style={styles.input}
+        />
       </ScrollView>
     </View>
   );
@@ -82,5 +124,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     marginLeft: 5,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    marginVertical: 10,
+    borderRadius: 5,
+    fontSize: 16,
   },
 });
