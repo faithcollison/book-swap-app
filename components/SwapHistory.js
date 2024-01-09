@@ -35,21 +35,41 @@ const SwapHistory = ({ session }) => {
     }
   }, [userID]);
 
-//   console.log(userData);
-// const newDate = date.split("T")[0];
-  return (
-    <View>
-      {userData.map((swap) => {
-        return (
-          <View key={swap.pending_swap_id}>
-            <Text>
-              {" "}
-              You swapped {swap.user1_book_title} with {swap.user2_book_title} on {(swap.offer_date).split("T")[0]}{" "}
-            </Text>
+  const formatDate = (date) => {
+    return date.split("T")[0];
+  }
+
+return (
+    <ScrollView>
+      {userData.map((swap) => (
+        <Pressable
+          key={swap.pending_swap_id}
+          style={styles.container}
+          onPress={() => {
+            // Add navigation logic if needed
+          }}
+        >
+          <View>
+            <Text>{`You swapped ${swap.user1_book_title} with ${swap.user2_book_title} on ${formatDate(swap.offer_date)}`}</Text>
           </View>
-        );
-      })}
-    </View>
+        </Pressable>
+      ))}
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    margin: 'auto',
+    borderColor: 'gray',
+    borderWidth: 2,
+    width: '80%',
+    borderRadius: 12,
+    marginBottom: 8,
+    marginTop: 8,
+    padding: 10,
+  },
+});
+
 export default SwapHistory;

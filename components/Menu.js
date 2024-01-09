@@ -1,40 +1,42 @@
-import "react-native-gesture-handler";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { useState, useEffect } from "react";
-import supabase from "../config/supabaseClient";
-import HomeScreen from "./Home";
-import WishList from "./WishList";
-import UserLibrary from "./UserLibrary";
-import SignOutScreen from "./SignOut";
-import SwapHistory from "./SwapHistory";
-import { Image } from "react-native-elements";
+import 'react-native-gesture-handler';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useState, useEffect } from 'react';
+import supabase from '../config/supabaseClient';
+import HomeScreen from './Home';
+import WishList from './WishList';
+import UserLibrary from './UserLibrary';
+import SignOutScreen from './SignOut';
+import SwapHistory from './SwapHistory';
+import ActiveSwaps from './ActiveSwaps';
+import { Image } from 'react-native-elements';
 
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigator() {
-	const [session, setSession] = useState(null);
+    const [session, setSession] = useState(null);
 
-	useEffect(() => {
-		supabase.auth.getSession().then((session) => {
-			setSession(session);
-		});
-		supabase.auth.onAuthStateChange((event, session) => {
-			setSession(session);
-		});
-	}, []);
+    useEffect(() => {
+        supabase.auth.getSession().then(session => {
+            setSession(session);
+        });
+        supabase.auth.onAuthStateChange((event, session) => {
+            setSession(session);
+        });
+    }, []);
 
-	const logo = () => (
-		<Image
-			source={require("../assets/IMG_5454.png")}
-			style={{
-				width: 40,
-				height: 40,
-				borderRadius: 20,
-				marginRight: 10,
-				marginBottom: 10,
-			}}
-		/>
-	);
+    const logo = () => (
+        <Image
+            source={require('../assets/IMG_5454.png')}
+            style={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+                marginRight: 10,
+                marginBottom: 10,
+            }}
+        />
+    );
+
 
 	return (
 		<Drawer.Navigator

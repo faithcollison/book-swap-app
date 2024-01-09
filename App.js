@@ -29,17 +29,17 @@ import ChatWindow from "./components/ChatWindow";
 const Stack = createNativeStackNavigator();
 
 function App() {
-  const [session, setSession] = useState(null);
-  const [newNotif, setNewNotif] = useState(false);
+	const [session, setSession] = useState(null);
+	const [newNotif, setNewNotif] = useState(false);
 
-  useEffect(() => {
-    supabase.auth.getSession().then((session) => {
-      setSession(session);
-    });
-    supabase.auth.onAuthStateChange((event, session) => {
-      setSession(session);
-    });
-  }, []);
+	useEffect(() => {
+		supabase.auth.getSession().then((session) => {
+			setSession(session);
+		});
+		supabase.auth.onAuthStateChange((event, session) => {
+			setSession(session);
+		});
+	}, []);
 
   return (
     <NavigationContainer>
@@ -154,14 +154,14 @@ function App() {
 export default App;
 
 const styles = StyleSheet.create({
-  text: {
-    alignItems: "center",
-  },
-  container: {
-    flex: 1,
-  },
-  main: {
-    headerTitleAlign: "center",
-    flexGrow: 1,
-  },
+	text: {
+		alignItems: "center",
+	},
+	container: {
+		flex: 1,
+	},
+	main: {
+		headerTitleAlign: "center",
+		flexGrow: 1,
+	},
 });
