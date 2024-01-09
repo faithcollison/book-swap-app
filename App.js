@@ -128,17 +128,35 @@ function App() {
 					<Stack.Screen
 						name="Welcome"
 						component={Welcome}
-						options={{ headerTitleAlign: "center" }}
+						options={{
+							headerTitleAlign: "center",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+							headerTintColor: "white",
+						}}
 					/>
 					<Stack.Screen
 						name="Login"
 						component={Login}
-						options={{ headerTitleAlign: "center" }}
+						options={{
+							headerTitleAlign: "center",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+							headerTintColor: "white",
+						}}
 					/>
 					<Stack.Screen
 						name="SignUp"
 						component={SignUp}
-						options={{ headerTitleAlign: "center" }}
+						options={{
+							headerTitleAlign: "center",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+							headerTintColor: "white",
+						}}
 					/>
 				</Stack.Navigator>
 			)}
