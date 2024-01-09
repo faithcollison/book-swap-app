@@ -23,6 +23,7 @@ import SwapOffer from "./components/SwapOffer";
 import User2LibraryPage from "./components/User2Library";
 import GenreList from "./components/GenreList";
 import ReconsiderLibrary from "./components/ReconsiderLibrary";
+import ChatComponent from "./components/Messages";
 
 const Stack = createNativeStackNavigator();
 
@@ -62,43 +63,47 @@ function App() {
             name="UserProfile"
             component={UserProfile}
             initialParams={{ session: session }}
-            options={{headerTitle: ""}}
+            options={{ headerTitle: "" }}
           />
-          <Stack.Screen name="Messages" component={Messages} />
+          <Stack.Screen
+            name="Messages"
+            component={ChatComponent}
+            initialParams={{ session: session }}
+          />
           <Stack.Screen
             name="Notifications"
             component={Notifications}
             initialParams={{ session: session, setNewNotif: setNewNotif }}
-            options={{headerTitle: ""}}
+            options={{ headerTitle: "" }}
           />
           <Stack.Screen
             name="CreateListing"
             component={CreateListing}
             initialParams={{ session: session }}
-            options={{headerTitle: ""}}
+            options={{ headerTitle: "" }}
           />
           <Stack.Screen
             name="AvailableListings"
             component={AvailableListings}
             initialParams={{ session: session }}
-            options={{headerTitle: ""}}
+            options={{ headerTitle: "" }}
           />
           <Stack.Screen
             name="ListedBook"
             component={ListedBook}
             initialParams={{ session: session }}
-            options={{headerTitle: ""}}
+            options={{ headerTitle: "" }}
           />
           <Stack.Screen
             name="SwapNegotiationPage"
             component={SwapNegotiationPage}
             initialParams={{ session: session }}
-            options={{headerTitle: ""}}
+            options={{ headerTitle: "" }}
           />
           <Stack.Screen
             name="Search_Existing_Book"
             component={Search_Existing_Book}
-            options={{headerTitle: ""}}
+            options={{ headerTitle: "" }}
           />
           <Stack.Screen name="SwapOffer" component={SwapOffer} />
           <Stack.Screen
@@ -109,7 +114,7 @@ function App() {
               headerTintColor: "#000",
               headerTitleStyle: {
                 color: "#fff",
-              }
+              },
             }}
           />
           <Stack.Screen name="GenreList" component={GenreList} />

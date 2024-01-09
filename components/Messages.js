@@ -1,18 +1,44 @@
-import React from "react";
-import { View, Text } from "react-native";
-import Index from "./TestCarousel";
-import Test2 from "./TopTenCarousel"
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useEffect, useState } from "react";
+import { Text, View } from "react-native";
+import supabase from "../config/supabaseClient";
 
-const Messages = () => {
+export default function ChatComponent({ route }) {
+  const [chats, setChats] = useState([]);
+  const { session } = route.params;
+
+  useEffect(() => {
+    fetchChats().then(setChats);
+  }, []);
+
+  async function fetchChats() {
+    const { data, error } = await supabase
+      .from("Chats")
+      .select()
+      .or(`sender_id.eq.${session.user.id}, receiver_id.eq.${session.user.id}`);
+
+    return data;
+  }
+
+  const handlePostgresChanges = async () => {
+    const length = chats.length;
+    const res = await fetchChats(length);
+    setChats(res);
+  };
+
+  supabase
+    .channel("Chats")
+    .on(
+      "postgres_changes",
+      { event: "INSERT", schema: "public", table: "Chats" },
+      handlePostgresChanges
+    )
+    .subscribe();
+
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
-      <View>
-        <Text>This is Messages Screen</Text>
-        <Index />
-      </View>
-    </GestureHandlerRootView>
+    <View>
+      {chats.map((chat) => {
+        return <Text key={chat.id}>{chat.message}</Text>;
+      })}
+    </View>
   );
-};
-
-export default Messages;
+}
