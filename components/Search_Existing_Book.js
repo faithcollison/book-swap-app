@@ -22,6 +22,7 @@ const Search_Existing_Book = ({ navigation }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedBook, setSelectedBook] = useState({});
   const [title, setTitle] = useState("");
+  const [googleBookId, setGoogleBookId] = useState("")
   const [authors, setAuthors] = useState("");
   const [description, setDescription] = useState("");
   const [imgUrl, setImgUrl] = useState("");
@@ -75,6 +76,7 @@ const Search_Existing_Book = ({ navigation }) => {
 
   const handleSelectBook = (book) => {
     setSelectedBook(book);
+    setGoogleBookId(book.id)
     setTitle(book.volumeInfo.title);
     setAuthors(book.volumeInfo.authors?.join(", ") || "");
     setDescription(book.volumeInfo.description);
@@ -86,16 +88,17 @@ const Search_Existing_Book = ({ navigation }) => {
   };
 
   useEffect(() => {
-    if (title || authors || description) {
+    if (title || authors) {
       navigation.navigate("CreateListing", {
         currTitle: title,
         authors: authors,
         currDescription: description,
         imgUrl: imgUrl,
         navigation: navigation,
+        book_id: googleBookId
       });
     }
-  }, [title, authors, description, imgUrl]);
+  }, [title, authors]);
 
 
   //Leave this comment in for future. Decision was made to map this instead of FlatList as FlatList refused to rerender when data/extradata was updated.
@@ -135,6 +138,7 @@ const Search_Existing_Book = ({ navigation }) => {
           <View style={styles.marginBottom}>
             <View style={styles.container}>
               {searchResults.map((item) => {
+                console.log(item)
                 return (
                   <View style={styles.item} key={item.id}>
                     <TouchableOpacity

@@ -6,9 +6,10 @@ import { StyleSheet } from "react-native-web";
 import DropDownPicker from "react-native-dropdown-picker";
 
 const CreateListing = ({ route, navigation }) => {
-  const { currTitle, authors, currDescription, imgUrl } = route.params;
+  const { currTitle, authors, currDescription, imgUrl, book_id } = route.params;
 
   const [title, setTitle] = useState(currTitle);
+  const [googleBookID, setGoogleBookID] = useState(book_id)
   const [author, setAuthor] = useState(authors);
   const [category, setCategory] = useState("");
   const [condition, setCondition] = useState("");
@@ -65,6 +66,7 @@ const CreateListing = ({ route, navigation }) => {
       .insert([
         {
           book_title: title,
+          google_book_id: googleBookID, 
           author: author,
           Category: category,
           condition: condition,
