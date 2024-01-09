@@ -27,134 +27,138 @@ import ReconsiderLibrary from "./components/ReconsiderLibrary";
 const Stack = createNativeStackNavigator();
 
 function App() {
-  const [session, setSession] = useState(null);
-  const [newNotif, setNewNotif] = useState(false);
+	const [session, setSession] = useState(null);
+	const [newNotif, setNewNotif] = useState(false);
 
-  useEffect(() => {
-    supabase.auth.getSession().then((session) => {
-      setSession(session);
-    });
-    supabase.auth.onAuthStateChange((event, session) => {
-      setSession(session);
-    });
-  }, []);
+	useEffect(() => {
+		supabase.auth.getSession().then((session) => {
+			setSession(session);
+		});
+		supabase.auth.onAuthStateChange((event, session) => {
+			setSession(session);
+		});
+	}, []);
 
-  return (
-    <NavigationContainer>
-      {session && session.user ? (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={DrawerNavigator}
-            options={{
-              title: "Home",
-              headerShown: false,
-              headerStyle: {
-                backgroundColor: "#72d5ff",
-              },
-              headerTintColor: "black",
-              headerTitleStyle: {
-                fontWeight: "bold",
-              },
-            }}
-          />
-          <Stack.Screen
-            name="UserProfile"
-            component={UserProfile}
-            initialParams={{ session: session }}
-            options={{headerTitle: ""}}
-          />
-          <Stack.Screen name="Messages" component={Messages} />
-          <Stack.Screen
-            name="Notifications"
-            component={Notifications}
-            initialParams={{ session: session, setNewNotif: setNewNotif }}
-            options={{headerTitle: ""}}
-          />
-          <Stack.Screen
-            name="CreateListing"
-            component={CreateListing}
-            initialParams={{ session: session }}
-            options={{headerTitle: ""}}
-          />
-          <Stack.Screen
-            name="AvailableListings"
-            component={AvailableListings}
-            initialParams={{ session: session }}
-            options={{headerTitle: ""}}
-          />
-          <Stack.Screen
-            name="ListedBook"
-            component={ListedBook}
-            initialParams={{ session: session }}
-            options={{headerTitle: ""}}
-          />
-          <Stack.Screen
-            name="SwapNegotiationPage"
-            component={SwapNegotiationPage}
-            initialParams={{ session: session }}
-            options={{headerTitle: ""}}
-          />
-          <Stack.Screen
-            name="Search_Existing_Book"
-            component={Search_Existing_Book}
-            options={{headerTitle: ""}}
-          />
-          <Stack.Screen name="SwapOffer" component={SwapOffer} />
-          <Stack.Screen
-            name="User2Library"
-            component={User2LibraryPage}
-            initialParams={{ session: session }}
-            options={{
-              headerTintColor: "#000",
-              headerTitleStyle: {
-                color: "#fff",
-              }
-            }}
-          />
-          <Stack.Screen name="GenreList" component={GenreList} />
-          <Stack.Screen
-            name="ReconsiderLibrary"
-            component={ReconsiderLibrary}
-            initialParams={{ session: session }}
-          />
-        </Stack.Navigator>
-      ) : (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Welcome"
-            component={Welcome}
-            options={{ headerTitleAlign: "center" }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerTitleAlign: "center" }}
-          />
-          <Stack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{ headerTitleAlign: "center" }}
-          />
-        </Stack.Navigator>
-      )}
-      {session && session.user && <Footer newNotif={newNotif} />}
-      <StatusBar style="auto" />
-    </NavigationContainer>
-  );
+	return (
+		<NavigationContainer>
+			{session && session.user ? (
+				<Stack.Navigator>
+					<Stack.Screen
+						name="Home"
+						component={DrawerNavigator}
+						options={{
+							title: "Home",
+							headerShown: false,
+							headerStyle: {
+								backgroundColor: "#72d5ff",
+							},
+							headerTintColor: "black",
+							headerTitleStyle: {
+								fontWeight: "bold",
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="UserProfile"
+						component={UserProfile}
+						initialParams={{ session: session }}
+						options={{ headerTitle: "" }}
+					/>
+					<Stack.Screen
+						name="Messages"
+						component={Messages}
+						options={{ headerTitle: "" }}
+					/>
+					<Stack.Screen
+						name="Notifications"
+						component={Notifications}
+						initialParams={{ session: session, setNewNotif: setNewNotif }}
+						options={{ headerTitle: "" }}
+					/>
+					<Stack.Screen
+						name="CreateListing"
+						component={CreateListing}
+						initialParams={{ session: session }}
+						options={{ headerTitle: "" }}
+					/>
+					<Stack.Screen
+						name="AvailableListings"
+						component={AvailableListings}
+						initialParams={{ session: session }}
+						options={{ headerTitle: "" }}
+					/>
+					<Stack.Screen
+						name="ListedBook"
+						component={ListedBook}
+						initialParams={{ session: session }}
+						options={{ headerTitle: "" }}
+					/>
+					<Stack.Screen
+						name="SwapNegotiationPage"
+						component={SwapNegotiationPage}
+						initialParams={{ session: session }}
+						options={{ headerTitle: "" }}
+					/>
+					<Stack.Screen
+						name="Search_Existing_Book"
+						component={Search_Existing_Book}
+						options={{ headerTitle: "" }}
+					/>
+					<Stack.Screen name="SwapOffer" component={SwapOffer} />
+					<Stack.Screen
+						name="User2Library"
+						component={User2LibraryPage}
+						initialParams={{ session: session }}
+						options={{
+							headerTintColor: "#000",
+							headerTitleStyle: {
+								color: "#fff",
+							},
+						}}
+					/>
+					<Stack.Screen name="GenreList" component={GenreList} />
+					<Stack.Screen
+						name="ReconsiderLibrary"
+						component={ReconsiderLibrary}
+						initialParams={{ session: session }}
+					/>
+				</Stack.Navigator>
+			) : (
+				<Stack.Navigator>
+					<Stack.Screen
+						name="Welcome"
+						component={Welcome}
+						options={{ headerTitleAlign: "center" }}
+					/>
+					<Stack.Screen
+						name="Login"
+						component={Login}
+						options={{ headerTitleAlign: "center" }}
+					/>
+					<Stack.Screen
+						name="SignUp"
+						component={SignUp}
+						options={{ headerTitleAlign: "center" }}
+					/>
+				</Stack.Navigator>
+			)}
+			{session && session.user && <Footer newNotif={newNotif} />}
+			<StatusBar style="auto" />
+		</NavigationContainer>
+	);
 }
 
 export default App;
 
 const styles = StyleSheet.create({
-  text: {
-    alignItems: "center",
-  },
-  container: {
-    flex: 1,
-  },
-  main: {
-    headerTitleAlign: "center",
-    flexGrow: 1,
-  },
+	text: {
+		alignItems: "center",
+	},
+	container: {
+		flex: 1,
+	},
+	main: {
+		headerTitleAlign: "center",
+		flexGrow: 1,
+	},
 });
