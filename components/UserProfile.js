@@ -167,16 +167,19 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontSize: 36,
     textDecorationLine: "underline",
+    fontFamily: "Bellefair_400Regular",
   },
   email: {
     fontSize: 24,
     marginLeft: 25,
     marginBottom: 20,
+    fontFamily: "Bellefair_400Regular",
   },
   phone: {
     fontSize: 24,
     marginLeft: 25,
     marginBottom: 7,
+    fontFamily: "Bellefair_400Regular",
   },
   edit_button: {
     position: "absolute",
@@ -201,11 +204,13 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
     fontSize: 34,
     marginBottom: 8,
+    fontFamily: "Bellefair_400Regular",
   },
   title: {
     marginLeft: 7,
     marginBottom: 7,
     fontSize: 24,
+    fontFamily: "Bellefair_400Regular",
   },
   edit_container: {
     marginTop: 30,

@@ -7,6 +7,7 @@ import WishList from "./WishList";
 import UserLibrary from "./UserLibrary";
 import SignOutScreen from "./SignOut";
 import SwapHistory from "./SwapHistory";
+import { Image } from "react-native-elements";
 
 const Drawer = createDrawerNavigator();
 
@@ -22,18 +23,49 @@ function DrawerNavigator() {
 		});
 	}, []);
 
+	const logo = () => (
+		<Image
+			source={require("../assets/IMG_5454.png")}
+			style={{
+				width: 40,
+				height: 40,
+				borderRadius: 20,
+				marginRight: 10,
+				marginBottom: 10,
+			}}
+		/>
+	);
+
 	return (
-		<Drawer.Navigator>
+		<Drawer.Navigator
+			screenOptions={{
+				headerStyle: {
+					backgroundColor: "#06A77D",
+				},
+				headerTintColor: "white",
+				headerTitleStyle: {
+					fontWeight: "bold",
+					fontSize: "21",
+				},
+				headerTitleAlign: "center",
+			}}
+		>
 			<Drawer.Screen
 				name="Home"
 				component={HomeScreen}
-				options={{ headerTitleAlign: "center" }}
+				options={{ headerTitle: "", headerTitleAlign: "center", headerRight: logo }}
 				initialParams={{ session: session }}
 			/>
-			<Drawer.Screen name="User Library" options={{ headerTitleAlign: "center" }}>
+			<Drawer.Screen
+				name="User Library"
+				options={{ headerTitle: "",headerTitleAlign: "center", headerRight: logo }}
+			>
 				{(props) => <UserLibrary {...props} session={session} />}
 			</Drawer.Screen>
-			<Drawer.Screen name="Wishlist" options={{ headerTitleAlign: "center" }}>
+			<Drawer.Screen
+				name="Wishlist"
+				options={{ headerTitle: "",headerTitleAlign: "center", headerRight: logo }}
+			>
 				{(props) => <WishList {...props} session={session} />}
 			</Drawer.Screen>
 			<Drawer.Screen
