@@ -1,8 +1,10 @@
 import { React, useCallback, useEffect, useState } from 'react';
 import supabase from '../config/supabaseClient';
+import { useNavigation } from '@react-navigation/native';
 import { Text, View, Image, StyleSheet, ScrollView, Dimensions, RefreshControl, Pressable } from 'react-native';
 
 const ActiveSwaps = ({ session }) => {
+    const navigation = useNavigation();
     const [userID, setUserID] = useState('');
     const [userData, setUserData] = useState([]);
 
@@ -34,7 +36,7 @@ const ActiveSwaps = ({ session }) => {
                     key={swap.pending_swap_id}
                     style={styles.container}
                     onPress={() => {
-                        // Add navigation logic to swap page
+                        navigation.navigate('SwapNegotiationPage', { user1_book: swap, user2_book: null, info: null, session });
                     }}
                 >
                     <View>
