@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   View,
   StyleSheet,
@@ -16,13 +17,15 @@ const screenWidth = Dimensions.get("window").width;
 
 export default function BookList({ categoryName, id }) {
   const [bookList, setBookList] = useState([]);
+  const navigation = useNavigation()
 
   useEffect(() => {
     async function getBooks(categoryName) {
       const { data, error } = await supabase
         .from("Listings")
         .select("*")
-        .eq("Category", categoryName);
+        .eq("Category", categoryName)
+        .range(0, 19)
       setBookList(data);
     }
 
@@ -33,7 +36,7 @@ export default function BookList({ categoryName, id }) {
     <View style={styles.categoryContainer}>
       <View style={styles.categoryHeader}>
         <Text style={styles.categoryHeader}>{categoryName}</Text>
-        <Pressable>
+        <Pressable onPress={() => navigation.navigate('GenreList', {genre: categoryName})}>
           <Text>See More</Text>
         </Pressable>
       </View>
@@ -50,8 +53,8 @@ export default function BookList({ categoryName, id }) {
 
 const styles = StyleSheet.create({
   categoryContainer: {
-    alignItems: "center",
     flex: 1,
+    alignItems: "center",
   },
   categoryHeader: {
     flexDirection: "row",
@@ -62,7 +65,7 @@ const styles = StyleSheet.create({
   },
   categoryList: {
     width: screenWidth,
-    flexDirection: "row",
+    // flexDirection: "row",
     marginTop: 10,
   },
 });

@@ -21,6 +21,7 @@ import DrawerNavigator from "./components/Menu";
 import AvailableListings from "./components/AvailableListings";
 import SwapOffer from "./components/SwapOffer";
 import User2LibraryPage from "./components/User2Library";
+import GenreList from "./components/GenreList";
 
 const Stack = createNativeStackNavigator();
 
@@ -101,6 +102,10 @@ function App() {
                 color: "#fff",
               },
             }}
+          />
+          <Stack.Screen 
+              name="GenreList"
+              component={GenreList}
           />
         </Stack.Navigator>
       ) : (

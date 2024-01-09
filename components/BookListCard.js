@@ -78,7 +78,7 @@ export default function BookListCard({ listing, id }) {
           name="circle"
           size={37}
           color="white"
-          style={{ opacity: 0.8 }}
+          style={{ opacity: 0.9 }}
         />
         {!wishListed ? (
           <AntDesign
@@ -102,19 +102,22 @@ export default function BookListCard({ listing, id }) {
 
 const styles = StyleSheet.create({
   bookCard: {
-    height: 150,
-    resizeMode: "contain",
+    height: 180,
+    width: 120,
+    borderRadius: 15,
+    resizeMode: "cover",
   },
   cardContainer: {
     flex: 1,
     width: ScreenWidth / 3,
     padding: 5,
     justifyContent: "center",
+    alignItems: 'center',
   },
   heartContainer: {
     position: "absolute",
-    top: 10,
-    right: 10,
+    top: 8.5,
+    right: 20,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
