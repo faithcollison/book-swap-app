@@ -36,7 +36,7 @@ const SwapHistory = ({ session }) => {
   }, [userID]);
 
 //   console.log(userData);
-
+// const newDate = date.split("T")[0];
   return (
     <View>
       {userData.map((swap) => {
@@ -44,7 +44,7 @@ const SwapHistory = ({ session }) => {
           <View key={swap.pending_swap_id}>
             <Text>
               {" "}
-              You swapped {swap.user1_book_title} with {swap.user2_book_title} on {swap.offer_date}{" "}
+              You swapped {swap.user1_book_title} with {swap.user2_book_title} on {(swap.offer_date).split("T")[0]}{" "}
             </Text>
           </View>
         );
