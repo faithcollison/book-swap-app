@@ -55,27 +55,25 @@ export default function AvailableListings({ route }) {
     getBookOwner();
   }, []);
   // remove <p> and <br> from description
-  let blurb = bookInfo.description;
+  const blurb = bookInfo.description;
   let newBlurb;
   if (blurb) {
-    const regex = /<\/?p>|<\/?br>/g;
+    const regex = /<\/?p>|<\/?br>|<\/?i>/g;
     newBlurb = blurb.replace(regex, "");
-    console.log(newBlurb);
   }
 
   return (
     <View>
       <View>
         <Image style={styles.bookCard} source={{ uri: listing.img_url }} />
-        {/* {console.log(bookInfo)} */}
-        {bookInfo && (
+        {Object.keys(bookInfo).length > 0? 
           <>
             <Text> {bookInfo.title}</Text>
             <Text> Written by {bookInfo.authors}</Text>
             <Text> Released on {bookInfo.publishedDate}</Text>
             <Text> About: {newBlurb}</Text>
           </>
-        )}
+        : <Text> No information available </Text>}
       </View>
 
       <Text>Books listed by users:</Text>
