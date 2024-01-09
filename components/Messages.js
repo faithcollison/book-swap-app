@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import { Text, View, Pressable } from "react-native";
 import supabase from "../config/supabaseClient";
+import { useNavigation } from "@react-navigation/native";
 
 function getChatKey(chat) {
   const ids = [chat.sender_id, chat.receiver_id].sort();
   return ids.join("-");
 }
-export default function ChatComponent({ route }) {
+export default function ChatComponent({ navigation, route }) {
   const [chats, setChats] = useState([]);
   const [uniqueChats, setUniqueChats] = useState([]);
   const { session } = route.params;
-  const [usernames, setUsernames] = useState({});
+  const [usernames, setUsernames] = useState([]);
+
+  
 
   useEffect(() => {
     fetchChats().then(setChats);
@@ -66,38 +69,40 @@ export default function ChatComponent({ route }) {
   useEffect(() => {
     Promise.all(
       uniqueChats.map(async (chat) => {
-        console.log(chat)
         const res = await getUsername(chat);
-        setUsernames((prevUsernames) => [
-          ...prevUsernames,
-          [chat, res[0].username],
-         ]);
-         
+        if (Array.isArray(res) && res.length > 0) {
+          setUsernames((prev) => [
+            ...prev,
+            [
+              { sender: chat.sender_id },
+              { receiver: chat.receiver_id },
+              res[0].username,
+            ],
+          ]);
+        }
       })
-    ).then(() => console.log(usernames));
+    );
   }, [uniqueChats]);
 
   return (
     <View>
-      {/* //render list of unique chat pairings */}
-      {/* {uniqueChats.map((chat) => {
-        getUsername(chat).then((res) => {
-          console.log(res[0].username, "res")
-          return (
-            <Pressable>
-              <View>
-                <Text> Hello </Text>
-                <Text > {res[0].username}  </Text>
-
-              </View>
-            // </Pressable>
-          );
-        });
-        // console.log(chat);
-      })} */}
-      {/* {usernames.map((username) => {
-      console.log(username)
-     })} */}
+      {usernames.map((username) => {
+        return (
+          <Pressable
+            onPress={() => {
+              navigation.navigate("ChatWindow", {
+                sender: username[0].sender,
+                receiver: username[1].receiver,
+                username: username[2],
+                session: session
+              });
+            }}
+            key={username[2]}
+          >
+            <Text key={username[2]}>{username[2]}</Text>
+          </Pressable>
+        );
+      })}
     </View>
   );
 }
