@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
 		fontSize: 21,
 		// fontFamily: "Bellefair_400Regular",
 		fontFamily: "VollkornSC_400Regular",
-		fontWeight: 500,
+		fontWeight: '500',
 	},
 	categoryList: {
 		width: screenWidth,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
 		// fontFamily: "Lora_400Regular",
 		fontFamily: "Bellefair_400Regular",
 		fontSize: 17,
-    fontWeight: 500,
+    fontWeight: '500',
 		color: "white",
 	},
 });

@@ -45,7 +45,7 @@ function DrawerNavigator() {
 				headerTintColor: "white",
 				headerTitleStyle: {
 					fontWeight: "bold",
-					fontSize: "21",
+					fontSize: 21,
 				},
 				headerTitleAlign: "center",
 			}}
