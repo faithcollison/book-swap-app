@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import supabase from "../config/supabaseClient";
+import { Input } from "react-native-elements";
 
 export default function ChatWindow({ route }) {
   const { sender, receiver, username, session } = route.params;
@@ -25,7 +26,12 @@ export default function ChatWindow({ route }) {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
-        style={{ position: "absolute", bottom: 0, top: 0, width: "100%" }}
+        style={{
+          position: "absolute",
+          bottom: Dimensions.get("window").height * 0.09,
+          top: 0,
+          width: "100%",
+        }}
         contentContainerStyle={{ flex: 1, justifyContent: "flex-end" }}
       >
         {chatMessages.map((message) => {
@@ -35,14 +41,15 @@ export default function ChatWindow({ route }) {
           }
           return message.sender_id === session.user.id ? (
             <Text style={styles.senderMessage}>
-              It's my message: {message.message}
+              {session.user.user_metadata.username}: {message.message}
             </Text>
           ) : (
             <Text style={styles.receiverMessage}>
-              It's their message: {message.message}
+              {username}: {message.message}
             </Text>
           );
         })}
+        {/* <Input label="SendMessage" placeholder="Send a message ..." /> */}
       </ScrollView>
     </View>
   );
@@ -54,6 +61,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     top: 0,
     width: "100%",
+    // marginBottom: Dimensions.get("window").height * 0.09,
   },
   senderMessage: {
     alignSelf: "flex-end",
@@ -63,6 +71,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 5,
     marginBottom: 5,
+    marginRight: 5,
   },
   receiverMessage: {
     alignSelf: "flex-start",
@@ -72,5 +81,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginTop: 5,
     marginBottom: 5,
+    marginLeft: 5,
   },
 });
