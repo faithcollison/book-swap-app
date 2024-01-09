@@ -2,6 +2,7 @@ import { Text, StyleSheet, Pressable, View } from "react-native";
 import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+
 /*
 
 User 1 - Has the book 
@@ -12,9 +13,11 @@ User 1 Picks a book from users 2 library
 */
 export default function ListedBook({ route }) {
   const navigation = useNavigation();
-  const { session, listing } = route.params;
+  const { session, listing } = route.params
   const [userName, setUserName] = useState();
   const [swapState, setSwapState] = useState(false);
+
+
 
   useEffect(() => {
     async function checkSwapExists() {
@@ -45,7 +48,6 @@ export default function ListedBook({ route }) {
 
   // inserts info into pending swaps
   const reqSwap = async () => {
-    console.log(listing)
     if (swapState) {
       return;
     }
@@ -70,7 +72,7 @@ export default function ListedBook({ route }) {
     }
     setSwapState(true);
 
-    return data[0].pending_swap_id
+    return data[0].pending_swap_id;
   };
 
   const sendNotification = async (id) => {
@@ -89,11 +91,12 @@ export default function ListedBook({ route }) {
 
   return (
     <View>
-      {/* <Text>{listing.book_title}</Text> */}
+      <Text>{listing.listing_id}</Text>
       <Pressable
         style={styles.button}
         onPress={() => {
           reqSwap().then((id) => {
+            console.log("making swap");
             sendNotification(id);
           });
         }}

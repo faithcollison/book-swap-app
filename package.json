@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.18.2",
-    "@react-native-picker/picker": "^2.6.1",
+    "@react-native-picker/picker": "2.4.10",
     "@react-navigation/drawer": "^6.6.6",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
@@ -41,6 +41,7 @@
     "react-native-search-bar": "^3.5.1",
     "react-native-search-box": "^0.0.20",
     "react-native-select-dropdown": "^3.4.0",
+    "react-native-switch-selector": "^2.3.0",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-user-agent": "^2.3.1",
     "react-native-web": "~0.19.6"
