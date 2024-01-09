@@ -20,17 +20,15 @@ export default function ChatWindow({ route }) {
     const { data, error } = await supabase
       .from("Chats")
       .select()
-      .or([
-        `sender_id.eq.${sender}, receiver_id.eq.${receiver}`,
-        `sender_id.eq.${receiver}, receiver_id.eq.${sender}`,
-      ]);
+      .in("sender_id", [sender, receiver])
+      .in("receiver_id", [sender, receiver]);
 
     return data;
   }
 
   useEffect(() => {
     fetchChats().then(setChatMessages);
-  }, [route, chatMessages]);
+  }, []);
 
   const handlePostgresChanges = async () => {
     const res = await fetchChats();
@@ -66,13 +64,17 @@ export default function ChatWindow({ route }) {
     setTimeout(() => {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }, 500);
-  }, []);
+  }, [chatMessages]);
 
   return (
     <View style={styles.container}>
       <ScrollView
         ref={scrollViewRef}
-        style={{ flex: 1, paddingBottom: 50, marginBottom: Dimensions.get('window').height * 0.078 }}
+        style={{
+          flex: 1,
+          paddingBottom: 50,
+          marginBottom: Dimensions.get("window").height * 0.078,
+        }}
         contentContainerStyle={{ flexGrow: 1 }}
       >
         {chatMessages.map((message) => {
