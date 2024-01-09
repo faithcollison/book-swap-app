@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -6,9 +6,10 @@ import {
   Text,
   TextInput,
   View,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import supabase from "../config/supabaseClient";
-
 
 export default function ChatWindow({ route }) {
   const { sender, receiver, username, session } = route.params;
@@ -29,7 +30,7 @@ export default function ChatWindow({ route }) {
 
   useEffect(() => {
     fetchChats().then(setChatMessages);
-  }, [route]);
+  }, [route, chatMessages]);
 
   const handlePostgresChanges = async () => {
     const res = await fetchChats();
@@ -37,18 +38,18 @@ export default function ChatWindow({ route }) {
   };
 
   async function sendMessage() {
-      let sendData = {
-          sender_id: receiver,
-          receiver_id: sender,
-          message: text,
-        };
-        
-        if (sender === session.user.id) {
-            sendData = { sender_id: sender, receiver_id: receiver, message: text };
-        }
-        const { data, error } = await supabase.from("Chats").insert([sendData]);
-        setText("")
+    let sendData = {
+      sender_id: receiver,
+      receiver_id: sender,
+      message: text,
+    };
+
+    if (sender === session.user.id) {
+      sendData = { sender_id: sender, receiver_id: receiver, message: text };
     }
+    const { data, error } = await supabase.from("Chats").insert([sendData]);
+    setText("");
+  }
 
   supabase
     .channel("Chats")
@@ -59,16 +60,20 @@ export default function ChatWindow({ route }) {
     )
     .subscribe();
 
+  const scrollViewRef = useRef();
+
+  useEffect(() => {
+    setTimeout(() => {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }, 500);
+  }, []);
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <ScrollView
-        style={{
-          position: "absolute",
-          bottom: Dimensions.get("window").height * 0.09,
-          top: 0,
-          width: "100%",
-        }}
-        contentContainerStyle={{ flex: 1, justifyContent: "flex-end" }}
+        ref={scrollViewRef}
+        style={{ flex: 1, paddingBottom: 50, marginBottom: Dimensions.get('window').height * 0.078 }}
+        contentContainerStyle={{ flexGrow: 1 }}
       >
         {chatMessages.map((message) => {
           if (!message) {
@@ -85,25 +90,28 @@ export default function ChatWindow({ route }) {
             </Text>
           );
         })}
-        <TextInput
-          placeholder="Send a message ..."
-          onChangeText={setText}
-          value={text}
-          onSubmitEditing={sendMessage}
-          style={styles.input}
-        />
       </ScrollView>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ position: "absolute", bottom: 0, width: "100%" }}
+      >
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Send a message ..."
+            onChangeText={setText}
+            value={text}
+            onSubmitEditing={sendMessage}
+            style={styles.input}
+          />
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
-    bottom: 0,
-    top: 0,
-    width: "100%",
-    // marginBottom: Dimensions.get("window").height * 0.09,
+    flex: 1,
   },
   senderMessage: {
     alignSelf: "flex-end",
@@ -127,11 +135,14 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
     paddingHorizontal: 10,
     marginVertical: 10,
-    borderRadius: 5,
     fontSize: 16,
+  },
+  inputContainer: {
+    backgroundColor: "white",
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
   },
 });
