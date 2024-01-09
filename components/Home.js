@@ -7,12 +7,14 @@ import { ScrollView } from "react-native-gesture-handler";
 
 import BookList from "./BookList";
 import Footer from "./Footer";
+import TopTenCarousel from "./TopTenCarousel";
 
 const screenHeight = Dimensions.get("window").height;
 
-const HomeScreen = ({ navigation }) => {
-	const [categories, setCategories] = useState([]);
-	const [currSession, setCurrSession] = useState();
+const HomeScreen = ({  navigation }) => {
+  const [categories, setCategories] = useState([]);
+  const [currSession, setCurrSession] = useState();
+  const [topTen, setTopTen] = useState([])
 
 	useEffect(() => {
 		async function compareId(id) {
@@ -49,8 +51,19 @@ const HomeScreen = ({ navigation }) => {
 			setCategories(catArr);
 		}
 
-		getCategories();
-	}, []);
+    async function getTopTen (table) {
+      const { data, error } = await supabase
+        .from(table)
+        .select()
+        .order('no_of_wishlists', { ascending: false })
+        .range(0, 9)
+      setTopTen(data);
+    }
+  
+    getTopTen("Listings")
+    getCategories();
+  }, []);
+
 
 	return (
 		<ScrollView showsVerticalScrollIndicator={false}>
@@ -61,6 +74,7 @@ const HomeScreen = ({ navigation }) => {
 						: styles.container
 				}
 			>
+				<TopTenCarousel listings={topTen}/>
 				<Text style={styles.header}>Categories</Text>
 				{categories.map((category) => {
 					return (

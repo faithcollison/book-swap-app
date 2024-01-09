@@ -6,6 +6,7 @@ import HomeScreen from "./Home";
 import WishList from "./WishList";
 import UserLibrary from "./UserLibrary";
 import SignOutScreen from "./SignOut";
+import SwapHistory from "./SwapHistory";
 import { Image } from "react-native-elements";
 
 const Drawer = createDrawerNavigator();
@@ -72,6 +73,9 @@ function DrawerNavigator() {
 				component={SignOutScreen}
 				options={{ headerTitleAlign: "center" }}
 			/>
+			<Drawer.Screen name="Swap History" options={{ headerTitleAlign: "center" }}>
+				{(props) => <SwapHistory {...props} session={session} />}
+			</Drawer.Screen>
 		</Drawer.Navigator>
 	);
 }

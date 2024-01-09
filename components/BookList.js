@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
 	View,
 	StyleSheet,
@@ -22,16 +23,18 @@ import {
 const screenWidth = Dimensions.get("window").width;
 
 export default function BookList({ categoryName, id }) {
-	const [bookList, setBookList] = useState([]);
+  const [bookList, setBookList] = useState([]);
+  const navigation = useNavigation()
 
-	useEffect(() => {
-		async function getBooks(categoryName) {
-			const { data, error } = await supabase
-				.from("Listings")
-				.select("*")
-				.eq("Category", categoryName);
-			setBookList(data);
-		}
+  useEffect(() => {
+    async function getBooks(categoryName) {
+      const { data, error } = await supabase
+        .from("Listings")
+        .select("*")
+        .eq("Category", categoryName)
+        .range(0, 19)
+      setBookList(data);
+    }
 
 		getBooks(categoryName);
 	}, []);
@@ -52,7 +55,7 @@ export default function BookList({ categoryName, id }) {
 		<View style={styles.categoryContainer}>
 			<View style={styles.categoryHeader}>
 				<Text style={styles.categoryHeader}>{categoryName}</Text>
-				<Pressable>
+				<Pressable onPress={() => navigation.navigate('GenreList', {genre: categoryName})}>
 					<Text style={styles.seemore}>See all</Text>
 				</Pressable>
 			</View>
@@ -87,7 +90,7 @@ const styles = StyleSheet.create({
 	},
 	categoryList: {
 		width: screenWidth,
-		flexDirection: "row",
+		// flexDirection: "row",
 		marginTop: 10,
 		// fontFamily: "CormorantGaramond_400Regular",
 		marginTop: 7,
