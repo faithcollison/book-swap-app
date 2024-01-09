@@ -24,7 +24,6 @@ import User2LibraryPage from "./components/User2Library";
 import GenreList from "./components/GenreList";
 import ReconsiderLibrary from "./components/ReconsiderLibrary";
 
-
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -106,9 +105,7 @@ function App() {
               },
             }}
           />
-          <Stack.Screen 
-              name="GenreList"
-              component={GenreList}
+          <Stack.Screen name="GenreList" component={GenreList} />
           <Stack.Screen
             name="ReconsiderLibrary"
             component={ReconsiderLibrary}
