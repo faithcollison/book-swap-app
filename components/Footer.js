@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		width: screenWidth,
 		borderTopWidth: 2,
-		backgroundColor: "#EBEBEB",
+		backgroundColor: "#06A77D",
 	},
 	footerContent: {
 		width: screenWidth * 0.8,

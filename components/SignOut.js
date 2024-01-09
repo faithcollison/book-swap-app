@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import supabase from "../config/supabaseClient";
-import { View, Text } from "react-native-web";
+import { View, Text } from "react-native";
 
 const SignOutScreen = () => {
 	const handleSignOut = async () => {

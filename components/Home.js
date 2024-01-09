@@ -8,6 +8,10 @@ import { ScrollView } from "react-native-gesture-handler";
 import BookList from "./BookList";
 import Footer from "./Footer";
 import TopTenCarousel from "./TopTenCarousel";
+import { useFonts } from "expo-font";
+import {
+	VollkornSC_400Regular
+} from "@expo-google-fonts/dev";
 
 const screenHeight = Dimensions.get("window").height;
 
