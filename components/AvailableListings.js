@@ -58,7 +58,7 @@ export default function AvailableListings({ route }) {
   const blurb = bookInfo.description;
   let newBlurb;
   if (blurb) {
-    const regex = /<\/?p>|<\/?br>|<\/?i>/g;
+    const regex = /<\/?[^>]+>/g;
     newBlurb = blurb.replace(regex, "");
   }
 
