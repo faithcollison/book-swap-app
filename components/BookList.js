@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
 		// fontFamily: "CormorantGaramond_400Regular",
 		marginTop: 7,
 		marginBottom: 10,
-		marginLeft: 16,
+		// marginLeft: 16, //changed from anas
 	},
 	seemore: {
 		// fontFamily: "Lora_400Regular",

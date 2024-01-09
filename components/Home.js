@@ -1,20 +1,22 @@
 import { View, Text, Pressable, Dimensions, Platform } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import supabase from "../config/supabaseClient";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons'; 
 
 import BookList from "./BookList";
-import Footer from "./Footer";
 import TopTenCarousel from "./TopTenCarousel";
 
-const screenHeight = Dimensions.get("window").height;
+const {height, width} = Dimensions.get("window");
 
 const HomeScreen = ({  navigation }) => {
   const [categories, setCategories] = useState([]);
   const [currSession, setCurrSession] = useState();
-  const [topTen, setTopTen] = useState([])
+  const [topTen, setTopTen] = useState([]);
+  const scrollRef = useRef();
 
 	useEffect(() => {
 		async function compareId(id) {
@@ -66,24 +68,42 @@ const HomeScreen = ({  navigation }) => {
 
 
 	return (
-		<ScrollView showsVerticalScrollIndicator={false}>
-			<View
-				style={
-					Platform.OS === "web"
-						? { ...styles.container, ...styles.webFix }
-						: styles.container
-				}
-			>
-				<TopTenCarousel listings={topTen}/>
-				<Text style={styles.header}>Categories</Text>
-				{categories.map((category) => {
-					return (
-						<BookList categoryName={category} key={category} id={currSession} />
-					);
-				})}
-				<StatusBar style="auto" />
-			</View>
-		</ScrollView>
+		<View style={{flex: 1,}}>
+			<ScrollView showsVerticalScrollIndicator={false} ref={scrollRef}>
+				<View
+					style={
+						Platform.OS === "web"
+							? { ...styles.container, ...styles.webFix }
+							: styles.container
+					}
+				>
+					<TopTenCarousel listings={topTen}/>
+					<Text style={styles.header}>Categories</Text>
+					{categories.map((category) => {
+						return (
+							<BookList categoryName={category} key={category} id={currSession} />
+						);
+					})}
+					<StatusBar style="auto" />
+				</View>
+			</ScrollView>
+			<Pressable style={styles.BTTContainer} onPress={() => {
+				// console.log(scrollRef, '<<<<')
+				scrollRef.current?.scrollTo({
+					y : 0,
+					animated : true
+				});
+			}}>
+				<View style={styles.BTTCircle}>
+					<Ionicons
+						name="arrow-up"
+						size={35}
+						color="black"
+						style={styles.BTTArrow}
+					/>
+				</View>
+			</Pressable>
+		</View>
 	);
 };
 
@@ -96,7 +116,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#272727",
 	},
 	webFix: {
-		marginBottom: screenHeight * 0.09,
+		marginBottom: height * 0.09,
 	},
 	header: {
 		fontSize: 29,
@@ -105,6 +125,33 @@ const styles = StyleSheet.create({
 		color: "white",
     marginBottom: 25,
 	},
+	BTTContainer: {
+		position: 'fixed',
+		bottom: 100,
+		right: 20,
+		flex: 1,
+		alignItems: 'center',
+	},
+	BTTCircle: {
+		width: 50,
+		height: 50,
+		borderRadius: 25,
+		backgroundColor: 'white',
+		shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 8,
+        },
+        shadowOpacity: 0.45,
+        shadowRadius: 8,
+        elevation: 16,
+		justifyContent: 'center',
+		alignContent: 'center',
+	},
+	BTTArrow: {
+		textAlign: 'center',
+		width: '100%',
+	}
 });
 
 export default HomeScreen;
