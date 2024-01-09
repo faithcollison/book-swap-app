@@ -61,36 +61,43 @@ function App() {
             name="UserProfile"
             component={UserProfile}
             initialParams={{ session: session }}
+            options={{headerTitle: ""}}
           />
           <Stack.Screen name="Messages" component={Messages} />
           <Stack.Screen
             name="Notifications"
             component={Notifications}
             initialParams={{ session: session, setNewNotif: setNewNotif }}
+            options={{headerTitle: ""}}
           />
           <Stack.Screen
             name="CreateListing"
             component={CreateListing}
             initialParams={{ session: session }}
+            options={{headerTitle: ""}}
           />
           <Stack.Screen
             name="AvailableListings"
             component={AvailableListings}
             initialParams={{ session: session }}
+            options={{headerTitle: ""}}
           />
           <Stack.Screen
             name="ListedBook"
             component={ListedBook}
             initialParams={{ session: session }}
+            options={{headerTitle: ""}}
           />
           <Stack.Screen
             name="SwapNegotiationPage"
             component={SwapNegotiationPage}
             initialParams={{ session: session }}
+            options={{headerTitle: ""}}
           />
           <Stack.Screen
             name="Search_Existing_Book"
             component={Search_Existing_Book}
+            options={{headerTitle: ""}}
           />
           <Stack.Screen name="SwapOffer" component={SwapOffer} />
           <Stack.Screen
@@ -101,7 +108,7 @@ function App() {
               headerTintColor: "#000",
               headerTitleStyle: {
                 color: "#fff",
-              },
+              }
             }}
           />
           <Stack.Screen

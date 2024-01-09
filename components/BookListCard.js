@@ -100,8 +100,10 @@ async function removeItemFromWishList(res) {
 
 const styles = StyleSheet.create({
   bookCard: {
-    height: 150,
-    resizeMode: "contain",
+    borderRadius: 16,
+    height: 180,
+    width: 120,
+    resizeMode: "cover",
   },
   cardContainer: {
     flex: 1,

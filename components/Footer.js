@@ -1,63 +1,79 @@
-import { View, StyleSheet, Dimensions, Text } from "react-native";
+import { View, StyleSheet, Dimensions, Text, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Feather } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 
-export default function Footer({newNotif}) {
-  const navigation = useNavigation();
+export default function Footer({ newNotif }) {
+	const navigation = useNavigation();
 
-  return (
-    <View style={styles.footer}>
-      <View style={styles.footerContent}>
-        <Feather
-          name="home"
-          size={30}
-          style={styles.icon}
-          onPress={() => navigation.navigate("Home")}
-        />
-        <Feather
-          name="message-circle"
-          size={30}
-          onPress={() => navigation.navigate("Messages")}
-        />
-        <Feather
-          name="plus-circle"
-          size={45}
-          onPress={() => navigation.navigate("Search_Existing_Book")}
-        />
-        <Feather
-          name="bell"
-          size={30}
-          color={newNotif ? 'red' : 'black'}
-          onPress={() => navigation.navigate("Notifications")}
-          />
-        <Feather
-          name="user"
-          size={30}
-          onPress={() => navigation.navigate("UserProfile")}
-        />
-      </View>
-    </View>
-  );
+	return (
+		<View style={styles.footer}>
+			<View
+				style={
+					Platform.OS === "ios"
+						? { ...styles.iosfix, ...styles.footerContent }
+						: styles.footerContent
+				}
+			>
+				<Ionicons
+					name="home-outline"
+					size={29}
+					style={styles.icon}
+					onPress={() => navigation.navigate("Home")}
+				/>
+				<Ionicons
+					name="chatbubbles-outline"
+					size={29}
+					style={styles.icon}
+					onPress={() => navigation.navigate("Messages")}
+				/>
+				<Ionicons
+					name="add-outline"
+					size={45}
+					style={styles.icon}
+					onPress={() => navigation.navigate("Search_Existing_Book")}
+				/>
+				<Ionicons
+					name="notifications-outline"
+					size={29}
+					style={styles.icon}
+					color={newNotif ? "red" : "white"}
+					onPress={() => navigation.navigate("Notifications")}
+				/>
+				<Ionicons
+					name="person-outline"
+					size={29}
+					style={styles.icon}
+					onPress={() => navigation.navigate("UserProfile")}
+				/>
+			</View>
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
-  footer: {
-    height: screenHeight * 0.09,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "fixed",
-    bottom: 0,
-    width: screenWidth,
-    borderTopWidth: 2,
-    backgroundColor: "white",
-  },
-  footerContent: {
-    width: screenWidth * 0.8,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
+	footer: {
+		height: screenHeight * 0.09,
+		justifyContent: "center",
+		alignItems: "center",
+		position: "fixed",
+		bottom: 0,
+		width: screenWidth,
+		borderTopWidth: 2,
+		backgroundColor: "#06A77D",
+	},
+	footerContent: {
+		width: screenWidth * 0.8,
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+	},
+	icon: {
+		color: "white",
+	},
+	iosfix: {
+		marginBottom: 20,
+	},
 });
