@@ -140,9 +140,21 @@ const Notifications = ({ route }) => {
                   <Pressable
                     style={styles.container}
                     onPress={() => {
-                      navigation.navigate("SwapOffer", {
-                        info: notification.swapData,
-                      });
+                      if (
+                        Object.entries(notification.swapData).every(
+                          ([key, value]) => !!value
+                        )
+                      ) {
+                        navigation.navigate("SwapNegotiationPage", {
+                          info: notification.swapData,
+                          user1_book: notification.swapData,
+                          user2_book: notification.swapData,
+                        });
+                      } else {
+                        navigation.navigate("SwapOffer", {
+                          info: notification.swapData,
+                        });
+                      }
                     }}
                   >
                     <View key={notification.swapData.offer_date}>

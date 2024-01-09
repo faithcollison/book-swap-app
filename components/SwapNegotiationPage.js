@@ -15,18 +15,6 @@ export default function SwapNegotiationPage({ route }) {
     });
   });
 
-  // console.log(user1_book, user2_book);
-
-  // Accept - Transfer row from pending swaps to swap history
-  //          Delete all rows from pending swaps with matching book id's(listing id)
-  //          Delete books from listings page with matching book id's
-
-  // Reconsider - Takes you to opposing users library where you can change your book choice
-
-  // Reject - Remove row from pending swaps with matching book id
-  //          Deletes notification for user 1 (book holder)
-  //          Sends notification to user 2 notifying they have been rejected
-
   async function getTransferData() {
     const { data, error } = await supabase
       .from("Pending_Swaps")
@@ -122,6 +110,19 @@ export default function SwapNegotiationPage({ route }) {
           }}
         >
           <Text style={styles.button}>Reject</Text>
+        </Pressable>
+        <Pressable
+          onPress={() => {
+
+            navigation.navigate("ChatWindow", {
+              sender: user1_book.user1_id,
+              receiver: user1_book.user2_id,
+              username: user1_book.user2_username,
+              session: session
+            });
+          }}
+        >
+          <Text>Chat to owner</Text>
         </Pressable>
       </View>
     </View>
