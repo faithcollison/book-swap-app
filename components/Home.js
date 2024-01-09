@@ -7,12 +7,14 @@ import { ScrollView } from "react-native-gesture-handler";
 
 import BookList from "./BookList";
 import Footer from "./Footer";
+import TopTenCarousel from "./TopTenCarousel";
 
 const screenHeight = Dimensions.get("window").height;
 
 const HomeScreen = ({  navigation }) => {
   const [categories, setCategories] = useState([]);
-  const [currSession, setCurrSession] = useState()
+  const [currSession, setCurrSession] = useState();
+  const [topTen, setTopTen] = useState([])
 
   useEffect(() => {
     async function compareId(id) {
@@ -51,8 +53,21 @@ const HomeScreen = ({  navigation }) => {
       setCategories(catArr);
     }
 
+    async function getTopTen (table) {
+      const { data, error } = await supabase
+        .from(table)
+        .select()
+        .order('no_of_wishlists', { ascending: false })
+        .range(0, 9)
+      setTopTen(data);
+    }
+  
+    getTopTen("Listings")
     getCategories();
   }, []);
+
+  useEffect(() => {
+  })
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -63,6 +78,7 @@ const HomeScreen = ({  navigation }) => {
             : styles.webFix
         }
       >
+        <TopTenCarousel listings={topTen}/>
         <Text style={styles.header}>Categories</Text>
         {categories.map((category) => {
           return (
@@ -81,12 +97,14 @@ const HomeScreen = ({  navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#292929',
     flex: 1,
     alignItems: "center",
     paddingTop: 10,
     paddingBottom: 10,
   },
   webFix: {
+    backgroundColor: '#292929',
     flex: 1,
     alignItems: "center",
     paddingTop: 10,

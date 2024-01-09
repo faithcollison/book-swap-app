@@ -1,6 +1,8 @@
 import { View, StyleSheet, Dimensions, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons'; 
+// play around with the icons...
 
 const screenHeight = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: screenWidth,
     borderTopWidth: 2,
-    backgroundColor: "white",
+    backgroundColor: '#EBEBEB',
   },
   footerContent: {
     width: screenWidth * 0.8,
