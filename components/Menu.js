@@ -38,77 +38,48 @@ function DrawerNavigator() {
     );
 
 
-    return (
-        <Drawer.Navigator
-            screenOptions={{
-                headerStyle: {
-                    backgroundColor: '#06A77D',
-                },
-                headerTintColor: 'white',
-                headerTitleStyle: {
-                    fontWeight: 'bold',
-                    fontSize: '21',
-                },
-                headerTitleAlign: 'center',
-            }}
-        >
-            <Drawer.Screen
-                name="Home"
-                component={HomeScreen}
-                options={{ headerTitle: '', headerTitleAlign: 'center', headerRight: logo }}
-                initialParams={{ session: session }}
-            />
-            <Drawer.Screen
-                name="User Library"
-                options={{ headerTitle: '', headerTitleAlign: 'center', headerRight: logo }}
-            >
-                {props => (
-                    <UserLibrary
-                        {...props}
-                        session={session}
-                    />
-                )}
-            </Drawer.Screen>
-            <Drawer.Screen
-                name="Wishlist"
-                options={{ headerTitle: '', headerTitleAlign: 'center', headerRight: logo }}
-            >
-                {props => (
-                    <WishList
-                        {...props}
-                        session={session}
-                    />
-                )}
-            </Drawer.Screen>
-            <Drawer.Screen
-                name="Swap History"
-                options={{ headerTitleAlign: 'center' }}
-            >
-                {props => (
-                    <SwapHistory
-                        {...props}
-                        session={session}
-                    />
-                )}
-            </Drawer.Screen>
-            <Drawer.Screen
-                name="Active Swaps"
-                options={{ headerTitleAlign: 'center' }}
-            >
-                {props => (
-                    <ActiveSwaps
-                        {...props}
-                        session={session}
-                    />
-                )}
-            </Drawer.Screen>
-            <Drawer.Screen
-                name="Sign Out"
-                component={SignOutScreen}
-                options={{ headerTitleAlign: 'center' }}
-            />
-        </Drawer.Navigator>
-    );
+	return (
+		<Drawer.Navigator
+			screenOptions={{
+				headerStyle: {
+					backgroundColor: "#06A77D",
+				},
+				headerTintColor: "white",
+				headerTitleStyle: {
+					fontWeight: "bold",
+					fontSize: 21,
+				},
+				headerTitleAlign: "center",
+			}}
+		>
+			<Drawer.Screen
+				name="Home"
+				component={HomeScreen}
+				options={{ headerTitle: "", headerTitleAlign: "center", headerRight: logo }}
+				initialParams={{ session: session }}
+			/>
+			<Drawer.Screen
+				name="User Library"
+				options={{ headerTitle: "",headerTitleAlign: "center", headerRight: logo }}
+			>
+				{(props) => <UserLibrary {...props} session={session} />}
+			</Drawer.Screen>
+			<Drawer.Screen
+				name="Wishlist"
+				options={{ headerTitle: "",headerTitleAlign: "center", headerRight: logo }}
+			>
+				{(props) => <WishList {...props} session={session} />}
+			</Drawer.Screen>
+			<Drawer.Screen
+				name="Sign Out"
+				component={SignOutScreen}
+				options={{ headerTitleAlign: "center" }}
+			/>
+			<Drawer.Screen name="Swap History" options={{ headerTitleAlign: "center" }}>
+				{(props) => <SwapHistory {...props} session={session} />}
+			</Drawer.Screen>
+		</Drawer.Navigator>
+	);
 }
 
 export default DrawerNavigator;
