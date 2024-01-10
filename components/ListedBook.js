@@ -2,6 +2,7 @@ import { Text, StyleSheet, Pressable, View } from "react-native";
 import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { Dimensions } from "react-native";
 
 export default function ListedBook({ route, username }) {
   const navigation = useNavigation();
@@ -70,7 +71,7 @@ export default function ListedBook({ route, username }) {
     <View>
       <Text>{listing.listing_id}</Text>
       <Pressable
-        style={styles.button}
+        style={styles.descriptionButton}
         onPress={() => {
           Promise.all([checkSwapExists(), reqSwap()]).then(
             ([checkResults, reqResults]) => {
@@ -79,7 +80,7 @@ export default function ListedBook({ route, username }) {
           );
         }}
       >
-        <Text>Button to request swap</Text>
+        <Text style={styles.text}>Request a swap</Text>
       </Pressable>
     </View>
   );
@@ -90,4 +91,23 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "blue",
   },
+  descriptionButton: {
+    backgroundColor: "#3B8D77",
+    fontSize: 10,
+    alignSelf: "center",
+    width: Dimensions.get("window").width * 0.33,
+    borderRadius: 15,
+    marginTop: 10,
+    textAlign: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  text: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    padding: 10,
+  },
+  
 });
