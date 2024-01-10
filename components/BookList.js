@@ -55,13 +55,7 @@ export default function BookList({ categoryName, id }) {
 
 	return (
 		<View style={styles.categoryContainer}>
-			<View style={styles.categoryHeader}>
-				<Text style={styles.categoryHeader}>{categoryName}</Text>
-				<Pressable onPress={() => navigation.navigate('GenreList', {genre: categoryName})} style={styles.seeMorePill}>
-					<Text style={styles.seemore}>See all</Text>
-					<FontAwesome name="arrow-circle-right" size={24} color="white" />
-				</Pressable>
-			</View>
+			<Text style={styles.categoryHeader}>{categoryName}</Text>
 			<View style={styles.categoryList}>
 				<ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
 					{bookList.map((listing) => {
@@ -70,7 +64,6 @@ export default function BookList({ categoryName, id }) {
 					<View style={styles.cardContainer}>
 						<Pressable style={styles.linkCard} onPress={() => navigation.navigate('GenreList', {genre: categoryName})}>
 							<Ionicons name="arrow-forward" size={30} color="white" />
-							{/* <Text style={{color: 'white', fontWeight: 'bold', fontSize: 12}}>See All</Text> */}
 						</Pressable>
 					</View>
 				</ScrollView>
