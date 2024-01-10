@@ -3,55 +3,32 @@ import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
-/*
-
-User 1 - Has the book 
-User 2 - Requests the book 
-User 1 Picks a book from users 2 library
-
-
-*/
 export default function ListedBook({ route }) {
   const navigation = useNavigation();
-  const { session, listing } = route.params
+  const { session, listing } = route;
   const [userName, setUserName] = useState();
   const [swapState, setSwapState] = useState(false);
 
-
-
-  useEffect(() => {
-    async function checkSwapExists() {
-      const { data, error } = await supabase
-        .from("Pending_Swaps")
-        .select()
-        .eq("user1_id", listing.user_id)
-        .eq("user2_id", session.user.id)
-        .eq("user1_listing_id", listing.book_id);
-      if (data.length > 0) {
-        setSwapState(true);
-      } else {
-        setSwapState(false);
-      }
-    }
-    checkSwapExists();
-  }, []);
-
-  // retrieves the username of the book lister
-  async function getBookOwner() {
+  async function checkSwapExists() {
     const { data, error } = await supabase
-      .from("Users")
-      .select("username")
-      .eq("user_id", listing.user_id);
-    setUserName(data[0].username);
+      .from("Pending_Swaps")
+      .select()
+      .eq("user1_id", listing.user_id)
+      .eq("user2_id", session.user.id)
+      .eq("user1_listing_id", listing.book_id);
+
+    if (data.length > 0) {
+      setSwapState(true);
+    } else {
+      setSwapState(false);
+    }
   }
-  getBookOwner();
 
   // inserts info into pending swaps
   const reqSwap = async () => {
     if (swapState) {
       return;
     }
-
     const { data, error } = await supabase
       .from("Pending_Swaps")
       .insert([
@@ -68,10 +45,11 @@ export default function ListedBook({ route }) {
       .select("pending_swap_id");
 
     if (error) {
-      console.log(error);
+      console.error("Failed to make swap request: ", error);
+    } else {
+      console.log("Data inserted: ", data);
     }
     setSwapState(true);
-
     return data[0].pending_swap_id;
   };
 
@@ -79,7 +57,6 @@ export default function ListedBook({ route }) {
     if (swapState) {
       return;
     }
-
     const { data, error } = await supabase.from("Notifications").insert([
       {
         swap_offer_id: id,
@@ -95,10 +72,11 @@ export default function ListedBook({ route }) {
       <Pressable
         style={styles.button}
         onPress={() => {
-          reqSwap().then((id) => {
-            console.log("making swap");
-            sendNotification(id);
-          });
+          Promise.all([checkSwapExists(), reqSwap()]).then(
+            ([checkResults, reqResults]) => {
+              sendNotification(reqResults);
+            }
+          );
         }}
       >
         <Text>Button to request swap</Text>
