@@ -2,9 +2,7 @@ import { useEffect } from "react";
 import { View, Text, Pressable, StyleSheet, Image } from "react-native";
 import supabase from "../config/supabaseClient";
 import { useFonts } from "expo-font";
-import {
-	Bellefair_400Regular
-} from "@expo-google-fonts/dev";
+import { JosefinSans_400Regular } from "@expo-google-fonts/dev";
 
 export default function Welcome({ navigation }) {
 	useEffect(() => {
@@ -31,6 +29,14 @@ export default function Welcome({ navigation }) {
 			}}
 		/>
 	);
+
+	const [fontsLoaded] = useFonts({
+		JosefinSans_400Regular,
+	});
+
+	if (!fontsLoaded) {
+		return <Text>Loading...</Text>;
+	}
 
 	return (
 		<View style={styles.container}>
@@ -82,10 +88,10 @@ const styles = StyleSheet.create({
 		borderRadius: 20,
 		borderColor: "#06A77D",
 	},
-  text: {
-    fontSize: 20,
-		fontFamily: "Bellefair_400Regular",
+	text: {
+		fontSize: 20,
+		fontFamily: "JosefinSans_400Regular",
 		fontWeight: 500,
-    color: "white",
-  }
+		color: "white",
+	},
 });

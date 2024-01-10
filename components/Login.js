@@ -70,18 +70,20 @@ const styles = StyleSheet.create({
 	},
 	inputContainer: {
 		width: 300,
-    marginBottom: 10,
+		marginBottom: 10,
 	},
 	buttonContainer: {
 		width: 200,
 		marginTop: 10,
 	},
-  button: {
-    backgroundColor: "#06A77D",
-    width: 200,
-    height: 42,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 20,
-  },
+	button: {
+		backgroundColor: "#06A77D",
+		width: 200,
+		height: 42,
+		alignItems: "center",
+		justifyContent: "center",
+		borderRadius: 20,
+	},
 });
+
+//placeholder colour matches background - > change so it doesn't 'dissapear'

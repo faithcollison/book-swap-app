@@ -8,6 +8,14 @@ import UserLibrary from "./UserLibrary";
 import SignOutScreen from "./SignOut";
 import SwapHistory from "./SwapHistory";
 import { Image } from "react-native-elements";
+import { Text } from "react-native-elements";
+import { useFonts } from "expo-font";
+import {
+	VollkornSC_400Regular,
+	Bellefair_400Regular,
+	CormorantGaramond_400Regular,
+	JosefinSans_400Regular,
+} from "@expo-google-fonts/dev";
 
 const Drawer = createDrawerNavigator();
 
@@ -36,6 +44,17 @@ function DrawerNavigator() {
 		/>
 	);
 
+	const [fontsLoaded] = useFonts({
+		VollkornSC_400Regular,
+		Bellefair_400Regular,
+		CormorantGaramond_400Regular,
+		JosefinSans_400Regular,
+	});
+
+	if (!fontsLoaded) {
+		return <Text>Loading...</Text>;
+	}
+
 	return (
 		<Drawer.Navigator
 			screenOptions={{
@@ -45,9 +64,17 @@ function DrawerNavigator() {
 				headerTintColor: "white",
 				headerTitleStyle: {
 					fontWeight: "bold",
-					fontSize: "21",
+					fontSize: 21,
+					fontFamily: "Bellefair_400Regular",
 				},
 				headerTitleAlign: "center",
+				drawerStyle: {
+					backgroundColor: "#272727",
+					// #307361 - muted green based on accent colour
+				},
+				drawerLabelStyle: {
+					color: "white",
+				},
 			}}
 		>
 			<Drawer.Screen
@@ -58,17 +85,20 @@ function DrawerNavigator() {
 			/>
 			<Drawer.Screen
 				name="User Library"
-				options={{ headerTitle: "",headerTitleAlign: "center", headerRight: logo }}
+				options={{ headerTitle: "", headerTitleAlign: "center", headerRight: logo }}
 			>
 				{(props) => <UserLibrary {...props} session={session} />}
 			</Drawer.Screen>
 			<Drawer.Screen
 				name="Wishlist"
-				options={{ headerTitle: "",headerTitleAlign: "center", headerRight: logo }}
+				options={{ headerTitle: "", headerTitleAlign: "center", headerRight: logo }}
 			>
 				{(props) => <WishList {...props} session={session} />}
 			</Drawer.Screen>
-			<Drawer.Screen name="Swap History" options={{ headerTitleAlign: "center", headerTitle: ""}}>
+			<Drawer.Screen
+				name="Swap History"
+				options={{ headerTitleAlign: "center", headerTitle: "" }}
+			>
 				{(props) => <SwapHistory {...props} session={session} />}
 			</Drawer.Screen>
 			<Drawer.Screen

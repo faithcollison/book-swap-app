@@ -44,10 +44,10 @@ function App() {
 			{session && session.user ? (
 				<Stack.Navigator>
 					<Stack.Screen
-						name="Home"
+						name="Drawer"
 						component={DrawerNavigator}
 						options={{
-							title: "Home",
+							title: "Drawer",
 							headerShown: false,
 							headerStyle: {
 								backgroundColor: "#72d5ff",
@@ -62,47 +62,87 @@ function App() {
 						name="UserProfile"
 						component={UserProfile}
 						initialParams={{ session: session }}
-						options={{ headerTitle: "" }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
 					/>
 					<Stack.Screen
 						name="Messages"
 						component={Messages}
-						options={{ headerTitle: "" }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
 					/>
 					<Stack.Screen
 						name="Notifications"
 						component={Notifications}
 						initialParams={{ session: session, setNewNotif: setNewNotif }}
-						options={{ headerTitle: "" }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
 					/>
 					<Stack.Screen
 						name="CreateListing"
 						component={CreateListing}
 						initialParams={{ session: session }}
-						options={{ headerTitle: "" }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
 					/>
 					<Stack.Screen
 						name="AvailableListings"
 						component={AvailableListings}
 						initialParams={{ session: session }}
-						options={{ headerTitle: "" }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
 					/>
 					<Stack.Screen
 						name="ListedBook"
 						component={ListedBook}
 						initialParams={{ session: session }}
-						options={{ headerTitle: "" }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
 					/>
 					<Stack.Screen
 						name="SwapNegotiationPage"
 						component={SwapNegotiationPage}
 						initialParams={{ session: session }}
-						options={{ headerTitle: "" }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
 					/>
 					<Stack.Screen
 						name="Search_Existing_Book"
 						component={Search_Existing_Book}
-						options={{ headerTitle: "" }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
 					/>
 					<Stack.Screen name="SwapOffer" component={SwapOffer} />
 					<Stack.Screen
@@ -111,16 +151,29 @@ function App() {
 						initialParams={{ session: session }}
 						options={{
 							headerTintColor: "#000",
-							headerTitleStyle: {
-								color: "#fff",
+							headerStyle: {
+								backgroundColor: "#06A77D",
 							},
 						}}
 					/>
-					<Stack.Screen name="GenreList" component={GenreList} />
+					<Stack.Screen
+						name="GenreList"
+						component={GenreList}
+						options={{
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
 					<Stack.Screen
 						name="ReconsiderLibrary"
 						component={ReconsiderLibrary}
 						initialParams={{ session: session }}
+						options={{
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
 					/>
 				</Stack.Navigator>
 			) : (
