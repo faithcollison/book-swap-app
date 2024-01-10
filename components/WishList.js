@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
         width: 50,
         height: 75,
         marginRight: 10,
+        borderRadius: 7,
     },
     itemContainer: {
         display: 'flex',
