@@ -82,16 +82,16 @@ export default function ChatWindow({ route }) {
             return null;
           }
           return message.sender_id === session.user.id ? (
-            <Text style={styles.senderMessage}>
-              {message.message}
+            <View style={styles.senderMessage}>
+              <Text>{message.message}</Text>
               {/* {session.user.user_metadata.username}: {message.message} */}
-            </Text>
+            </View>
           ) : (
-            <Text style={styles.receiverMessage}>
+            <View style={styles.receiverMessage}>
               {/* {username}: {message.message} */}
-              {message.message}
+              <Text>{message.message}</Text>
 
-            </Text>
+            </View>
           );
         })}
       </ScrollView>
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#272727",
-    
+    overflow: 'hidden',
   },
   text: {
     fontFamily: "CormorantGaramond_400Regular",

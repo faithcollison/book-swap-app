@@ -114,16 +114,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listItem: {
-    // borderColor: "white",
-    // borderWidth: 2,
     borderTopColor: "white",
     borderTopWidth: 1,
     borderBottomColor: "white",
     borderBottomWidth: 1,
     padding:20,
     margin: 3,
-    // textAlign: "left",
-    // borderRadius: 20,
   },
   text: {
     fontFamily: "CormorantGaramond_400Regular",
