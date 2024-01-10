@@ -93,7 +93,7 @@ const WishList = ({ session }) => {
                                     style={styles.bookImage}
                                 />
                             )}
-                            <Text style={styles.textStyling}>{book}</Text>
+                            <Text style={[styles.textStyling, styles.hightlightText]}>{book}</Text>
                         </View>
                     </View>
                 ))}
@@ -122,6 +122,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: 'VollkornSC_400Regular',
         flexShrink: 1,
+    },
+    hightlightText: {
+        color: "#06A77D",
+        fontSize: 20,
+        fontFamily: 'VollkornSC_400Regular',
     },
     icon: {
         color: 'red',
