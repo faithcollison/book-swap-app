@@ -70,14 +70,14 @@ function DrawerNavigator() {
 			>
 				{(props) => <WishList {...props} session={session} />}
 			</Drawer.Screen>
+			<Drawer.Screen name="Swap History" options={{ headerTitleAlign: "center" }}>
+				{(props) => <SwapHistory {...props} session={session} />}
+			</Drawer.Screen>
 			<Drawer.Screen
 				name="Sign Out"
 				component={SignOutScreen}
 				options={{ headerTitleAlign: "center" }}
 			/>
-			<Drawer.Screen name="Swap History" options={{ headerTitleAlign: "center" }}>
-				{(props) => <SwapHistory {...props} session={session} />}
-			</Drawer.Screen>
 		</Drawer.Navigator>
 	);
 }

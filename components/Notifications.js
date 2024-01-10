@@ -31,7 +31,7 @@ const Notifications = ({ route }) => {
     loadNotifications().then((res) => {
       setNotifications(res);
     });
-  }, []);
+  }, [notifications]);
 
   async function getNotifications(length) {
     const { data, error } = await supabase
@@ -130,7 +130,7 @@ const Notifications = ({ route }) => {
   }, [notifications]);
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.page}>
       <View style={{ justifyContent: "flex-start" }}>
         {processedNotifications.map((notification) => {
           switch (notification.type) {
@@ -138,7 +138,7 @@ const Notifications = ({ route }) => {
               if (notification.swapData) {
                 return (
                   <Pressable
-                    style={styles.container}
+                    style={styles.notCard}
                     onPress={() => {
                       if (
                         Object.entries(notification.swapData).every(
@@ -158,32 +158,33 @@ const Notifications = ({ route }) => {
                     }}
                   >
                     <View key={notification.swapData.offer_date}>
-                      <Text>{daysSince(notification.created_at)} days ago</Text>
-                      <Text style={styles.flex}>
+                      {/* <Text>{daysSince(notification.created_at)} days ago</Text> */}
+                      <View style={styles.notCard}>
                         <Image
                           source={{
                             uri: notification.swapData.user1_book_imgurl,
                           }}
-                          style={styles.image}
+                          style={styles.bookCard}
                         />
-                        <Text>
-                          <Text style={{ fontWeight: "bold" }}>
-                            {notification.swapData.user2_username}
-                          </Text>
-                          <Text> </Text>
-                          would like to create a swap for
-                          <Text> </Text>
-                          <Text style={{ fontWeight: "bold" }}>
-                            {notification.swapData.user1_book_title}
+                        <Text style={styles.textBox}>
+                          <Text style={styles.notParaText}>
+                            {notification.swapData.user2_username + " wants to swap " + notification.swapData.user1_book_title}
                           </Text>
                         </Text>
-                      </Text>
-                      <Pressable
+                      </View>
+                      
+                      
+                      
+                      
+                      {/* <Pressable
                         onPress={() => deleteNotification(notification.id)}
                         style={styles.deleteButton}
                       >
                         <Text style={{ color: "red" }}>Delete</Text>
-                      </Pressable>
+                      </Pressable> */}
+
+
+
                     </View>
                   </Pressable>
                 );
@@ -202,8 +203,8 @@ const Notifications = ({ route }) => {
                   >
                     <View>
                       <Text>{daysSince(notification.created_at)} days ago</Text>
-                      <Text style={styles.flex}>
-                        <Text style={{ fontWeight: "bold" }}>
+                      <Text style={styles.textBox}>
+                        <Text style={styles.notParaText}>
                           {notification.username}{" "}
                         </Text>
                         <Image
@@ -233,33 +234,44 @@ const Notifications = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    display: "flex",
-    margin: "auto",
-    borderColor: "gray",
-    borderWidth: 2,
+  page: {
+    backgroundColor: "#272727",
+    flex: 1,
+  },
+  notParaText: {
+    // fontWeight: "bold",
+    color: "white",
+    flex: 0.5,
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  notText: {
+    color: "white",
+  },
+  bookCard: {
+    // flex: 0.5,
+    borderRadius: 16,
+    height: 180,
+    width: 120,
+    resizeMode: "contain",
+  },
+  notCard: {
+    flex: 1,
+    backgroundColor:"#464646",
     width: "auto",
     alignItems: "center",
-    width: "80%",
-    borderRadius: 12,
-    marginBottom: 8,
-    marginTop: 8,
+    justifyContent: "center",
+    width: "90%",
+    // borderRadius: 12,
   },
   deleteButton: {
     marginTop: 8,
     alignItems: "center",
   },
-  image: {
-    width: 80,
-    height: 120,
-    padding: 50,
-    margin: 10,
-    borderRadius: 4,
-  },
-  flex: {
+  textBox: {
     display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
+    // alignItems: "flex-start",
+    padding: 5,
   },
 });
 
