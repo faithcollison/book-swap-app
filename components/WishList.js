@@ -1,6 +1,7 @@
 import { React, useCallback, useEffect, useState } from 'react';
 import supabase from '../config/supabaseClient';
-import { Text, View, Image, StyleSheet, ScrollView, Dimensions, RefreshControl, Pressable } from 'react-native';
+import { Text, View, Image, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const WishList = ({ session }) => {
     const [books, setBooks] = useState([]);
@@ -20,32 +21,51 @@ const WishList = ({ session }) => {
         setRefreshing(false);
     }, [username]);
 
-    const getWishList = async username => {
+    const getWishList = async () => {
         const { data, error } = await supabase.from('Users').select('wishlist').eq('user_id', session.user.id).limit(1).single();
 
         if (error) {
             console.log(error);
-        } else {
-            setBooks(data.wishlist || []);
+            return;
         }
+
+        const wishlist = data?.wishlist || [];
+        const promises = wishlist.map(async book => {
+            const { data, error } = await supabase
+            .from('Listings')
+            .select('img_url')
+            .eq('book_title', book)
+            .limit(1).single();
+            
+            if (error) {
+                console.log(error);
+                return null;
+            }
+
+            return { book, img_url: data?.img_url };
+        });
+
+        const booksWithImages = await Promise.all(promises);
+        setBooks(booksWithImages.filter(item => item !== null));
     };
 
     const removeFromWishList = async book => {
         const { data, error } = await supabase
             .from('Users')
-            .update({ wishlist: books.filter(item => item !== book) })
+            .update({ wishlist: books.filter(item => item.book !== book) })
             .select('wishlist')
-            .eq('user_id', session.user.id)
+            .eq('user_id', session.user.id);
+
         if (error) {
             console.log(error);
         } else {
-            // console.log(data)
             setBooks(data[0].wishlist);
         }
     };
+
     return (
         <ScrollView
-            contentContainerStyle={styles.container}
+            style={styles.container}
             refreshControl={
                 <RefreshControl
                     refreshing={refreshing}
@@ -54,16 +74,27 @@ const WishList = ({ session }) => {
             }
         >
             <View>
-                <Text style={styles.header}>Wishlist</Text>
-                {books.map(book => (
+                <Text style={styles.textStyling}>Your Wishlist:</Text>
+                {books.map(({ book, img_url }) => (
                     <View
                         key={book}
                         style={styles.listContainer}
                     >
-                        <Text style={styles.titleText}>{book}</Text>
-                        <Pressable onPress={() => removeFromWishList(book)}>
-                            <Text>Remove</Text>
-                        </Pressable>
+                        <Ionicons
+                            name="close-circle-outline"
+                            size={20}
+                            style={styles.icon}
+                            onPress={() => removeFromWishList(book)}
+                        />
+                        <View style={styles.itemContainer}>
+                            {img_url && (
+                                <Image
+                                    source={{ uri: img_url }}
+                                    style={styles.bookImage}
+                                />
+                            )}
+                            <Text style={styles.textStyling}>{book}</Text>
+                        </View>
                     </View>
                 ))}
             </View>
@@ -73,27 +104,41 @@ const WishList = ({ session }) => {
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: '#272727',
         padding: 16,
     },
     listContainer: {
+        display: 'flex',
+        borderColor: 'gray',
+        borderWidth: 2,
+        borderRadius: 12,
+        marginBottom: 8,
+        marginTop: 8,
+        padding: 10,
+        posistion: 'relative',
+    },
+    textStyling: {
+        color: 'white',
+        fontSize: 20,
+        fontFamily: 'VollkornSC_400Regular',
+        flexShrink: 1,
+    },
+    icon: {
+        color: 'red',
+        position: 'absolute',
+        right: 10,
+        top: 5,
+        zIndex: 1,
+    },
+    bookImage: {
+        width: 50,
+        height: 75,
+        marginRight: 10,
+    },
+    itemContainer: {
+        display: 'flex',
+        flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 25,
-        backgroundColor: '#e3e3e3',
-        padding: 16,
-        borderRadius: 8,
-        width: Dimensions.get('window').width - 32,
-    },
-    header: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
-    },
-    titleText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
     },
 });
 export default WishList;
