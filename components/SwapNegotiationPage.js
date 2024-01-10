@@ -113,7 +113,6 @@ export default function SwapNegotiationPage({ route }) {
         </Pressable>
         <Pressable
           onPress={() => {
-
             navigation.navigate("ChatWindow", {
               sender: user1_book.user1_id,
               receiver: user1_book.user2_id,

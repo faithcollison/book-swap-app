@@ -31,7 +31,7 @@ const Notifications = ({ route }) => {
     loadNotifications().then((res) => {
       setNotifications(res);
     });
-  }, []);
+  }, [notifications]);
 
   async function getNotifications(length) {
     const { data, error } = await supabase
