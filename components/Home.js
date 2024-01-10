@@ -80,7 +80,6 @@ const HomeScreen = ({ navigation }) => {
         }
       >
         <TopTenCarousel listings={topTen} />
-        <Text style={styles.header}>Categories</Text>
         {categories.map((category) => {
           return (
             <BookList categoryName={category} key={category} id={currSession} />
