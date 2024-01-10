@@ -2,6 +2,7 @@ import { React, useCallback, useEffect, useState } from 'react';
 import supabase from '../config/supabaseClient';
 import { Text, View, Image, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 const WishList = ({ session }) => {
     const [books, setBooks] = useState([]);
@@ -80,8 +81,8 @@ const WishList = ({ session }) => {
                         key={book}
                         style={styles.listContainer}
                     >
-                        <Ionicons
-                            name="close-circle-outline"
+                        <Entypo
+                            name="circle-with-cross"
                             size={20}
                             style={styles.icon}
                             onPress={() => removeFromWishList(book)}
@@ -109,6 +110,7 @@ const styles = StyleSheet.create({
     },
     listContainer: {
         display: 'flex',
+        backgroundColor: '#464646',
         borderColor: 'gray',
         borderWidth: 2,
         borderRadius: 12,
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
         fontFamily: 'VollkornSC_400Regular',
     },
     icon: {
-        color: 'red',
+        color:"#C2C2C2",
         position: 'absolute',
         right: 10,
         top: 5,

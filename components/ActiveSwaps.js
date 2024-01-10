@@ -46,25 +46,44 @@ const ActiveSwaps = ({ session }) => {
                 >
                     <View>
                         {swap.user1_id === session.user.id ? (
-                            <Text style={styles.textStyling}>
-                                <Text style={[styles.hightlightText]}>{swap.user2_username}</Text>
-                                <Text> </Text>
-                                would like to create a swap for
-                                <Text> </Text>
-                                <Text style={[styles.hightlightText]}>{swap.user1_book_title}</Text>
-                                <Text>{` on ${formatDate(swap.offer_date)} `}</Text>
-                            </Text>
-                        ) : (
-                            <Text style={styles.textStyling}>
-                                <Text>
-                                    <Text style={[styles.hightlightText]}>You</Text>
+                            <View>
+                                <Text style={styles.textStyling}>
+                                    <Text style={[styles.hightlightText]}>{swap.user2_username}</Text>
+                                    <Text> </Text>
+                                    would like to create a swap for
+                                    <Text> </Text>
+                                    <Text style={[styles.hightlightText]}>{swap.user1_book_title}</Text>
+                                    <Text>{` on ${formatDate(swap.offer_date)} `}</Text>
                                 </Text>
-                                <Text> offered to swap</Text>
-                                <Text>{` ${swap.user2_book_title} `}</Text>
-                                <Text>for</Text>
-                                <Text style={[styles.hightlightText]}>{` ${swap.user1_book_title}`}</Text>
-                                <Text>{` on ${formatDate(swap.offer_date)} `}</Text>
-                            </Text>
+                                <Image
+                                    source={{ uri: swap.user2_book_imgurl }}
+                                    style={styles.bookImage}
+                                />
+                            </View>
+                        ) : (
+                            <View>
+                                <Text style={styles.textStyling}>
+                                    <Text>
+                                        <Text style={[styles.hightlightText]}>You</Text>
+                                    </Text>
+                                    <Text> offered to swap</Text>
+                                    <Text>{` ${swap.user2_book_title} `}</Text>
+                                    <Text>for</Text>
+                                    <Text style={[styles.hightlightText]}>{` ${swap.user1_book_title}`}</Text>
+                                    <Text>{` on ${formatDate(swap.offer_date)} `}</Text>
+                                </Text>
+                                <View
+                                style={styles.imageRow}>
+                                <Image
+                                    source={{ uri: swap.user2_book_imgurl }}
+                                    style={styles.bookImage}
+                                />
+                                <Image
+                                    source={{ uri: swap.user1_book_imgurl }}
+                                    style={styles.bookImage}
+                                />
+                            </View>
+                            </View>
                         )}
                     </View>
                 </Pressable>
@@ -80,6 +99,7 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         display: 'flex',
+        backgroundColor: '#464646',
         borderColor: 'gray',
         borderWidth: 2,
         borderRadius: 12,
@@ -93,9 +113,19 @@ const styles = StyleSheet.create({
         fontFamily: 'VollkornSC_400Regular',
     },
     hightlightText: {
-        color: "#06A77D",
+        color: '#06A77D',
         fontSize: 20,
         fontFamily: 'VollkornSC_400Regular',
+    },
+    bookImage: {
+        width: 50,
+        height: 75,
+        borderRadius: 7,
+    },
+    imageRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between', // Adjust as needed
+        marginTop: 8, // Add some space between text and images
     },
 });
 
