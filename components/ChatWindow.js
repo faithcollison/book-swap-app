@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     marginRight: 5,
+    maxWidth: '70%',
   },
   receiverMessage: {
     alignSelf: "flex-start",
@@ -164,6 +165,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     marginLeft: 5,
+    maxWidth: '70%',
   },
   input: {
     height: 40,
