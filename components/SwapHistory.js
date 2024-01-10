@@ -37,20 +37,33 @@ const SwapHistory = ({ session }) => {
 
   const formatDate = (date) => {
     return date.split("T")[0];
-  }
+  };
 
-return (
-    <ScrollView>
+  return (
+    <ScrollView style={styles.container}>
       {userData.map((swap) => (
         <Pressable
           key={swap.pending_swap_id}
-          style={styles.container}
+          style={styles.item}
           onPress={() => {
             // Add navigation logic if needed
           }}
         >
           <View>
-            <Text>{`You swapped ${swap.user1_book_title} with ${swap.user2_book_title} on ${formatDate(swap.offer_date)}`}</Text>
+            <Text style={styles.text}>
+              {"You swapped "}
+              <Text style={styles.highlightedText}>
+                {swap.user1_book_title}
+              </Text>
+              {" with "}
+              <Text style={styles.highlightedText}>
+                {swap.user2_book_title}
+              </Text>
+              {" on "}
+              <Text style={styles.text}>
+                {formatDate(swap.offer_date)}
+              </Text>
+            </Text>
           </View>
         </Pressable>
       ))}
@@ -59,16 +72,31 @@ return (
 };
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    margin: 'auto',
-    borderColor: 'gray',
+  item: {
+    display: "flex",
+    margin: "auto",
+    borderColor: "gray",
     borderWidth: 2,
-    width: '80%',
+    width: "95%",
     borderRadius: 12,
-    marginBottom: 8,
-    marginTop: 8,
+    margin: 10,
     padding: 10,
+  },
+  container: {
+    backgroundColor: "#272727",
+    flex: 1,
+  },
+  text: {
+    fontFamily: "VollkornSC_400Regular",
+    color: "white",
+    fontSize: 16,
+    textAlign: "left",
+  },
+  highlightedText: {
+    color: "#06A77D",
+    fontFamily: "VollkornSC_400Regular",
+    fontSize: 16,
+    textAlign: "left",
   },
 });
 
