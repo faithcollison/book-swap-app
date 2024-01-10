@@ -83,11 +83,14 @@ export default function ChatWindow({ route }) {
           }
           return message.sender_id === session.user.id ? (
             <Text style={styles.senderMessage}>
-              {session.user.user_metadata.username}: {message.message}
+              {message.message}
+              {/* {session.user.user_metadata.username}: {message.message} */}
             </Text>
           ) : (
             <Text style={styles.receiverMessage}>
-              {username}: {message.message}
+              {/* {username}: {message.message} */}
+              {message.message}
+
             </Text>
           );
         })}
@@ -128,7 +131,14 @@ export default function ChatWindow({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#272727",
     
+  },
+  text: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
   },
   inputContainer: {
     backgroundColor: "white",
@@ -140,12 +150,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginBottom: Dimensions.get("window").height * 0.08,
     height: 10,
-    // borderColor: "gray",
-    // borderWidth: 10,
-    // borderRadius: 5,
   },
 
   senderMessage: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "white",
+    fontSize: 16,
     alignSelf: "flex-end",
     padding: 5,
     borderColor: "gray",
@@ -155,8 +165,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginRight: 5,
     maxWidth: '70%',
+    backgroundColor: "#2b88cf"
   },
   receiverMessage: {
+    backgroundColor: "#dadfe3",
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "black",
+    fontSize: 16,
     alignSelf: "flex-start",
     padding: 5,
     borderColor: "gray",
