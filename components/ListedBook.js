@@ -3,11 +3,11 @@ import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
-export default function ListedBook({ route }) {
+export default function ListedBook({ route, username }) {
   const navigation = useNavigation();
   const { session, listing } = route;
-  const [userName, setUserName] = useState();
   const [swapState, setSwapState] = useState(false);
+
 
   async function checkSwapExists() {
     const { data, error } = await supabase
@@ -37,7 +37,7 @@ export default function ListedBook({ route }) {
           user1_book_title: listing.book_title,
           user1_listing_id: listing.book_id,
           user1_book_imgurl: listing.img_url,
-          user1_username: userName,
+          user1_username: username,
           user2_id: session.user.id,
           user2_username: session.user.user_metadata.username,
         },

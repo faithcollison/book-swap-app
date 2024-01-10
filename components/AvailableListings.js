@@ -71,7 +71,7 @@ export default function AvailableListings({ route }) {
             <Text> {bookInfo.title}</Text>
             <Text> Written by {bookInfo.authors}</Text>
             <Text> Released on {bookInfo.publishedDate}</Text>
-            <Text> About: {newBlurb}</Text>
+            {/* <Text> About: {newBlurb}</Text> */}
           </>
         ) : (
           <Text> No information available </Text>
@@ -97,7 +97,7 @@ export default function AvailableListings({ route }) {
                     }}
                     style={styles.button}
                   >
-                    <ListedBook route={{session: session, listing: book}}/>
+                    <ListedBook username={userName} route={{session: session, listing: book}}/>
                   </Pressable>
                 </View>
               </TouchableOpacity>
