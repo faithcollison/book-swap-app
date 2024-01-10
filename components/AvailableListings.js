@@ -35,6 +35,7 @@ export default function AvailableListings({ route }) {
   const [bookInfo, setBookInfo] = useState({});
   const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [swapRequestMade, setSwapRequestMade] = useState(false);
   const googleID = route.params.listing.google_book_id;
 
   useEffect(() => {
@@ -107,9 +108,6 @@ export default function AvailableListings({ route }) {
                   style={styles.descriptionButton}
                 >
                   <Text style={styles.text}>
-                    {/* {isDescriptionCollapsed
-                    ? "About"
-                    : "Hide Description"} */}
                     About
                   </Text>
                 </Pressable>
@@ -118,7 +116,6 @@ export default function AvailableListings({ route }) {
                     <Text style={styles.text}>{newBlurb}</Text>
                     <Pressable
                       onPress={() => setIsModalVisible(false)}
-                      // style={styles.closeButton}
                     >
                       <Text style={styles.text}>Close</Text>
                     </Pressable>
@@ -139,17 +136,11 @@ export default function AvailableListings({ route }) {
             keyExtractor={(item) => item.book_id}
             renderItem={({ item }) => (
               <View style={styles.listItem}>
-                {/* <Text style={styles.text}>
-                  {" "}
-                  Posted on : {new Date(
-                    item.date_posted
-                  ).toLocaleDateString()}{" "}
-                </Text> */}
                 <Text style={styles.text}> Posted by {userName} on {new Date(
                     item.date_posted
                   ).toLocaleDateString()} </Text>
                 <Text style={styles.text}> {item.condition} Condition </Text>
-                <Pressable style={styles.descriptionButton}>
+                <Pressable  style={styles.descriptionButton}>
                   <ListedBook
                     username={item.username}
                     route={{ session: session, listing: item }}
@@ -200,6 +191,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 10,
   },
+  // requestSwapButton: {
+  //   backgroundColor: "#3B8D77",
+  //   fontSize: 10,
+  //   alignSelf: "center",
+  //   width: Dimensions.get("window").width * 0.33,
+  //   borderRadius: 15,
+  //   marginTop: 10,
+  //   textAlign: "center",
+  //   justifyContent: "center",
+  //   marginBottom: 10,
+  // },
+  // requestSwapButtonPressed: {
+  //   backgroundColor: "#3B8D77", // Change this to whatever color you want
+  //   fontSize: 10,
+  //   alignSelf: "center",
+  //   width: Dimensions.get("window").width * 0.33,
+  //   borderRadius: 15,
+  //   borderColor: "Green",
+  //   borderWidth: 3,
+  //   marginTop: 10,
+  //   textAlign: "center",
+  //   justifyContent: "center",
+  //   marginBottom: 10,
+  // },
   bookInfoBox: {
     borderColor: "white",
     borderRadius: 30,
@@ -213,7 +228,8 @@ const styles = StyleSheet.create({
   bookCard: {
     height: 150,
     resizeMode: "contain",
-    borderRadius: 30,
+    borderRadius: 50,
+    
   },
   item: {
     borderColor: "black",

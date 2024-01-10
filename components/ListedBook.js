@@ -8,6 +8,8 @@ export default function ListedBook({ route, username }) {
   const navigation = useNavigation();
   const { session, listing } = route;
   const [swapState, setSwapState] = useState(false);
+  const [swapRequestMade, setSwapRequestMade] = useState(false);
+
 
 
   async function checkSwapExists() {
@@ -69,18 +71,23 @@ export default function ListedBook({ route, username }) {
 
   return (
     <View>
-      <Text>{listing.listing_id}</Text>
+      {/* <Text>{listing.listing_id}</Text> */}
       <Pressable
-        style={styles.descriptionButton}
+        // style={styles.descriptionButton}
         onPress={() => {
           Promise.all([checkSwapExists(), reqSwap()]).then(
             ([checkResults, reqResults]) => {
               sendNotification(reqResults);
             }
           );
+          setSwapRequestMade(true)
         }}
+        style={styles.descriptionButton}
+       
       >
-        <Text style={styles.text}>Request a swap</Text>
+        <View >
+          <Text  style={swapRequestMade ? styles.requestSwapButtonPressed : styles.text}> {swapRequestMade? "Request Made": "Request swap"}</Text>
+        </View>
       </Pressable>
     </View>
   );
@@ -101,6 +108,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
     marginBottom: 10,
+  },
+  requestSwapButtonPressed: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "black",
+    fontSize: 16,
+    textAlign: "center",
+    padding: 10,
   },
   text: {
     fontFamily: "CormorantGaramond_400Regular",
