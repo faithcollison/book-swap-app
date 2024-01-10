@@ -9,6 +9,7 @@ export default function ListedBook({ route, username }) {
   const { session, listing } = route;
   const [swapState, setSwapState] = useState(false);
   const [swapRequestMade, setSwapRequestMade] = useState(false);
+  
 
 
 
@@ -71,9 +72,7 @@ export default function ListedBook({ route, username }) {
 
   return (
     <View>
-      {/* <Text>{listing.listing_id}</Text> */}
-      <Pressable
-        // style={styles.descriptionButton}
+      <Pressable 
         onPress={() => {
           Promise.all([checkSwapExists(), reqSwap()]).then(
             ([checkResults, reqResults]) => {

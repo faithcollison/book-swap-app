@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
+  Platform,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
@@ -24,7 +25,7 @@ import {
   Lora_400Regular,
   JosefinSans_400Regular,
 } from "@expo-google-fonts/dev";
-
+const screenHeight = Dimensions.get("window").height;
 const api = process.env.GOOGLE_BOOKS_API_KEY;
 
 export default function AvailableListings({ route }) {
@@ -36,6 +37,8 @@ export default function AvailableListings({ route }) {
   const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [swapRequestMade, setSwapRequestMade] = useState(false);
+  const [showCloseButton, setShowCloseButton] = useState(false);
+
   const googleID = route.params.listing.google_book_id;
 
   useEffect(() => {
@@ -80,7 +83,13 @@ export default function AvailableListings({ route }) {
   }
 
   return (
-    <View style={styles.container}>
+    <View
+      style={
+        Platform.OS === "web"
+          ? { ...styles.container, ...styles.webFix }
+          : styles.container
+      }
+    >
       <View style={styles.halfPage}>
         <View style={styles.bookInfoBox}>
           <LinearGradient
@@ -90,35 +99,47 @@ export default function AvailableListings({ route }) {
             style={{
               borderRadius: 30,
               overflow: "hidden",
-              height: '100%',
+              height: "100%",
               marginBottom: 25,
             }}
           >
             <Text style={styles.title}> {bookInfo.title}</Text>
-            <Image style={styles.bookCard} source={{ uri: listing.img_url }} />
+            <View style={styles.bookCardContainer}>
+              <Image
+                style={styles.bookCard}
+                source={{ uri: listing.img_url }}
+              />
+            </View>
             {Object.keys(bookInfo).length > 0 ? (
               <View>
-                <Text style={styles.title}> {bookInfo.authors}</Text>
+                <Text style={styles.author}> {bookInfo.authors}</Text>
                 <Text style={styles.text}>
-                  {" "}
                   Released on {bookInfo.publishedDate}
                 </Text>
                 <Pressable
                   onPress={() => setIsModalVisible(true)}
                   style={styles.descriptionButton}
                 >
-                  <Text style={styles.text}>
-                    About
-                  </Text>
+                  <Text style={styles.text}>About</Text>
                 </Pressable>
+
                 <Modal isVisible={isModalVisible} backdropOpacity={2}>
                   <View style={styles.modal}>
-                    <Text style={styles.text}>{newBlurb}</Text>
-                    <Pressable
-                      onPress={() => setIsModalVisible(false)}
-                    >
-                      <Text style={styles.text}>Close</Text>
-                    </Pressable>
+                    {/* <ScrollView> */}
+                      <View
+                        style={{ flexDirection: "column", alignItems: "left" }}
+                      >
+                        <Text style={styles.text}>{newBlurb}</Text>
+                        <View>
+                          <Pressable
+                            onPress={() => setIsModalVisible(false)}
+                            style={styles.closeButton}
+                          >
+                            <Text style={styles.text}>Close</Text>
+                          </Pressable>
+                        </View>
+                      </View>
+                    {/* </ScrollView> */}
                   </View>
                 </Modal>
               </View>
@@ -129,27 +150,28 @@ export default function AvailableListings({ route }) {
         </View>
       </View>
 
-      <View style={[styles.halfPage, { marginTop: 70}]}>
+      <View style={[styles.halfPage, {marginTop: 30}]}>
         <Text style={styles.title}>Books listed by users:</Text>
-          <FlatList
-            data={listings}
-            keyExtractor={(item) => item.book_id}
-            renderItem={({ item }) => (
-              <View style={styles.listItem}>
-                <Text style={styles.text}> Posted by {userName} on {new Date(
-                    item.date_posted
-                  ).toLocaleDateString()} </Text>
-                <Text style={styles.text}> {item.condition} Condition </Text>
-                <Pressable  style={styles.descriptionButton}>
-                  <ListedBook
-                    username={item.username}
-                    route={{ session: session, listing: item }}
-                  />
-                </Pressable>
-              </View>
-            )}
-          />
-        
+        <FlatList
+          data={listings}
+          keyExtractor={(item) => item.book_id}
+          renderItem={({ item }) => (
+            <View style={styles.listItem}>
+              <Text style={styles.text}>
+                {" "}
+                Posted by {userName} on{" "}
+                {new Date(item.date_posted).toLocaleDateString()}{" "}
+              </Text>
+              <Text style={styles.text}> Condition is {item.condition} </Text>
+              <Pressable style={styles.descriptionButton}>
+                <ListedBook
+                  username={item.username}
+                  route={{ session: session, listing: item }}
+                />
+              </Pressable>
+            </View>
+          )}
+        />
       </View>
     </View>
   );
@@ -159,11 +181,17 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#272727",
     flex: 1,
-    // alignItems: "center",
-    // justifyContent: "center"
+  },
+  webFix: {
+    marginBottom: screenHeight * 0.09,
   },
   halfPage: {
     flex: 1,
+  },
+  modal: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
     fontSize: 18,
@@ -171,13 +199,25 @@ const styles = StyleSheet.create({
     color: "white",
     padding: 10,
     fontFamily: "JosefinSans_400Regular",
-    padding: 20,
+  },
+  author: {
+    fontSize: 16,
+    textAlign: "center",
+    color: "white",
+    padding: 10,
+    fontFamily: "JosefinSans_400Regular",
   },
   text: {
     fontFamily: "CormorantGaramond_400Regular",
     color: "white",
     fontSize: 16,
     textAlign: "center",
+  },
+  closeButton: {
+    // position: "absolute",
+    top: 60,
+    right: 10,
+    borderRadius: 50,
     padding: 10,
   },
   descriptionButton: {
@@ -191,30 +231,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 10,
   },
-  // requestSwapButton: {
-  //   backgroundColor: "#3B8D77",
-  //   fontSize: 10,
-  //   alignSelf: "center",
-  //   width: Dimensions.get("window").width * 0.33,
-  //   borderRadius: 15,
-  //   marginTop: 10,
-  //   textAlign: "center",
-  //   justifyContent: "center",
-  //   marginBottom: 10,
-  // },
-  // requestSwapButtonPressed: {
-  //   backgroundColor: "#3B8D77", // Change this to whatever color you want
-  //   fontSize: 10,
-  //   alignSelf: "center",
-  //   width: Dimensions.get("window").width * 0.33,
-  //   borderRadius: 15,
-  //   borderColor: "Green",
-  //   borderWidth: 3,
-  //   marginTop: 10,
-  //   textAlign: "center",
-  //   justifyContent: "center",
-  //   marginBottom: 10,
-  // },
   bookInfoBox: {
     borderColor: "white",
     borderRadius: 30,
@@ -225,11 +241,16 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "blue",
   },
+  bookCardContainer: {
+    borderRadius: 50,
+    overflow: "hidden",
+  },
   bookCard: {
     height: 150,
     resizeMode: "contain",
-    borderRadius: 50,
-    
+    width: "100%",
+    marginBottom: 10,
+    marginTop: 10,
   },
   item: {
     borderColor: "black",
@@ -240,17 +261,8 @@ const styles = StyleSheet.create({
     height: 100,
   },
   listItem: {
-   borderTopWidth: 1,
-   borderBlockColor: "white",
-    // borderRadius: 30,
-    // borderWidth: 3,
+    borderTopWidth: 1,
+    borderBlockColor: "white",
+    paddingTop: 10,
   },
-  // footer: {
-  //   justifyContent: "flex-end",
-  //   marginBottom: Dimensions.get("window").height * 0.08,
-  //   height: 10,
-  //   // borderColor: "gray",
-  //   // borderWidth: 10,
-  //   // borderRadius: 5,
-  // },
 });
