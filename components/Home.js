@@ -17,6 +17,8 @@ const HomeScreen = ({  navigation }) => {
   const [currSession, setCurrSession] = useState();
   const [topTen, setTopTen] = useState([]);
   const scrollRef = useRef();
+  const [scrollOffset, setScrollOffset] = useState(0);
+  const scrollOffsetLimit = 200
 
 	useEffect(() => {
 		async function compareId(id) {
@@ -69,7 +71,9 @@ const HomeScreen = ({  navigation }) => {
 
 	return (
 		<View style={{flex: 1,}}>
-			<ScrollView showsVerticalScrollIndicator={false} ref={scrollRef}>
+			<ScrollView showsVerticalScrollIndicator={false} ref={scrollRef} onScroll={event => {
+				setScrollOffset(event.nativeEvent.contentOffset.y);
+			}} scrollEventThrottle={16}>
 				<View
 					style={
 						Platform.OS === "web"
@@ -87,22 +91,23 @@ const HomeScreen = ({  navigation }) => {
 					<StatusBar style="auto" />
 				</View>
 			</ScrollView>
-			<Pressable style={styles.BTTContainer} onPress={() => {
-				// console.log(scrollRef, '<<<<')
-				scrollRef.current?.scrollTo({
-					y : 0,
-					animated : true
-				});
-			}}>
-				<View style={styles.BTTCircle}>
-					<Ionicons
-						name="arrow-up"
-						size={35}
-						color="black"
-						style={styles.BTTArrow}
-					/>
-				</View>
-			</Pressable>
+			{scrollOffset > scrollOffsetLimit && (
+				<Pressable style={Platform.OS === 'web' ? {...styles.BTTContainer, ...styles.BTTHeight} : styles.BTTContainer} onPress={() => {
+					scrollRef.current?.scrollTo({
+						y : 0,
+						animated : true
+					});
+				}}>
+					<View style={styles.BTTCircle}>
+						<Ionicons
+							name="arrow-up"
+							size={30}
+							color="black"
+							style={styles.BTTArrow}
+						/>
+					</View>
+				</Pressable>
+			)}
 		</View>
 	);
 };
@@ -126,11 +131,12 @@ const styles = StyleSheet.create({
     marginBottom: 25,
 	},
 	BTTContainer: {
-		position: 'fixed',
-		bottom: 100,
-		right: 20,
-		flex: 1,
-		alignItems: 'center',
+		position: 'absolute',
+		bottom: 15,
+		right: 15,
+	},
+	BTTHeight: {
+		bottom: 98,
 	},
 	BTTCircle: {
 		width: 50,

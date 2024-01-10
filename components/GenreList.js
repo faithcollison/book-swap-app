@@ -28,9 +28,9 @@ export default function GenreList ({route}) {
             <View style={styles.bookList}>
                 {genreList.map(listing => {
                     return (
-                        <View style={styles.bookContainer}>
+                        <View style={styles.bookContainer} key={listing.book_id}>
                             <View style={styles.book}>
-                                <BookListCard listing={listing} key={listing.book_id}/>
+                                <BookListCard listing={listing}/>
                             </View>
                         </View>
                     )
@@ -42,6 +42,7 @@ export default function GenreList ({route}) {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
     },
     bookList: {
         flexDirection: 'row',
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
     },
     bookContainer: {
         width: width / 3,
+        height: 190,
     },
     book: {
         flex: 1,

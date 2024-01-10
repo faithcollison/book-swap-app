@@ -19,6 +19,8 @@ import {
 	Lora_400Regular,
 	JosefinSans_400Regular,
 } from "@expo-google-fonts/dev";
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -55,8 +57,9 @@ export default function BookList({ categoryName, id }) {
 		<View style={styles.categoryContainer}>
 			<View style={styles.categoryHeader}>
 				<Text style={styles.categoryHeader}>{categoryName}</Text>
-				<Pressable onPress={() => navigation.navigate('GenreList', {genre: categoryName})}>
+				<Pressable onPress={() => navigation.navigate('GenreList', {genre: categoryName})} style={styles.seeMorePill}>
 					<Text style={styles.seemore}>See all</Text>
+					<FontAwesome name="arrow-circle-right" size={24} color="white" />
 				</Pressable>
 			</View>
 			<View style={styles.categoryList}>
@@ -64,6 +67,12 @@ export default function BookList({ categoryName, id }) {
 					{bookList.map((listing) => {
 						return <BookListCard listing={listing} key={listing.book_id} id={id} />;
 					})}
+					<View style={styles.cardContainer}>
+						<Pressable style={styles.linkCard} onPress={() => navigation.navigate('GenreList', {genre: categoryName})}>
+							<Ionicons name="arrow-forward" size={30} color="white" />
+							{/* <Text style={{color: 'white', fontWeight: 'bold', fontSize: 12}}>See All</Text> */}
+						</Pressable>
+					</View>
 				</ScrollView>
 			</View>
 		</View>
@@ -99,9 +108,25 @@ const styles = StyleSheet.create({
 	},
 	seemore: {
 		// fontFamily: "Lora_400Regular",
-		fontFamily: "Bellefair_400Regular",
+		// fontFamily: "Bellefair_400Regular",
+		fontFamily: 'JosefinSans_400Regular',
 		fontSize: 17,
     fontWeight: 500,
 		color: "white",
+	},
+	cardContainer: {
+		flex: 1,
+		width: screenWidth / 3,
+		padding: 5,
+		justifyContent: "center",
+		alignItems: 'center',
+	},
+	linkCard: {
+		height: 70,
+		width: 70,
+		borderRadius: 35,
+		backgroundColor: '#06A77D',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });
