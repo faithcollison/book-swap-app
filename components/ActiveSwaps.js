@@ -124,8 +124,8 @@ const styles = StyleSheet.create({
     },
     imageRow: {
         flexDirection: 'row',
-        justifyContent: 'space-between', // Adjust as needed
-        marginTop: 8, // Add some space between text and images
+        justifyContent: 'space-between', 
+        marginTop: 8,
     },
 });
 
