@@ -10,6 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import supabase from "../config/supabaseClient";
+import ListedBook from "./ListedBook";
 const api = process.env.GOOGLE_BOOKS_API_KEY;
 
 export default function AvailableListings({ route }) {
@@ -20,11 +21,10 @@ export default function AvailableListings({ route }) {
   const [bookInfo, setBookInfo] = useState({});
   const googleID = route.params.listing.google_book_id;
 
-
   useEffect(() => {
     async function getBookInfo() {
       // if googlebooks ID exists, will find info from API
-      if(googleID) {
+      if (googleID) {
         try {
           const response = await fetch(
             `https://www.googleapis.com/books/v1/volumes/${googleID}?key=${api}`
@@ -66,14 +66,16 @@ export default function AvailableListings({ route }) {
     <View>
       <View>
         <Image style={styles.bookCard} source={{ uri: listing.img_url }} />
-        {Object.keys(bookInfo).length > 0? 
+        {Object.keys(bookInfo).length > 0 ? (
           <>
             <Text> {bookInfo.title}</Text>
             <Text> Written by {bookInfo.authors}</Text>
             <Text> Released on {bookInfo.publishedDate}</Text>
             <Text> About: {newBlurb}</Text>
           </>
-        : <Text> No information available </Text>}
+        ) : (
+          <Text> No information available </Text>
+        )}
       </View>
 
       <Text>Books listed by users:</Text>
@@ -91,11 +93,11 @@ export default function AvailableListings({ route }) {
                   <Text> Condition: {book.condition} </Text>
                   <Pressable
                     onPress={() => {
-                      navigation.navigate("ListedBook", { listing: book });
+                      handleSwapRequest(book);
                     }}
                     style={styles.button}
                   >
-                    <Text>Click here to make offer!</Text>
+                    <ListedBook username={userName} route={{session: session, listing: book}}/>
                   </Pressable>
                 </View>
               </TouchableOpacity>
