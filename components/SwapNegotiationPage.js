@@ -13,9 +13,11 @@ export default function SwapNegotiationPage({ route }) {
 
   const { user1_book, user2_book, info, session } = route.params;
 
+  console.log(session, info)
+
   // MVP ONLY - NEEDS REFACTORING TO BE SCALABLE! 
   useEffect(() => {
-    switch (info.user1_id) {
+    switch (session.user.id) {
       case "10240ee4-1b43-4749-afbe-1356c83af4da": 
         setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Nav.jpg'));
         break;
@@ -35,7 +37,7 @@ export default function SwapNegotiationPage({ route }) {
         setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Faith.jpg'));
         break;
     }
-  }, [info.user1_id]);
+  }, []);
   
   useEffect(() => {
     switch (info.user2_id) {
@@ -58,13 +60,13 @@ export default function SwapNegotiationPage({ route }) {
         setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Faith.jpg'));
         break;
     }
-  }, [info.user2_id]);
+  }, []);
 
   useEffect(() => {
     getTransferData().then((res) => {
       setTitle([`${res.user1_book_title}`, `${res.user2_book_title}`]);
     });
-  });
+  }, []);
 
   async function getTransferData() {
     const { data, error } = await supabase

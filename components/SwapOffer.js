@@ -10,9 +10,11 @@ export default function SwapOffer({ route }) {
   const [user1ProfilePic, setUser1ProfilePic] = useState()
   const [user2ProfilePic, setUser2ProfilePic] = useState()
 
+  console.log(info)
+
   // MVP ONLY - NEEDS REFACTORING TO BE SCALABLE! 
   useEffect(() => {
-    switch (info.user1_id) {
+    switch (session.user.id) {
       case "10240ee4-1b43-4749-afbe-1356c83af4da": 
         setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Nav.jpg'));
         break;
@@ -32,30 +34,30 @@ export default function SwapOffer({ route }) {
         setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Faith.jpg'));
         break;
     }
-  }, [info.user1_id]);
+  }, []);
   
   useEffect(() => {
     switch (info.user2_id) {
       case "10240ee4-1b43-4749-afbe-1356c83af4da": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Nav.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Nav.jpg'));
         break;
       case "a4624164-bbbb-4cb6-b199-06b2fdd6f14a": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Jake.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Jake.jpg'));
         break;
       case "c563d513-b021-42f2-a3b3-77067b8547af": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Jay.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Jay.jpg'));
         break;
       case "ce083d4c-a1e8-45d0-9f93-6bc092f7155b": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Ana.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Ana.jpg'));
         break;
       case "2f71dabd-2f9c-48c3-8edd-4ae7495f59ce": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Alicia.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Alicia.jpg'));
         break;
       case "b45b3687-4e73-46e2-8474-da10e307691b": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Faith.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Faith.jpg'));
         break;
     }
-  }, [info.user2_id]);
+  }, []);
 
   async function rejectBook(info) {
     await Promise.all([
@@ -84,7 +86,7 @@ export default function SwapOffer({ route }) {
         <View  style={styles.profilePics}>
           <View style={styles.picAndName}>
             <Image
-              source={user1ProfilePic ? user1ProfilePic : null}
+              source={user1ProfilePic}
               style={styles.user1Profile}
               />
             <Text style={styles.profileName} >
@@ -106,7 +108,7 @@ export default function SwapOffer({ route }) {
 				  />
           <View style={styles.picAndName}>
             <Image
-              source={user2ProfilePic ? user2ProfilePic : null}
+              source={user2ProfilePic}
               style={styles.user2Profile}
               />
             <Text style={styles.profileName} >
