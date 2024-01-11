@@ -106,7 +106,7 @@ function App() {
             component={Search_Existing_Book}
             options={{ headerTitle: "" }}
           />
-          <Stack.Screen name="SwapOffer" component={SwapOffer} />
+          <Stack.Screen name="SwapOffer" component={SwapOffer} initialParams={{ session: session }}/>
           <Stack.Screen
             name="User2Library"
             component={User2LibraryPage}
