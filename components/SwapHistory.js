@@ -80,12 +80,12 @@ const SwapHistory = ({ session }) => {
       textStyling: {
         color: 'white',
         fontSize: 20,
-        fontFamily: 'VollkornSC_400Regular',
+        fontFamily: 'JosefinSans_400Regular',
       },
       hightlightText: {
         color: '#06A77D',
         fontSize: 20,
-        fontFamily: 'VollkornSC_400Regular',
+        fontFamily: 'JosefinSans_400Regular',
       },
     });
     
