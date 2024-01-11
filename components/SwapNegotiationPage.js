@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
 import { Entypo, Ionicons } from "@expo/vector-icons";
+import { JosefinSans_400Regular } from "@expo-google-fonts/dev";
 
 export default function SwapNegotiationPage({ route }) {
   const [title, setTitle] = useState([]);
@@ -182,11 +183,16 @@ export default function SwapNegotiationPage({ route }) {
 
   return (
     <View style={styles.page}>
+      <View>
+        <Text style={styles.heading}>
+          Your Offer
+        </Text>
+      </View>
       <View style={styles.booksAndProfilePics}>
         <View style={styles.profilePics}>
           <View style={styles.picAndName}>
             <Image source={user1ProfilePic} style={styles.user1Profile} />
-            <Text style={styles.profileName}>{info.user1_username}</Text>
+            <Text style={styles.body}>{info.user1_username}</Text>
           </View>
           <Ionicons
             name="chatbubbles-outline"
@@ -207,7 +213,7 @@ export default function SwapNegotiationPage({ route }) {
           />
           <View style={styles.picAndName}>
             <Image source={user2ProfilePic} style={styles.user2Profile} />
-            <Text style={styles.profileName}>{info.user2_username}</Text>
+            <Text style={styles.body}>{info.user2_username}</Text>
           </View>
         </View>
         <View style={styles.booksAndArrows}>
@@ -244,7 +250,7 @@ export default function SwapNegotiationPage({ route }) {
                 });
             }}
           >
-            <Text style={{ color: "white" }}>Accept</Text>
+            <Text style={styles.body}>Accept</Text>
           </Pressable>
           <Pressable
             style={styles.reconsider}
@@ -258,7 +264,7 @@ export default function SwapNegotiationPage({ route }) {
               });
             }}
           >
-            <Text style={{ color: "white" }}>Reconsider</Text>
+            <Text style={styles.body}>Reconsider</Text>
           </Pressable>
           <Pressable
             style={styles.reject}
@@ -268,7 +274,7 @@ export default function SwapNegotiationPage({ route }) {
               });
             }}
           >
-            <Text style={{ color: "white" }}>Reject Offer</Text>
+            <Text style={styles.body}>Reject Offer</Text>
           </Pressable>
         </View>
       </View>
@@ -277,6 +283,12 @@ export default function SwapNegotiationPage({ route }) {
 }
 
 const styles = StyleSheet.create({
+  heading: {
+    fontSize: 28,
+    fontWeight: "bold",
+    fontFamily: JosefinSans_400Regular,
+    color: "white",
+  },
   page: {
     backgroundColor: "#272727",
     flex: 0.91,
@@ -351,9 +363,11 @@ const styles = StyleSheet.create({
   picAndName: {
     justifyContent: "center",
   },
-  profileName: {
-    paddingTop: 5,
+  body: {
     textAlign: "center",
+    color: "white",
+    fontSize: 16,
+    fontFamily: JosefinSans_400Regular,
     color: "white",
   },
   icon: {
