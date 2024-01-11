@@ -89,19 +89,12 @@ const Notifications = ({ route }) => {
     .channel("Notifications")
     .on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "Notifications" },
+      { event: "*", schema: "public", table: "Notifications" },
       handlePostgresChanges
     )
     .subscribe();
 
-  supabase
-    .channel("Notifications")
-    .on(
-      "postgres_changes",
-      { event: "DELETE", schema: "public", table: "Notifications" },
-      handlePostgresChanges
-    )
-    .subscribe();
+  
 
   function daysSince(dateString) {
     const notificationDate = new Date(dateString);

@@ -16,7 +16,7 @@ export default function ReconsiderLibrary({ route }) {
   const navigation = useNavigation();
   const [books, setBooks] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const { info, session } = route.params;
+  const { info, session, setReconsidered, setKey } = route.params;
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -135,8 +135,13 @@ export default function ReconsiderLibrary({ route }) {
               navigation.navigate("SwapNegotiationPage", {
                 user1_book: info,
                 user2_book: book,
+                info: info,
+                user2_book_info: book,
+                user2_book_url: book.img_url
               });
               updateSwapInfo(book).then((res) => {
+                setKey(Date.now());
+                setReconsidered(true);
                 sendNotification(book, res);
               });
             }}
