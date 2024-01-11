@@ -1,14 +1,11 @@
 import { View, Text, Pressable, Dimensions, Platform } from "react-native";
 import { useEffect, useState, useRef } from "react";
-import { useEffect, useState, useRef } from "react";
 import supabase from "../config/supabaseClient";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons'; 
 import { FontAwesome } from "@expo/vector-icons";
-import { Ionicons } from '@expo/vector-icons'; 
 
 import BookList from "./BookList";
 import TopTenCarousel from "./TopTenCarousel";
