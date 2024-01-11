@@ -111,6 +111,14 @@ const styles = StyleSheet.create({
         borderColor: 'white',
         marginBottom: 25,
     },
+    antiText: {
+        fontSize: 20,
+        color: 'white',
+        fontFamily: 'JosefinSans_400Regular',
+        marginLeft: 20,
+        marginTop: 20,
+        fontWeight: 'normal',
+    }
 });
 
 export default ActiveSwaps;
