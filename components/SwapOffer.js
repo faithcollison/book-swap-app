@@ -3,6 +3,7 @@ import { Text, Pressable, StyleSheet, View, Image, Dimensions } from "react-nati
 import { ScreenWidth, ScreenHeight, color } from "react-native-elements/dist/helpers";
 import { useState, useEffect } from "react";
 import { Entypo, Ionicons } from '@expo/vector-icons';
+import { JosefinSans_400Regular } from "@expo-google-fonts/dev";
 
 export default function SwapOffer({ route }) {
   const { info, session, notification } = route.params;
@@ -82,6 +83,11 @@ export default function SwapOffer({ route }) {
 
   return (
     <View style={styles.page}>
+      <View>
+        <Text style={styles.heading}>
+          Your Offer
+        </Text>
+      </View>
       <View style={styles.booksAndProfilePics}>
         <View  style={styles.profilePics}>
           <View style={styles.picAndName}>
@@ -89,7 +95,7 @@ export default function SwapOffer({ route }) {
               source={user1ProfilePic}
               style={styles.user1Profile}
               />
-            <Text style={styles.profileName} >
+            <Text style={styles.body} >
               {session.user.user_metadata.username}
             </Text>
           </View>
@@ -111,7 +117,7 @@ export default function SwapOffer({ route }) {
               source={user2ProfilePic}
               style={styles.user2Profile}
               />
-            <Text style={styles.profileName} >
+            <Text style={styles.body} >
               {info.user2_username}
             </Text>
           </View>
@@ -130,7 +136,7 @@ export default function SwapOffer({ route }) {
               navigation.navigate("User2Library", { info: info });
             }}
             >
-            <Text style={{color: "white"}}>
+            <Text style={styles.body}>
               Select a book
             </Text>
           </Pressable>
@@ -141,7 +147,7 @@ export default function SwapOffer({ route }) {
               rejectBook(res);
             });
           }}>
-            <Text style={{color: "white"}}>
+            <Text style={styles.body}>
               Reject Offer
             </Text>
           </Pressable>
@@ -154,6 +160,12 @@ export default function SwapOffer({ route }) {
 
 
 const styles = StyleSheet.create({
+  heading: {
+    fontSize: 28,
+    fontWeight: "bold",
+    fontFamily: JosefinSans_400Regular,
+    color: "white",
+  },
   page: {
     backgroundColor: "#272727",
     flex: 0.91,
@@ -228,9 +240,11 @@ const styles = StyleSheet.create({
   picAndName: {
     justifyContent: "center",
   },
-  profileName: {
-    paddingTop: 5,
+  body: {
     textAlign: "center",
+    color: "white",
+    fontSize: 16,
+    fontFamily: JosefinSans_400Regular,
     color: "white",
   },
   icon: {
