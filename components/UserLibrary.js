@@ -180,6 +180,8 @@ const styles = StyleSheet.create({
 		color: "white",
 		fontFamily: "CormorantGaramond_400Regular",
 		textAlign: "justify",
+		paddingHorizontal: 10,
+		paddingVertical: 10,
 	},
 	categoryText: {
 		fontSize: 20,

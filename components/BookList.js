@@ -13,10 +13,7 @@ import supabase from "../config/supabaseClient";
 import BookListCard from "./BookListCard";
 import { useFonts } from "expo-font";
 import {
-	VollkornSC_400Regular,
 	Bellefair_400Regular,
-	CormorantGaramond_400Regular,
-	Lora_400Regular,
 	JosefinSans_400Regular,
 } from "@expo-google-fonts/dev";
 import { Ionicons } from '@expo/vector-icons';
@@ -42,10 +39,7 @@ export default function BookList({ categoryName, id }) {
 	}, []);
 
 	const [fontsLoaded] = useFonts({
-		VollkornSC_400Regular,
 		Bellefair_400Regular,
-		CormorantGaramond_400Regular,
-		Lora_400Regular,
 		JosefinSans_400Regular,
 	});
 
@@ -76,7 +70,6 @@ const styles = StyleSheet.create({
 	categoryContainer: {
 		alignItems: "center",
 		flex: 1,
-		fontFamily: "VollkornSC_400Regular",
 	},
 	categoryHeader: {
 		flexDirection: "row",
@@ -85,27 +78,16 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "space-between",
 		color: "white",
-		fontSize: 21,
-		// fontFamily: "Bellefair_400Regular",
-		fontFamily: "VollkornSC_400Regular",
-		fontWeight: 500,
+		fontSize: 21.5,
+		fontFamily: "JosefinSans_400Regular",
+		fontWeight: 400,
+		marginTop: 20,
 	},
 	categoryList: {
 		width: screenWidth,
-		// flexDirection: "row",
 		marginTop: 10,
-		// fontFamily: "CormorantGaramond_400Regular",
 		marginTop: 7,
 		marginBottom: 10,
-		// marginLeft: 16, //changed from anas
-	},
-	seemore: {
-		// fontFamily: "Lora_400Regular",
-		// fontFamily: "Bellefair_400Regular",
-		fontFamily: 'JosefinSans_400Regular',
-		fontSize: 17,
-    fontWeight: 500,
-		color: "white",
 	},
 	cardContainer: {
 		flex: 1,
@@ -115,8 +97,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	linkCard: {
-		height: 70,
-		width: 70,
+		height: 50,
+		width: 50,
 		borderRadius: 35,
 		backgroundColor: '#06A77D',
 		justifyContent: 'center',
