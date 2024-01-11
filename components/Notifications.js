@@ -4,6 +4,7 @@ import supabase from '../config/supabaseClient';
 import { useNavigation } from '@react-navigation/native';
 import { Entypo } from '@expo/vector-icons';
 import { Dimensions } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -187,10 +188,11 @@ const Notifications = ({ route }) => {
                                                         <Text style={styles.headerText}>{daysSince(notification.created_at)} days ago</Text>
                                                         <Entypo
                                                             name="circle-with-cross"
-                                                            size={24}
+                                                            size={20}
                                                             color="#C1514B"
+                                                            style={styles.icon}
                                                             onPress={() => deleteNotification(notification.id)}
-                                                            style={styles.deleteButton}
+                                                            
                                                         />
                                                     </View>
                                                     <View style={{flex: 1, justifyContent: 'center',}}>
@@ -220,6 +222,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#272727',
         width: width,
         flex: 1,
+    },
+    gradientContainer: {
+        marginTop: 10,
+        width: width - 20,
+        marginLeft: 10,
+        marginTop: 20,
     },
     webFix: {
         marginBottom: height * 0.09,
@@ -305,6 +313,13 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.3,
         shadowRadius: 3,
+    },
+    icon: {
+        color: 'white',
+        position: 'absolute',
+        right: 10,
+        top: 5,
+        zIndex: 1,
     },
 });
 
