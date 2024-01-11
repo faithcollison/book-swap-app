@@ -39,10 +39,6 @@ const ActiveSwaps = ({ session }) => {
         }
     }, [userID]);
 
-    const formatDate = date => {
-        return date.split('T')[0];
-    };
-
     return (
         <ScrollView style={Platform.OS === 'ios'
             ? styles.pageContainer

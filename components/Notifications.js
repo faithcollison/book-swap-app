@@ -104,8 +104,7 @@ const Notifications = ({ route }) => {
     }, [notifications]);
 
     return (
-        <ScrollView style={styles.scroll}>
-            <View style={styles.page}>
+        <ScrollView style={styles.pageContainer}>
                 <View style={styles.notificationsList}>
                     {processedNotifications.map(notification => {
                         switch (notification.type) {
@@ -182,30 +181,36 @@ const Notifications = ({ route }) => {
                         }
                     })}
                 </View>
-            </View>
         </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-    scroll: {
+    pageContainer: {
         backgroundColor: '#272727',
-    },
-    page: {
+        width: width,
         flex: 1,
-        alignItems: 'center',
+    },
+    webFix: {
+        marginBottom: height * 0.09,
     },
     notificationsList: {
         width: width * 0.9,
     },
     notCard: {
-        backgroundColor: '#464646',
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 16,
-        marginTop: 20,
+        flexDirection: 'row',
+        width: width * 0.9,
+        borderRadius: 20,
         padding: 10,
+        backgroundColor: "#06A77D",
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
     },
     contentsMain: {
         flex: 1,
