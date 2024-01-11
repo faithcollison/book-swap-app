@@ -23,11 +23,17 @@ import Collapsible from "react-native-collapsible";
 const UserLibrary = ({ session }) => {
 	const [books, setBooks] = useState([]);
 	const [refreshing, setRefreshing] = useState(false);
-	const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(true);
+	const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(
+		Array(books.length).fill(true)
+	);
 
 	useEffect(() => {
 		if (session) getListings(session?.user?.user_metadata?.username);
 	}, []);
+
+	useEffect(() => {
+		setIsDescriptionCollapsed(Array(books.length).fill(true));
+	}, [books]);
 
 	const onRefresh = useCallback(async () => {
 		setRefreshing(true);
@@ -91,7 +97,7 @@ const UserLibrary = ({ session }) => {
 			}
 		>
 			<Text style={styles.headerText}>User Library</Text>
-			{books.map((book) => (
+			{books.map((book, index) => (
 				<LinearGradient
 					colors={["#307361", "rgba(169, 169, 169, 0.10)"]}
 					start={{ x: 0, y: 0 }}
@@ -108,14 +114,20 @@ const UserLibrary = ({ session }) => {
 						<Text style={styles.authorText}>{book.author}</Text>
 						<Image source={{ uri: book.img_url }} style={styles.image} />
 						<Pressable
-							onPress={() => setIsDescriptionCollapsed(!isDescriptionCollapsed)}
+							onPress={() => {
+								let newCollapsedStates = [...isDescriptionCollapsed];
+								newCollapsedStates[index] = !newCollapsedStates[index];
+								setIsDescriptionCollapsed(newCollapsedStates);
+							}}
 							style={styles.descriptionButton}
 						>
 							<Text style={{ color: "white", fontFamily: "JosefinSans_400Regular" }}>
-								{isDescriptionCollapsed ? "Show Description" : "Hide Description"}
+								{isDescriptionCollapsed[index]
+									? "Show Description"
+									: "Hide Description"}
 							</Text>
 						</Pressable>
-						<Collapsible collapsed={isDescriptionCollapsed}>
+						<Collapsible collapsed={isDescriptionCollapsed[index]}>
 							<Text style={styles.descriptionText}>{book.description}</Text>
 						</Collapsible>
 						<Pressable onPress={() => removeFromLibrary(book)} style={styles.button}>
