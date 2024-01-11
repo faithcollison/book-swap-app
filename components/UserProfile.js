@@ -154,18 +154,20 @@ export default function UserProfile({ route }) {
         );
     }
     return (
-        <View style={[styles.container, styles.background]}>
+        <View style={[styles.background]}>
             <View>
                 <View>
                     <LinearGradient
+                        style={[
+                            styles.gradientContainer,
+                            {
+                                borderRadius: 30,
+                                alignItems: 'center',
+                            },
+                        ]}
                         colors={['#307361', 'rgba(169, 169, 169, 0.10)']}
                         start={{ x: 0, y: 0 }}
                         end={{ x: 1, y: 1 }}
-                        style={{
-                            borderRadius: 30,
-                            alignItems: 'center',
-                            height: screenHeight,
-                        }}
                     >
                         <View>
                             <Text style={styles.username}>{username}</Text>
@@ -175,10 +177,17 @@ export default function UserProfile({ route }) {
                             style={styles.profilePicture}
                         />
                         <Text style={styles.contact_info}>Contact Info</Text>
-                        <Text style={styles.title}>Email:</Text>
-                        <Text style={styles.email}>{email}</Text>
-                        <Text style={styles.title}>Mobile:</Text>
-                        <Text style={styles.phone}>{phone}</Text>
+                        <View style={{ alignItems: 'flex' }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.title}>Email:</Text>
+                                <Text style={styles.email}>{email}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.title}>Mobile:</Text>
+                                <Text style={styles.phone}>{phone}</Text>
+                            </View>
+                        </View>
+
                         <View style={styles.buttonContainer}>
                             <Pressable
                                 onPress={() => {
@@ -193,16 +202,16 @@ export default function UserProfile({ route }) {
                                 />
                             </Pressable>
                         </View>
-                        <View style={styles.logout}>
-                            <Pressable
-                                onPress={() => {
-                                    handleSignOut();
-                                }}
-                            >
-                                <Text>Sign Out</Text>
-                            </Pressable>
-                        </View>
                     </LinearGradient>
+                    <View style={styles.logout}>
+                        <Pressable
+                            onPress={() => {
+                                handleSignOut();
+                            }}
+                        >
+                            <Text>Sign Out</Text>
+                        </Pressable>
+                    </View>
                 </View>
             </View>
         </View>
@@ -210,11 +219,11 @@ export default function UserProfile({ route }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        height: screenHeight,
-        // display: 'flex',
-        // justifyContent: 'center',
-        // alignItems: 'center',
+    gradientContainer: {
+        marginTop: 10,
+        width: screenWidth - 20,
+        marginLeft: 10,
+        marginTop: 20,
     },
     background: {
         backgroundColor: '#272727',
@@ -227,19 +236,24 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginBottom: 20,
         textDecorationLine: 'underline',
-        fontFamily: 'Bellefair_400Regular',
+        fontFamily: 'JosefinSans_400Regular',
+        color: 'white',
     },
     email: {
         fontSize: 24,
-        marginLeft: 25,
+        marginLeft: 10,
+        marginTop: 10,
         marginBottom: 20,
-        fontFamily: 'Bellefair_400Regular',
+        fontFamily: 'JosefinSans_400Regular',
+        color: 'white',
     },
     phone: {
         fontSize: 24,
-        marginLeft: 25,
+        marginLeft: 10,
         marginBottom: 7,
-        fontFamily: 'Bellefair_400Regular',
+        marginTop: 10,
+        fontFamily: 'JosefinSans_400Regular',
+        color: 'white',
     },
     edit_button: {
         position: 'absolute',
@@ -264,13 +278,16 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline',
         fontSize: 34,
         marginBottom: 8,
-        fontFamily: 'Bellefair_400Regular',
+        fontFamily: 'JosefinSans_400Regular',
+        color: 'white',
     },
     title: {
         marginLeft: 7,
-        marginBottom: 7,
+        marginTop: 10,
+        marginBottom: 30,
         fontSize: 24,
-        fontFamily: 'Bellefair_400Regular',
+        fontFamily: 'JosefinSans_400Regular',
+        color: 'white',
     },
     edit_container: {
         marginTop: 30,
@@ -281,10 +298,14 @@ const styles = StyleSheet.create({
         borderRadius: 150,
     },
     logout: {
-        border: '1px solid black',
         borderRadius: 5,
-        padding: 5,
+        padding: 10,
         marginTop: 30,
-        backgroundColor: 'white',
+        backgroundColor: '#C1514B',
+        width: 90,
+        height: 40,
+        alignItems: 'center',
+        alignSelf: 'center',
+        fontFamily: 'JosefinSans_400Regular',
     },
 });
