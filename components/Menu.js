@@ -32,20 +32,6 @@ function DrawerNavigator() {
         });
     }, []);
 
-	const logo = () => (
-		<Image
-			// source={require("../assets/IMG_5454.png")}
-			source={{uri: "https://img.freepik.com/free-vector/hand-drawn-book-cartoon-illustration_52683-130773.jpg"}}
-			style={{
-				width: 40,
-				height: 40,
-				borderRadius: 20,
-				marginRight: 10,
-				marginBottom: 10,
-			}}
-		/>
-	);
-
 	const [fontsLoaded] = useFonts({
 		VollkornSC_400Regular,
 		Bellefair_400Regular,
@@ -82,18 +68,18 @@ function DrawerNavigator() {
 			<Drawer.Screen
 				name="Home"
 				component={HomeScreen}
-				options={{ headerTitle: "", headerTitleAlign: "center", headerRight: logo }}
+				options={{ headerTitle: "", headerTitleAlign: "center" }}
 				initialParams={{ session: session }}
 			/>
 			<Drawer.Screen
 				name="User Library"
-				options={{ headerTitle: "", headerTitleAlign: "center", headerRight: logo }}
+				options={{ headerTitle: "", headerTitleAlign: "center" }}
 			>
 				{(props) => <UserLibrary {...props} session={session} />}
 			</Drawer.Screen>
 			<Drawer.Screen
 				name="Wishlist"
-				options={{ headerTitle: "", headerTitleAlign: "center", headerRight: logo }}
+				options={{ headerTitle: "", headerTitleAlign: "center"}}
 			>
 				{(props) => <WishList {...props} session={session} />}
 			</Drawer.Screen>
