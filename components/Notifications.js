@@ -1,77 +1,101 @@
-import { useEffect, useRef, useState } from 'react';
-import { View, Text, Pressable, Alert, StyleSheet, Image, ScrollView } from 'react-native';
-import supabase from '../config/supabaseClient';
-import { useNavigation } from '@react-navigation/native';
-import { Entypo } from '@expo/vector-icons';
-import { Dimensions } from 'react-native';
+import { useEffect, useRef, useState } from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  Alert,
+  StyleSheet,
+  Image,
+  ScrollView,
+} from "react-native";
+import supabase from "../config/supabaseClient";
+import { useNavigation } from "@react-navigation/native";
+import { Entypo } from "@expo/vector-icons";
+import { Dimensions } from "react-native";
+import { LinearGradient } from 'expo-linear-gradient';
 
-const { width, height } = Dimensions.get('screen');
+const { width, height } = Dimensions.get("screen");
 
 const Notifications = ({ route }) => {
-    const [notifications, setNotifications] = useState([]);
-    const { session, setNewNotif } = route.params;
-    const [processedNotifications, setProcessedNotifications] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const { session, setNewNotif } = route.params;
+  const [processedNotifications, setProcessedNotifications] = useState([]);
 
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
-    useEffect(() => {
-        setNewNotif(false);
-        async function loadNotifications() {
-            const { data, error } = await supabase.from('Notifications').select().eq('user_id', session.user.id);
-            return data;
-        }
-
-        loadNotifications().then(res => {
-            setNotifications(res);
-        });
-    }, []);
-
-    async function getNotifications(length) {
-        const { data, error } = await supabase.from('Notifications').select().eq('user_id', session.user.id);
-
-        if (data.length > length) {
-            setNewNotif(true);
-        }
-
-        return data;
+  useEffect(() => {
+    setNewNotif(false);
+    async function loadNotifications() {
+      const { data, error } = await supabase
+        .from("Notifications")
+        .select()
+        .eq("user_id", session.user.id);
+      return data;
     }
 
-    const deleteNotification = async notificationId => {
-        try {
-            const { error } = await supabase.from('Notifications').delete().eq('id', notificationId);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    loadNotifications().then((res) => {
+      setNotifications(res);
+    });
+  }, []);
 
-    const handlePostgresChanges = async () => {
-        const length = notifications.length;
-        const res = await getNotifications(length);
-        setNotifications(res);
-    };
+  async function getNotifications(length) {
+    const { data, error } = await supabase
+      .from("Notifications")
+      .select()
+      .eq("user_id", session.user.id);
 
-    const getSwapInfo = async id => {
-        const { data, error } = await supabase.from('Pending_Swaps').select().eq('pending_swap_id', id);
+    if (data.length > length) {
+      setNewNotif(true);
+    }
 
-        return data[0];
-    };
+    return data;
+  }
 
-    const getUserInfo = async id => {
-        const { data, error } = await supabase.from('Users').select().eq('user_id', id);
+  const deleteNotification = async (notificationId) => {
+    try {
+      const { error } = await supabase
+        .from("Notifications")
+        .delete()
+        .eq("id", notificationId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-        return data[0];
-    };
+  const handlePostgresChanges = async () => {
+    const length = notifications.length;
+    const res = await getNotifications(length);
+    setNotifications(res);
+  };
 
-    supabase.channel('Notifications').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Notifications' }, handlePostgresChanges).subscribe();
+  const getSwapInfo = async (id) => {
+    const { data, error } = await supabase
+      .from("Pending_Swaps")
+      .select()
+      .eq("pending_swap_id", id);
 
-    supabase
+    return data[0];
+  };
+
+  const getUserInfo = async (id) => {
+    const { data, error } = await supabase
+      .from("Users")
+      .select()
+      .eq("user_id", id);
+
+    return data[0];
+  };
+
+  supabase
     .channel("Notifications")
     .on(
       "postgres_changes",
-      { event: "DELETE", schema: "public", table: "Notifications" },
+      { event: "*", schema: "public", table: "Notifications" },
       handlePostgresChanges
     )
     .subscribe();
+
+  
 
   function daysSince(dateString) {
     const notificationDate = new Date(dateString);
@@ -81,45 +105,57 @@ const Notifications = ({ route }) => {
     return daysPassed;
   }
 
-    useEffect(() => {
-        Promise.all(
-            notifications.map(async notification => {
-                switch (notification.type) {
-                    case 'Swap_Request':
-                        if (notification.swap_offer_id) {
-                            const swapData = await getSwapInfo(notification.swap_offer_id);
-                            return {
-                                ...notification,
-                                swapData,
-                            };
-                        }
-                        break;
-                    case 'Chosen_Book':
-                        if (notification.user_id) {
-                            const swapData = await getUserInfo(notification.user_id);
-                            return {
-                                ...notification,
-                                swapData,
-                            };
-                        }
-                        break;
-                    default:
-                        return notification;
-                }
-            })
-        ).then(newNotifications => {
-            setProcessedNotifications(newNotifications);
-        });
-    }, [notifications]);
+  useEffect(() => {
+    Promise.all(
+      notifications.map(async (notification) => {
+        switch (notification.type) {
+          case "Swap_Request":
+            if (notification.swap_offer_id) {
+              const swapData = await getSwapInfo(notification.swap_offer_id);
+              return {
+                ...notification,
+                swapData,
+              };
+            }
+            break;
+          case "Chosen_Book":
+            if (notification.user_id) {
+              const swapData = await getUserInfo(notification.user_id);
+              return {
+                ...notification,
+                swapData,
+              };
+            }
+            break;
+          default:
+            return notification;
+        }
+      })
+    ).then((newNotifications) => {
+      setProcessedNotifications(newNotifications);
+    });
+  }, [notifications]);
 
     return (
         <ScrollView style={styles.pageContainer}>
-                <View style={styles.notificationsList}>
-                    {processedNotifications.map(notification => {
-                        switch (notification.type) {
-                            case 'Swap_Request':
-                                if (notification.swapData) {
-                                    return (
+            <View style={styles.notificationsList}>
+                {processedNotifications.map(notification => {
+                    switch (notification.type) {
+                        case 'Swap_Request':
+                            if (notification.swapData) {
+                                return (
+                                    <LinearGradient
+                                        style={[
+                                            styles.gradientContainer,
+                                            {
+                                                borderRadius: 30,
+                                                alignItems: 'center',
+                                            },
+                                        ]}
+                                        colors={['#307361', 'rgba(169, 169, 169, 0.10)']}
+                                        start={{ x: 0, y: 0 }}
+                                        end={{ x: 1, y: 1 }}
+                                    >
                                         <View style={styles.notificationContainer}>
                                             <Pressable
                                                 style={styles.notCard}
@@ -155,18 +191,31 @@ const Notifications = ({ route }) => {
                                                     </View>
                                                     <View style={styles.messageBorder}>
                                                         <Text style={styles.message}>
-                                                            <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user2_username}</Text> wants to swap <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user1_book_title}</Text>
+                                                            <Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{notification.swapData.user2_username}</Text> wants to swap <Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{notification.swapData.user1_book_title}</Text>
                                                         </Text>
                                                     </View>
                                                 </View>
                                             </Pressable>
                                         </View>
-                                    );
-                                }
-                                break;
-                            case 'Chosen_Book':
-                                if (notification.swapData) {
-                                    return (
+                                    </LinearGradient>
+                                );
+                            }
+                            break;
+                        case 'Chosen_Book':
+                            if (notification.swapData) {
+                                return (
+                                    <LinearGradient
+                                        style={[
+                                            styles.gradientContainer,
+                                            {
+                                                borderRadius: 30,
+                                                alignItems: 'center',
+                                            },
+                                        ]}
+                                        colors={['#307361', 'rgba(169, 169, 169, 0.10)']}
+                                        start={{ x: 0, y: 0 }}
+                                        end={{ x: 1, y: 1 }}
+                                    >
                                         <View style={styles.notificationContainer}>
                                             <Pressable
                                                 style={styles.notCard}
@@ -187,30 +236,31 @@ const Notifications = ({ route }) => {
                                                         <Text style={styles.headerText}>{daysSince(notification.created_at)} days ago</Text>
                                                         <Entypo
                                                             name="circle-with-cross"
-                                                            size={24}
+                                                            size={20}
                                                             color="#C1514B"
+                                                            style={styles.icon}
                                                             onPress={() => deleteNotification(notification.id)}
-                                                            style={styles.deleteButton}
                                                         />
                                                     </View>
-                                                    <View style={{flex: 1, justifyContent: 'center',}}>
+                                                    <View style={{ flex: 1, justifyContent: 'center' }}>
                                                         <View style={styles.messageBorder}>
                                                             <Text style={styles.message}>
-                                                                <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user1_username}</Text> has chosen <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user2_book_title}</Text> from your library!
+                                                                <Text style={{ fontWeight: 'bold' }}>{notification.swapData.user1_username}</Text> has chosen <Text style={{ fontWeight: 'bold' }}>{notification.swapData.user2_book_title}</Text> from your library!
                                                             </Text>
                                                         </View>
                                                     </View>
                                                 </View>
                                             </Pressable>
                                         </View>
-                                    );
-                                }
-                                break;
-                            default:
-                                return null;
-                        }
-                    })}
-                </View>
+                                    </LinearGradient>
+                                );
+                            }
+                            break;
+                        default:
+                            return null;
+                    }
+                })}
+            </View>
         </ScrollView>
     );
 };
@@ -220,6 +270,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#272727',
         width: width,
         flex: 1,
+    },
+    headerText: {
+        fontFamily: 'JosefinSans_400Regular',
+        fontSize: 28,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        color: 'white',
+    },
+    gradientContainer: {
+        marginTop: 10,
+        width: width - 20,
+        marginLeft: 10,
+        marginTop: 20,
     },
     webFix: {
         marginBottom: height * 0.09,
@@ -238,15 +301,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: width * 0.9,
         borderRadius: 20,
-        padding: 10,
-        backgroundColor: "#06A77D",
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 5,
-        },
-        shadowOpacity: 0.5,
-        shadowRadius: 5,
+        // padding: 10,
+        // backgroundColor: '#06A77D',
+        // shadowColor: '#000',
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 5,
+        // },
+        // shadowOpacity: 0.5,
+        // shadowRadius: 5,
     },
     contentsMain: {
         flex: 1,
@@ -298,13 +361,20 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         backgroundColor: '#06A77D',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 3,
+        // shadowColor: '#000',
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 3,
+        // },
+        // shadowOpacity: 0.3,
+        // shadowRadius: 3,
+    },
+    icon: {
+        color: 'white',
+        position: 'absolute',
+        right: 10,
+        top: 5,
+        zIndex: 1,
     },
 });
 

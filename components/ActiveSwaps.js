@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Text, View, Image, StyleSheet, ScrollView, Dimensions, RefreshControl, Pressable, Platform } from 'react-native';
 import SwapCard from './SwapCard';
 
+
 const {height, width} = Dimensions.get('screen');
 
 const ActiveSwaps = ({ session }) => {
@@ -89,6 +90,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: 'white',
         marginVertical: 15,
+        fontFamily: 'JosefinSans_400Regular',
     },
     heading: {
         width: width * 0.9,
@@ -97,6 +99,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'white',
         marginBottom: 5,
+        fontFamily: 'JosefinSans_400Regular',
     },
     section: {
         marginVertical: 25,
@@ -108,6 +111,14 @@ const styles = StyleSheet.create({
         borderColor: 'white',
         marginBottom: 25,
     },
+    antiText: {
+        fontSize: 20,
+        color: 'white',
+        fontFamily: 'JosefinSans_400Regular',
+        marginLeft: 20,
+        marginTop: 20,
+        fontWeight: 'normal',
+    }
 });
 
 export default ActiveSwaps;

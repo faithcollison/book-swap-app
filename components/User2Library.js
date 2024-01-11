@@ -99,7 +99,9 @@ export default function User2LibraryPage({ route }) {
             onPress={() => {
               navigation.navigate("SwapNegotiationPage", {
                 user1_book: info,
-                user2_book: book,
+                user2_book_url: book.img_url,
+                info: info,
+                user2_book_info: book
               });
               updateSwapInfo(book).then((res) => {
                 sendNotification(book, res);

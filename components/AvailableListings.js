@@ -165,7 +165,7 @@ export default function AvailableListings({ route }) {
               <Text style={styles.text}> Condition is {item.condition} </Text>
               <Pressable style={styles.descriptionButton}>
                 <ListedBook
-                  username={item.username}
+                  username={userName}
                   route={{ session: session, listing: item }}
                 />
               </Pressable>
