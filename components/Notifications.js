@@ -65,22 +65,15 @@ const Notifications = ({ route }) => {
 
     supabase.channel('Notifications').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Notifications' }, handlePostgresChanges).subscribe();
 
-    supabase
-    .channel("Notifications")
-    .on(
-      "postgres_changes",
-      { event: "DELETE", schema: "public", table: "Notifications" },
-      handlePostgresChanges
-    )
-    .subscribe();
+    supabase.channel('Notifications').on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'Notifications' }, handlePostgresChanges).subscribe();
 
-  function daysSince(dateString) {
-    const notificationDate = new Date(dateString);
-    const currentDate = new Date();
-    const timeDifference = currentDate - notificationDate;
-    const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-    return daysPassed;
-  }
+    function daysSince(dateString) {
+        const notificationDate = new Date(dateString);
+        const currentDate = new Date();
+        const timeDifference = currentDate - notificationDate;
+        const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+        return daysPassed;
+    }
 
     useEffect(() => {
         Promise.all(
@@ -115,12 +108,25 @@ const Notifications = ({ route }) => {
 
     return (
         <ScrollView style={styles.pageContainer}>
-                <View style={styles.notificationsList}>
-                    {processedNotifications.map(notification => {
-                        switch (notification.type) {
-                            case 'Swap_Request':
-                                if (notification.swapData) {
-                                    return (
+            <Text>Notifications</Text>
+            <View style={styles.notificationsList}>
+                {processedNotifications.map(notification => {
+                    switch (notification.type) {
+                        case 'Swap_Request':
+                            if (notification.swapData) {
+                                return (
+                                    <LinearGradient
+                                        style={[
+                                            styles.gradientContainer,
+                                            {
+                                                borderRadius: 30,
+                                                alignItems: 'center',
+                                            },
+                                        ]}
+                                        colors={['#307361', 'rgba(169, 169, 169, 0.10)']}
+                                        start={{ x: 0, y: 0 }}
+                                        end={{ x: 1, y: 1 }}
+                                    >
                                         <View style={styles.notificationContainer}>
                                             <Pressable
                                                 style={styles.notCard}
@@ -156,18 +162,31 @@ const Notifications = ({ route }) => {
                                                     </View>
                                                     <View style={styles.messageBorder}>
                                                         <Text style={styles.message}>
-                                                            <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user2_username}</Text> wants to swap <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user1_book_title}</Text>
+                                                            <Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{notification.swapData.user2_username}</Text> wants to swap <Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{notification.swapData.user1_book_title}</Text>
                                                         </Text>
                                                     </View>
                                                 </View>
                                             </Pressable>
                                         </View>
-                                    );
-                                }
-                                break;
-                            case 'Chosen_Book':
-                                if (notification.swapData) {
-                                    return (
+                                    </LinearGradient>
+                                );
+                            }
+                            break;
+                        case 'Chosen_Book':
+                            if (notification.swapData) {
+                                return (
+                                    <LinearGradient
+                                        style={[
+                                            styles.gradientContainer,
+                                            {
+                                                borderRadius: 30,
+                                                alignItems: 'center',
+                                            },
+                                        ]}
+                                        colors={['#307361', 'rgba(169, 169, 169, 0.10)']}
+                                        start={{ x: 0, y: 0 }}
+                                        end={{ x: 1, y: 1 }}
+                                    >
                                         <View style={styles.notificationContainer}>
                                             <Pressable
                                                 style={styles.notCard}
@@ -192,27 +211,27 @@ const Notifications = ({ route }) => {
                                                             color="#C1514B"
                                                             style={styles.icon}
                                                             onPress={() => deleteNotification(notification.id)}
-                                                            
                                                         />
                                                     </View>
-                                                    <View style={{flex: 1, justifyContent: 'center',}}>
+                                                    <View style={{ flex: 1, justifyContent: 'center' }}>
                                                         <View style={styles.messageBorder}>
                                                             <Text style={styles.message}>
-                                                                <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user1_username}</Text> has chosen <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user2_book_title}</Text> from your library!
+                                                                <Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{notification.swapData.user1_username}</Text> has chosen <Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{notification.swapData.user2_book_title}</Text> from your library!
                                                             </Text>
                                                         </View>
                                                     </View>
                                                 </View>
                                             </Pressable>
                                         </View>
-                                    );
-                                }
-                                break;
-                            default:
-                                return null;
-                        }
-                    })}
-                </View>
+                                    </LinearGradient>
+                                );
+                            }
+                            break;
+                        default:
+                            return null;
+                    }
+                })}
+            </View>
         </ScrollView>
     );
 };
@@ -246,15 +265,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: width * 0.9,
         borderRadius: 20,
-        padding: 10,
-        backgroundColor: "#06A77D",
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 5,
-        },
-        shadowOpacity: 0.5,
-        shadowRadius: 5,
+        // padding: 10,
+        // backgroundColor: '#06A77D',
+        // shadowColor: '#000',
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 5,
+        // },
+        // shadowOpacity: 0.5,
+        // shadowRadius: 5,
     },
     contentsMain: {
         flex: 1,
@@ -306,13 +325,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         backgroundColor: '#06A77D',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 3,
+        // shadowColor: '#000',
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 3,
+        // },
+        // shadowOpacity: 0.3,
+        // shadowRadius: 3,
     },
     icon: {
         color: 'white',
