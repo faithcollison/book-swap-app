@@ -108,7 +108,6 @@ const Notifications = ({ route }) => {
 
     return (
         <ScrollView style={styles.pageContainer}>
-            <Text>Notifications</Text>
             <View style={styles.notificationsList}>
                 {processedNotifications.map(notification => {
                     switch (notification.type) {
@@ -216,7 +215,7 @@ const Notifications = ({ route }) => {
                                                     <View style={{ flex: 1, justifyContent: 'center' }}>
                                                         <View style={styles.messageBorder}>
                                                             <Text style={styles.message}>
-                                                                <Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{notification.swapData.user1_username}</Text> has chosen <Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}>{notification.swapData.user2_book_title}</Text> from your library!
+                                                                <Text style={{ fontWeight: 'bold' }}>{notification.swapData.user1_username}</Text> has chosen <Text style={{ fontWeight: 'bold' }}>{notification.swapData.user2_book_title}</Text> from your library!
                                                             </Text>
                                                         </View>
                                                     </View>
@@ -241,6 +240,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#272727',
         width: width,
         flex: 1,
+    },
+    headerText: {
+        fontFamily: 'JosefinSans_400Regular',
+        fontSize: 28,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        color: 'white',
     },
     gradientContainer: {
         marginTop: 10,
