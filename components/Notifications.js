@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { View, Text, Pressable, Alert, StyleSheet, Image, ScrollView } from 'react-native';
 import supabase from '../config/supabaseClient';
 import { useNavigation } from '@react-navigation/native';
