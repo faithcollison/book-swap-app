@@ -82,13 +82,16 @@ export default function ChatWindow({ route }) {
             return null;
           }
           return message.sender_id === session.user.id ? (
-            <Text style={styles.senderMessage}>
-              {session.user.user_metadata.username}: {message.message}
-            </Text>
+            <View style={styles.senderMessage}>
+              <Text>{message.message}</Text>
+              {/* {session.user.user_metadata.username}: {message.message} */}
+            </View>
           ) : (
-            <Text style={styles.receiverMessage}>
-              {username}: {message.message}
-            </Text>
+            <View style={styles.receiverMessage}>
+              {/* {username}: {message.message} */}
+              <Text>{message.message}</Text>
+
+            </View>
           );
         })}
       </ScrollView>
@@ -128,7 +131,14 @@ export default function ChatWindow({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
+    backgroundColor: "#272727",
+    overflow: 'hidden',
+  },
+  text: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
   },
   inputContainer: {
     backgroundColor: "white",
@@ -140,12 +150,12 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     marginBottom: Dimensions.get("window").height * 0.08,
     height: 10,
-    // borderColor: "gray",
-    // borderWidth: 10,
-    // borderRadius: 5,
   },
 
   senderMessage: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "white",
+    fontSize: 16,
     alignSelf: "flex-end",
     padding: 5,
     borderColor: "gray",
@@ -155,8 +165,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     marginRight: 5,
     maxWidth: '70%',
+    backgroundColor: "#2b88cf"
   },
   receiverMessage: {
+    backgroundColor: "#dadfe3",
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "black",
+    fontSize: 16,
     alignSelf: "flex-start",
     padding: 5,
     borderColor: "gray",

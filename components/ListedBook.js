@@ -2,11 +2,15 @@ import { Text, StyleSheet, Pressable, View } from "react-native";
 import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { Dimensions } from "react-native";
 
 export default function ListedBook({ route, username }) {
   const navigation = useNavigation();
   const { session, listing } = route;
   const [swapState, setSwapState] = useState(false);
+  const [swapRequestMade, setSwapRequestMade] = useState(false);
+  
+
 
 
   async function checkSwapExists() {
@@ -68,18 +72,21 @@ export default function ListedBook({ route, username }) {
 
   return (
     <View>
-      <Text>{listing.listing_id}</Text>
-      <Pressable
-        style={styles.button}
+      <Pressable 
         onPress={() => {
           Promise.all([checkSwapExists(), reqSwap()]).then(
             ([checkResults, reqResults]) => {
               sendNotification(reqResults);
             }
           );
+          setSwapRequestMade(true)
         }}
+        style={styles.descriptionButton}
+       
       >
-        <Text>Button to request swap</Text>
+        <View >
+          <Text  style={swapRequestMade ? styles.requestSwapButtonPressed : styles.text}> {swapRequestMade? "Request Made": "Request swap"}</Text>
+        </View>
       </Pressable>
     </View>
   );
@@ -90,4 +97,30 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "blue",
   },
+  descriptionButton: {
+    backgroundColor: "#3B8D77",
+    fontSize: 10,
+    alignSelf: "center",
+    width: Dimensions.get("window").width * 0.33,
+    borderRadius: 15,
+    marginTop: 10,
+    textAlign: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  requestSwapButtonPressed: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "black",
+    fontSize: 16,
+    textAlign: "center",
+    padding: 10,
+  },
+  text: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    padding: 10,
+  },
+  
 });
