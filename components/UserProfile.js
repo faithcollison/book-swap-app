@@ -198,7 +198,7 @@ export default function UserProfile({ route }) {
                                 <AntDesign
                                     name="edit"
                                     size={24}
-                                    color="black"
+                                    color="white"
                                 />
                             </Pressable>
                         </View>
@@ -209,7 +209,7 @@ export default function UserProfile({ route }) {
                                 handleSignOut();
                             }}
                         >
-                            <Text>Sign Out</Text>
+                            <Text style={styles.logout.text}>Sign Out</Text>
                         </Pressable>
                     </View>
                 </View>
@@ -299,13 +299,13 @@ const styles = StyleSheet.create({
     },
     logout: {
         borderRadius: 5,
-        padding: 10,
+        padding: 15,
         marginTop: 30,
         backgroundColor: '#C1514B',
         width: 90,
-        height: 40,
         alignItems: 'center',
         alignSelf: 'center',
-        fontFamily: 'JosefinSans_400Regular',
+        color: 'white',
+        text: {color: 'white', fontFamily: 'JosefinSans_400Regular'}
     },
 });
