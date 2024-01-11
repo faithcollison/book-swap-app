@@ -1,16 +1,7 @@
-import {
-  Text,
-  StyleSheet,
-  Pressable,
-  View,
-  RefreshControl,
-  ScrollView,
-  Image,
-  Dimensions,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
-import supabase from "../config/supabaseClient";
+import { Text, StyleSheet, Pressable, View, RefreshControl, ScrollView, Image, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useCallback, useEffect, useState } from 'react';
+import supabase from '../config/supabaseClient';
 
 export default function ReconsiderLibrary({ route }) {
   const navigation = useNavigation();
@@ -18,98 +9,83 @@ export default function ReconsiderLibrary({ route }) {
   const [refreshing, setRefreshing] = useState(false);
   const { info, session, setReconsidered, setKey } = route.params;
 
-  const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    const { data, error } = await supabase
-      .from("Listings")
-      .select("*")
-      .eq(
-        "user_id",
-        info.user2_id === session.user.id ? info.user1_id : info.user2_id
-      )
-      .order("date_posted", { ascending: false });
+    const onRefresh = useCallback(async () => {
+        setRefreshing(true);
+        const { data, error } = await supabase
+            .from('Listings')
+            .select('*')
+            .eq('user_id', info.user2_id === session.user.id ? info.user1_id : info.user2_id)
+            .order('date_posted', { ascending: false });
 
-    if (error) {
-      alert(error);
-    } else {
-      setBooks(data);
-    }
-    setRefreshing(false);
-  }, []);
+        if (error) {
+            alert(error);
+        } else {
+            setBooks(data);
+        }
+        setRefreshing(false);
+    }, []);
 
-  useEffect(() => {
-    async function getListings() {
-      const { data, error } = await supabase
-        .from("Listings")
-        .select("*")
-        .eq(
-          "user_id",
-          info.user2_id === session.user.id ? info.user1_id : info.user2_id
-        )
-        .order("date_posted", { ascending: false });
+    useEffect(() => {
+        async function getListings() {
+            const { data, error } = await supabase
+                .from('Listings')
+                .select('*')
+                .eq('user_id', info.user2_id === session.user.id ? info.user1_id : info.user2_id)
+                .order('date_posted', { ascending: false });
 
-      if (error) {
-        alert(error);
-      } else {
-        setBooks(data);
-      }
-    }
+            if (error) {
+                alert(error);
+            } else {
+                setBooks(data);
+            }
+        }
 
-    getListings();
-  }, []);
+        getListings();
+    }, []);
 
-  async function updateSwapInfo(book) {
-    let updateObject = {};
+    async function updateSwapInfo(book) {
+        let updateObject = {};
 
-    if (info.user2_id === session.user.id) {
-      console.log(book);
-      updateObject = {
-        user1_book_title: book.book_title,
-        user1_book_imgurl: book.img_url,
-        user1_listing_id: book.book_id,
-      };
-    } else if (info.user1_id === session.user.id) {
-      console.log(book);
-      updateObject = {
-        user2_book_title: book.book_title,
-        user2_book_imgurl: book.img_url,
-        user2_listing_id: book.book_id,
-      };
-    }
+        if (info.user2_id === session.user.id) {
+            updateObject = {
+                user1_book_title: book.book_title,
+                user1_book_imgurl: book.img_url,
+                user1_listing_id: book.book_id,
+            };
+        } else if (info.user1_id === session.user.id) {
+            updateObject = {
+                user2_book_title: book.book_title,
+                user2_book_imgurl: book.img_url,
+                user2_listing_id: book.book_id,
+            };
+        }
 
-    let query = supabase
-      .from("Pending_Swaps")
-      .update(updateObject)
-      .select("pending_swap_id");
+        let query = supabase.from('Pending_Swaps').update(updateObject).select('pending_swap_id');
 
-    if (info.user2_id === session.user.id) {
-      query = query
-        .eq("user1_id", book.user_id)
-        .eq("user2_id", session.user.id);
-    } else if (info.user1_id === session.user.id) {
-      query = query
-        .eq("user1_id", session.user.id)
-        .eq("user2_id", book.user_id);
+        if (info.user2_id === session.user.id) {
+            query = query.eq('user1_id', book.user_id).eq('user2_id', session.user.id);
+        } else if (info.user1_id === session.user.id) {
+            query = query.eq('user1_id', session.user.id).eq('user2_id', book.user_id);
+        }
+
+        const { data, error } = await query;
+
+        if (error) {
+            console.log(error);
+        }
+        return data[0];
     }
 
-    const { data, error } = await query;
-
-    if (error) {
-      console.log(error);
+    async function sendNotification(bookInfo, swapId) {
+        const { data, error } = await supabase.from('Notifications').insert([
+            {
+                swap_offer_id: swapId.pending_swap_id,
+                type: 'Chosen_Book',
+                user_id: bookInfo.user_id,
+                username: session.user.user_metadata.username,
+            },
+        ]);
     }
-    return data[0];
-  }
-
-  async function sendNotification(bookInfo, swapId) {
-    const { data, error } = await supabase.from("Notifications").insert([
-      {
-        swap_offer_id: swapId.pending_swap_id,
-        type: "Chosen_Book",
-        user_id: bookInfo.user_id,
-        username: session.user.user_metadata.username,
-      },
-    ]);
-  }
 
   return (
     <ScrollView
@@ -155,53 +131,53 @@ export default function ReconsiderLibrary({ route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 16,
-    marginBottom: Dimensions.get("window").height * 0.09,
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-  bookContainer: {
-    alignItems: "center",
-    marginBottom: 25,
-    backgroundColor: "#e3e3e3",
-    padding: 16,
-    borderRadius: 8,
-    width: Dimensions.get("window").width - 32,
-  },
-  titleText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  authorText: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  image: {
-    alignItems: "center",
-    width: "50%",
-    height: 290,
-    marginBottom: 8,
-    borderRadius: 4,
-  },
-  descriptionText: {
-    fontSize: 14,
-    marginBottom: 16,
-  },
-  categoryText: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  buttonContainer: {
-    borderColor: "grey",
-    borderWidth: 2,
-    borderRadius: 12,
-    padding: 3,
-  },
+    container: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 16,
+        marginBottom: Dimensions.get('window').height * 0.09,
+    },
+    headerText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 16,
+    },
+    bookContainer: {
+        alignItems: 'center',
+        marginBottom: 25,
+        backgroundColor: '#e3e3e3',
+        padding: 16,
+        borderRadius: 8,
+        width: Dimensions.get('window').width - 32,
+    },
+    titleText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 8,
+    },
+    authorText: {
+        fontSize: 16,
+        marginBottom: 8,
+    },
+    image: {
+        alignItems: 'center',
+        width: '50%',
+        height: 290,
+        marginBottom: 8,
+        borderRadius: 4,
+    },
+    descriptionText: {
+        fontSize: 14,
+        marginBottom: 16,
+    },
+    categoryText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    buttonContainer: {
+        borderColor: 'grey',
+        borderWidth: 2,
+        borderRadius: 12,
+        padding: 3,
+    },
 });

@@ -32,12 +32,8 @@ const WishList = ({ session }) => {
 
         const wishlist = data?.wishlist || [];
         const promises = wishlist.map(async book => {
-            const { data, error } = await supabase
-            .from('Listings')
-            .select('img_url')
-            .eq('book_title', book)
-            .limit(1).single();
-            
+            const { data, error } = await supabase.from('Listings').select('img_url').eq('book_title', book).limit(1).single();
+
             if (error) {
                 console.log(error);
                 return null;
@@ -75,7 +71,7 @@ const WishList = ({ session }) => {
             }
         >
             <View>
-                <Text style={styles.textStyling}>Your Wishlist:</Text>
+                <Text style={styles.headerText}>Your Wishlist:</Text>
                 {books.map(({ book, img_url }) => (
                     <View
                         key={book}
@@ -94,7 +90,7 @@ const WishList = ({ session }) => {
                                     style={styles.bookImage}
                                 />
                             )}
-                            <Text style={[styles.textStyling, styles.hightlightText]}>{book}</Text>
+                            <Text style={[styles.textStyling]}>{book}</Text>
                         </View>
                     </View>
                 ))}
@@ -108,10 +104,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#272727',
         padding: 16,
     },
+    headerText: {
+        fontFamily: 'JosefinSans_400Regular',
+        fontSize: 28,
+        fontWeight: 'bold',
+        marginBottom: 16,
+        color: 'white',
+    },
     listContainer: {
         display: 'flex',
-        backgroundColor: '#464646',
-        borderColor: 'gray',
+        backgroundColor: '#06A77D',
+        borderColor: 'white',
         borderWidth: 2,
         borderRadius: 12,
         marginBottom: 8,
@@ -120,18 +123,15 @@ const styles = StyleSheet.create({
         posistion: 'relative',
     },
     textStyling: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginBottom: 8,
         color: 'white',
-        fontSize: 20,
-        fontFamily: 'VollkornSC_400Regular',
+        fontFamily: 'JosefinSans_400Regular',
         flexShrink: 1,
     },
-    hightlightText: {
-        color: "#06A77D",
-        fontSize: 20,
-        fontFamily: 'VollkornSC_400Regular',
-    },
     icon: {
-        color:"#C2C2C2",
+        color: 'white',
         position: 'absolute',
         right: 10,
         top: 5,

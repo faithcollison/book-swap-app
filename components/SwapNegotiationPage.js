@@ -126,60 +126,36 @@ export default function SwapNegotiationPage({ route }) {
     }
   }, [user2_book, user2BookUrl]);
 
-  async function getTransferData() {
-    const { data, error } = await supabase
-      .from("Pending_Swaps")
-      .select()
-      .eq(
-        "pending_swap_id",
-        user1_book ? user1_book.pending_swap_id : info.swap_offer_id
-      );
+    async function getTransferData() {
+        const { data, error } = await supabase
+            .from('Pending_Swaps')
+            .select()
+            .eq('pending_swap_id', user1_book ? user1_book.pending_swap_id : info.swap_offer_id);
 
-    return data[0];
-  }
+        return data[0];
+    }
 
-  async function updateSwapHistory(info) {
-    const { data, error } = await supabase.from("Swap_History").insert([info]);
-  }
+    async function updateSwapHistory(info) {
+        const { data, error } = await supabase.from('Swap_History').insert([info]);
+    }
 
-  async function removeData(infoResponse) {
-    console.log(infoResponse);
-    await Promise.all([
-      supabase
-        .from("Pending_Swaps")
-        .delete()
-        .eq("pending_swap_id", infoResponse.pending_swap_id),
-      supabase
-        .from("Listings")
-        .delete()
-        .eq("book_id", infoResponse.user1_listing_id),
-      supabase
-        .from("Listings")
-        .delete()
-        .eq("book_id", infoResponse.user2_listing_id),
-    ]);
-  }
+    async function removeData(infoResponse) {
+        await Promise.all([supabase.from('Pending_Swaps').delete().eq('pending_swap_id', infoResponse.pending_swap_id), supabase.from('Listings').delete().eq('book_id', infoResponse.user1_listing_id), supabase.from('Listings').delete().eq('book_id', infoResponse.user2_listing_id)]);
+    }
 
-  async function rejectBook(info) {
-    await Promise.all([
-      supabase.from("Notifications").insert([
-        {
-          type: "Offer_Rejected",
-          user_id:
-            info.user1_id === session.user.id ? info.user2_id : info.user1_id,
-          username: session.user.user_metadata.username,
-        },
-      ]),
-      supabase
-        .from("Notifications")
-        .delete()
-        .eq("swap_offer_id", info.pending_swap_id),
-      supabase
-        .from("Pending_Swaps")
-        .delete()
-        .eq("pending_swap_id", info.pending_swap_id),
-    ]);
-  }
+    async function rejectBook(info) {
+        await Promise.all([
+            supabase.from('Notifications').insert([
+                {
+                    type: 'Offer_Rejected',
+                    user_id: info.user1_id === session.user.id ? info.user2_id : info.user1_id,
+                    username: session.user.user_metadata.username,
+                },
+            ]),
+            supabase.from('Notifications').delete().eq('swap_offer_id', info.pending_swap_id),
+            supabase.from('Pending_Swaps').delete().eq('pending_swap_id', info.pending_swap_id),
+        ]);
+    }
 
   return (
     <View style={styles.page}>
