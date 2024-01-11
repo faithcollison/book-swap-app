@@ -41,114 +41,186 @@ function App() {
 		});
 	}, []);
 
-  return (
-    <NavigationContainer>
-      {session && session.user ? (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={DrawerNavigator}
-            options={{
-              title: "Home",
-              headerShown: false,
-              headerStyle: {
-                backgroundColor: "#72d5ff",
-              },
-              headerTintColor: "black",
-              headerTitleStyle: {
-                fontWeight: "bold",
-              },
-            }}
-          />
-          <Stack.Screen
-            name="UserProfile"
-            component={UserProfile}
-            initialParams={{ session: session }}
-            options={{ headerTitle: "" }}
-          />
-          <Stack.Screen
-            name="Messages"
-            component={ChatComponent}
-            initialParams={{ session: session }}
-          />
-          <Stack.Screen
-            name="Notifications"
-            component={Notifications}
-            initialParams={{ session: session, setNewNotif: setNewNotif }}
-            options={{ headerTitle: "" }}
-          />
-          <Stack.Screen
-            name="CreateListing"
-            component={CreateListing}
-            initialParams={{ session: session }}
-            options={{ headerTitle: "" }}
-          />
-          <Stack.Screen
-            name="AvailableListings"
-            component={AvailableListings}
-            initialParams={{ session: session }}
-            options={{ headerTitle: "" }}
-          />
-          <Stack.Screen
-            name="ListedBook"
-            component={ListedBook}
-            initialParams={{ session: session }}
-            options={{ headerTitle: "" }}
-          />
-          <Stack.Screen
-            name="SwapNegotiationPage"
-            component={SwapNegotiationPage}
-            initialParams={{ session: session }}
-            options={{ headerTitle: "" }}
-          />
-          <Stack.Screen
-            name="Search_Existing_Book"
-            component={Search_Existing_Book}
-            options={{ headerTitle: "" }}
-          />
-          <Stack.Screen name="SwapOffer" component={SwapOffer} />
-          <Stack.Screen
-            name="User2Library"
-            component={User2LibraryPage}
-            initialParams={{ session: session }}
-            options={{
-              headerTintColor: "#000",
-              headerTitleStyle: {
-                color: "#fff",
-              },
-            }}
-          />
-          <Stack.Screen name="GenreList" component={GenreList} />
-          <Stack.Screen
-            name="ReconsiderLibrary"
-            component={ReconsiderLibrary}
-            initialParams={{ session: session }}
-          />
-          <Stack.Screen name="ChatWindow" component={ChatWindow} />
-        </Stack.Navigator>
-      ) : (
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Welcome"
-            component={Welcome}
-            options={{ headerTitleAlign: "center" }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerTitleAlign: "center" }}
-          />
-          <Stack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{ headerTitleAlign: "center" }}
-          />
-        </Stack.Navigator>
-      )}
-      {session && session.user && <Footer newNotif={newNotif} />}
-      <StatusBar style="auto" />
-    </NavigationContainer>
-  );
+	return (
+		<NavigationContainer>
+			{session && session.user ? (
+				<Stack.Navigator>
+					<Stack.Screen
+						name="Drawer"
+						component={DrawerNavigator}
+						options={{
+							title: "Drawer",
+							headerShown: false,
+							headerStyle: {
+								backgroundColor: "#72d5ff",
+							},
+							headerTintColor: "black",
+							headerTitleStyle: {
+								fontWeight: "bold",
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="UserProfile"
+						component={UserProfile}
+						initialParams={{ session: session }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="Messages"
+						component={ChatComponent}
+            			initialParams={{ session: session }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="Notifications"
+						component={Notifications}
+						initialParams={{ session: session, setNewNotif: setNewNotif }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="CreateListing"
+						component={CreateListing}
+						initialParams={{ session: session }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="AvailableListings"
+						component={AvailableListings}
+						initialParams={{ session: session }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="ListedBook"
+						component={ListedBook}
+						initialParams={{ session: session }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="SwapNegotiationPage"
+						component={SwapNegotiationPage}
+						initialParams={{ session: session }}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="Search_Existing_Book"
+						component={Search_Existing_Book}
+						options={{
+							headerTitle: "",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
+					<Stack.Screen name="SwapOffer" component={SwapOffer} />
+					<Stack.Screen
+						name="User2Library"
+						component={User2LibraryPage}
+						initialParams={{ session: session }}
+						options={{
+							headerTintColor: "#000",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="GenreList"
+						component={GenreList}
+						options={{
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
+					<Stack.Screen
+						name="ReconsiderLibrary"
+						component={ReconsiderLibrary}
+						initialParams={{ session: session }}
+						options={{
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+						}}
+					/>
+					<Stack.Screen name="ChatWindow" component={ChatWindow} />
+				</Stack.Navigator>
+			) : (
+				<Stack.Navigator>
+					<Stack.Screen
+						name="Welcome"
+						component={Welcome}
+						options={{
+							headerTitleAlign: "center",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+							headerTintColor: "white",
+						}}
+					/>
+					<Stack.Screen
+						name="Login"
+						component={Login}
+						options={{
+							headerTitleAlign: "center",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+							headerTintColor: "white",
+						}}
+					/>
+					<Stack.Screen
+						name="SignUp"
+						component={SignUp}
+						options={{
+							headerTitleAlign: "center",
+							headerStyle: {
+								backgroundColor: "#06A77D",
+							},
+							headerTintColor: "white",
+						}}
+					/>
+				</Stack.Navigator>
+			)}
+			{session && session.user && <Footer newNotif={newNotif} />}
+			<StatusBar style="auto" />
+		</NavigationContainer>
+	);
 }
 
 export default App;
