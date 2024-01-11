@@ -1,68 +1,97 @@
 import { useEffect } from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet, Image } from "react-native";
 import supabase from "../config/supabaseClient";
+import { useFonts } from "expo-font";
+import { JosefinSans_400Regular } from "@expo-google-fonts/dev";
 
 export default function Welcome({ navigation }) {
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: session } = await supabase.auth.getSession();
-      if (session.session.user) {
-        navigation.navigate("Home");
-      }
-    };
+	useEffect(() => {
+		const checkUser = async () => {
+			const { data: session } = await supabase.auth.getSession();
+			if (session.session.user) {
+				navigation.navigate("Home");
+			}
+		};
 
-    checkUser();
-  }, []);
+		checkUser();
+	}, []);
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.buttonContainer}>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("Login");
-          }}
-          style={styles.button}
-        >
-          <Text>Log In</Text>
-        </Pressable>
-      </View>
+	const Logo = () => (
+		<Image
+			source={require("../assets/IMG_5454.png")}
+			style={{
+				width: 250,
+				height: 250,
+				borderRadius: 200,
+				justifyContent: "center",
+				alignItems: "center",
+				marginBottom: 70,
+			}}
+		/>
+	);
 
-      <View style={styles.buttonContainer}>
-        <Pressable
-          onPress={() => {
-            navigation.navigate("SignUp");
-          }}
-          style={styles.button}
-        >
-          <Text>Sign Up</Text>
-        </Pressable>
-      </View>
-    </View>
-  );
+	const [fontsLoaded] = useFonts({
+		JosefinSans_400Regular,
+	});
+
+	if (!fontsLoaded) {
+		return <Text>Loading...</Text>;
+	}
+
+	return (
+		<View style={styles.container}>
+			<Logo />
+			<View style={styles.buttonContainer}>
+				<Pressable
+					onPress={() => {
+						navigation.navigate("Login");
+					}}
+					style={styles.button}
+				>
+					<Text style={styles.text}>Log In</Text>
+				</Pressable>
+			</View>
+			<View style={styles.buttonContainer}>
+				<Pressable
+					onPress={() => {
+						navigation.navigate("SignUp");
+					}}
+					style={styles.button}
+				>
+					<Text style={styles.text}>Sign Up</Text>
+				</Pressable>
+			</View>
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    width: 100,
-    height: 68,
-    marginHorizontal: 20,
-    padding: 3,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  container: {
-    alignItems: "center",
-  },
-  button: {
-    backgroundColor: "lightgrey",
-    width: 100,
-    alignItems: "center",
-    paddingTop: 7,
-    paddingBottom: 7,
-    paddingLeft: 15,
-    paddingRight: 15,
-    borderRadius: 10,
-    borderColor: "grey",
-    borderWidth: 2,
-  },
+	buttonContainer: {
+		width: 200,
+		height: 65,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	container: {
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: "#272727",
+		flex: 1,
+	},
+	button: {
+		backgroundColor: "#06A77D",
+		width: 200,
+		height: 42,
+		alignItems: "center",
+		paddingTop: 9,
+		paddingBottom: 10,
+		borderRadius: 20,
+		borderColor: "#06A77D",
+	},
+	text: {
+		fontSize: 20,
+		fontFamily: "JosefinSans_400Regular",
+		fontWeight: 500,
+		color: "white",
+	},
 });

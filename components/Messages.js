@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text, View, Pressable } from "react-native";
+import { Text, View, Pressable, StyleSheet } from "react-native";
 import supabase from "../config/supabaseClient";
 import { useNavigation } from "@react-navigation/native";
 
@@ -85,7 +85,7 @@ export default function ChatComponent({ navigation, route }) {
   }, [uniqueChats]);
 
   return (
-    <View>
+    <View style={styles.container}>
       {usernames.map((username) => {
         return (
           <Pressable
@@ -98,11 +98,33 @@ export default function ChatComponent({ navigation, route }) {
               });
             }}
             key={username[2]}
+            style={styles.listItem}
           >
-            <Text key={username[2]}>{username[2]}</Text>
+            <Text style={styles.text} key={username[2]}>{username[2]}</Text>
           </Pressable>
         );
       })}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#272727",
+    flex: 1,
+  },
+  listItem: {
+    borderTopColor: "white",
+    borderTopWidth: 1,
+    borderBottomColor: "white",
+    borderBottomWidth: 1,
+    padding:20,
+    margin: 3,
+  },
+  text: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "white",
+    fontSize: 16,
+    textAlign: "left",
+  },
+})

@@ -82,14 +82,14 @@ async function removeItemFromWishList(res) {
           <AntDesign
             name="hearto"
             size={18}
-            color="maroon"
+            color="#C1514B"
             style={styles.heart}
           />
         ) : (
           <AntDesign
             name="heart"
             size={18}
-            color="maroon"
+            color="#C1514B"
             style={styles.heart}
           />
         )}
