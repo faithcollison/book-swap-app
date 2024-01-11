@@ -1,9 +1,12 @@
 import { View, Text, Pressable, Dimensions, Platform } from "react-native";
 import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import supabase from "../config/supabaseClient";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons'; 
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons'; 
 
@@ -71,26 +74,44 @@ const HomeScreen = ({  navigation }) => {
 
 	return (
 		<View style={{flex: 1,}}>
+			<View style={{flex: 1,}}>
 			<ScrollView showsVerticalScrollIndicator={false} ref={scrollRef} onScroll={event => {
 				setScrollOffset(event.nativeEvent.contentOffset.y);
 			}} scrollEventThrottle={16}>
-				<View
-					style={
-						Platform.OS === "web"
-							? { ...styles.container, ...styles.webFix }
-							: styles.container
-					}
-				>
-					<TopTenCarousel listings={topTen}/>
-					<Text style={styles.header}>Categories</Text>
-					{categories.map((category) => {
-						return (
-							<BookList categoryName={category} key={category} id={currSession} />
-						);
-					})}
-					<StatusBar style="auto" />
+					<View
+						style={
+							Platform.OS === "web"
+								? { ...styles.container, ...styles.webFix }
+								: styles.container
+						}
+					>
+						<TopTenCarousel listings={topTen}/>
+						<Text style={styles.header}>Categories</Text>
+						{categories.map((category) => {
+							return (
+								<BookList categoryName={category} key={category} id={currSession} />
+							);
+						})}
+						<StatusBar style="auto" />
+					</View>
+				</ScrollView>
+			<Pressable style={styles.BTTContainer} onPress={() => {
+				// console.log(scrollRef, '<<<<')
+				scrollRef.current?.scrollTo({
+					y : 0,
+					animated : true
+				});
+			}}>
+				<View style={styles.BTTCircle}>
+					<Ionicons
+						name="arrow-up"
+						size={35}
+						color="black"
+						style={styles.BTTArrow}
+					/>
 				</View>
-			</ScrollView>
+			</Pressable>
+		</View>
 			{scrollOffset > scrollOffsetLimit && (
 				<Pressable style={Platform.OS === 'web' ? {...styles.BTTContainer, ...styles.BTTHeight} : styles.BTTContainer} onPress={() => {
 					scrollRef.current?.scrollTo({

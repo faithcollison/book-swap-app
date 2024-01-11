@@ -1,245 +1,319 @@
 import React, { useState, useEffect } from "react";
 import {
-  Button,
-  View,
-  Text,
-  Image,
-  FlatList,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  Input,
-  Dimensions,
+	Button,
+	View,
+	Text,
+	Image,
+	FlatList,
+	TouchableOpacity,
+	TextInput,
+	StyleSheet,
+	ScrollView,
+	SafeAreaView,
+	Input,
+	Dimensions,
+	Pressable,
 } from "react-native";
-import { SearchBar } from "react-native-elements";
+import { SegmentedButtons } from "react-native-paper";
+import { Searchbar } from "react-native-paper";
+import { LinearGradient } from "expo-linear-gradient";
+
 const screenHeight = Dimensions.get("window").height;
-import SwitchSelector from "react-native-switch-selector";
 
 const Search_Existing_Book = ({ navigation }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [selectedBook, setSelectedBook] = useState({});
-  const [title, setTitle] = useState("");
-  const [googleBookId, setGoogleBookId] = useState("")
-  const [authors, setAuthors] = useState("");
-  const [description, setDescription] = useState("");
-  const [imgUrl, setImgUrl] = useState("");
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [totalItems, setTotalItems] = useState(0);
-  const [hasSearched, setHasSearched] = useState(false);
-  const [searchType, setSearchType] = useState("title");
+	const [searchTerm, setSearchTerm] = useState("");
+	const [searchResults, setSearchResults] = useState([]);
+	const [selectedBook, setSelectedBook] = useState({});
+	const [title, setTitle] = useState("");
+	const [googleBookId, setGoogleBookId] = useState("");
+	const [authors, setAuthors] = useState("");
+	const [description, setDescription] = useState("");
+	const [imgUrl, setImgUrl] = useState("");
+	const [page, setPage] = useState(1);
+	const [hasMore, setHasMore] = useState(true);
+	const [totalItems, setTotalItems] = useState(0);
+	const [hasSearched, setHasSearched] = useState(false);
+	const [searchType, setSearchType] = useState("title");
 
-  let totalPages = Math.ceil(totalItems / 20);
-  const api = process.env.GOOGLE_BOOKS_API_KEY;
+	let totalPages = Math.ceil(totalItems / 20);
+	const api = process.env.GOOGLE_BOOKS_API_KEY;
 
-  const handleSearch = async () => {
-    let apiSearch;
-    if (searchTerm !== "") {
-      if (searchType === "title") {
-        const apiSearchTitle = searchTerm.replace(/\s/g, "+");
-        apiSearch = `https://www.googleapis.com/books/v1/volumes?q=${apiSearchTitle}&startIndex=${
-          page * 20
-        }&maxResults=20&key=${api}`;
-      } else if (searchType === "author") {
-        const apiSearchAuthor = searchTerm.replace(/\s/g, "+");
-        apiSearch = `https://www.googleapis.com/books/v1/volumes?q=inauthor:${apiSearchAuthor}&startIndex=${
-          page * 20
-        }&maxResults=20&key=${api}`;
-      }
-    }
-    try {
-      const response = await fetch(apiSearch);
-      const data = await response.json();
-      if (data.items === undefined) {
-        navigation.navigate("CreateListing");
-      }
-      if (data.totalItems <= page * 20 + 20) {
-        setHasMore(false);
-      }
-      setTotalItems(data.totalItems);
-      const filtered = data.items.filter(
-        (book) => book.volumeInfo.language === "en"
-      );
-      setSearchResults(filtered);
-      setHasSearched(true);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+	const handleSearch = async () => {
+		let apiSearch;
+		if (searchTerm !== "") {
+			if (searchType === "title") {
+				const apiSearchTitle = searchTerm.replace(/\s/g, "+");
+				apiSearch = `https://www.googleapis.com/books/v1/volumes?q=${apiSearchTitle}&startIndex=${
+					page * 20
+				}&maxResults=20&key=${api}`;
+			} else if (searchType === "author") {
+				const apiSearchAuthor = searchTerm.replace(/\s/g, "+");
+				apiSearch = `https://www.googleapis.com/books/v1/volumes?q=inauthor:${apiSearchAuthor}&startIndex=${
+					page * 20
+				}&maxResults=20&key=${api}`;
+			}
+		}
+		try {
+			const response = await fetch(apiSearch);
+			const data = await response.json();
+			if (data.items === undefined) {
+				navigation.navigate("CreateListing");
+			}
+			if (data.totalItems <= page * 20 + 20) {
+				setHasMore(false);
+			}
+			setTotalItems(data.totalItems);
+			const filtered = data.items.filter(
+				(book) => book.volumeInfo.language === "en"
+			);
+			setSearchResults(filtered);
+			setHasSearched(true);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
-  useEffect(() => {
-    handleSearch();
-  }, [page]);
+	useEffect(() => {
+		handleSearch();
+	}, [page]);
 
-  const handleSelectBook = (book) => {
-    setSelectedBook(book);
-    setGoogleBookId(book.id)
-    setTitle(book.volumeInfo.title);
-    setAuthors(book.volumeInfo.authors?.join(", ") || "");
-    setDescription(book.volumeInfo.description);
-    setImgUrl(
-      book.volumeInfo.imageLinks
-        ? book.volumeInfo.imageLinks.smallThumbnail
-        : "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg"
-    );
-  };
+	const handleSelectBook = (book) => {
+		setSelectedBook(book);
+		setGoogleBookId(book.id);
+		setTitle(book.volumeInfo.title);
+		setAuthors(book.volumeInfo.authors?.join(", ") || "");
+		setDescription(book.volumeInfo.description);
+		setImgUrl(
+			book.volumeInfo.imageLinks
+				? book.volumeInfo.imageLinks.smallThumbnail
+				: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg"
+		);
+	};
 
-  useEffect(() => {
-    if (title || authors) {
-      navigation.navigate("CreateListing", {
-        currTitle: title,
-        authors: authors,
-        currDescription: description,
-        imgUrl: imgUrl,
-        navigation: navigation,
-        book_id: googleBookId
-      });
-    }
-  }, [title, authors]);
+	useEffect(() => {
+		if (title || authors) {
+			navigation.navigate("CreateListing", {
+				currTitle: title,
+				authors: authors,
+				currDescription: description,
+				imgUrl: imgUrl,
+				navigation: navigation,
+				book_id: googleBookId,
+			});
+		}
+	}, [title, authors]);
 
-
-  //Leave this comment in for future. Decision was made to map this instead of FlatList as FlatList refused to rerender when data/extradata was updated.
-  //This was the only solution I could come up with
-
-  return (
-    <ScrollView>
-      <View style={styles.wrapperContainer}>
-        <Text> ADD A NEW BOOK! </Text>
-        <SwitchSelector
-          options={[
-            { label: "Title", value: "title" },
-            { label: "Author", value: "author" },
-          ]}
-          initial={0}
-          onPress={(value) => setSearchType(value)}
-          styles={{
-            borderColor: "#46bdbf",
-            backgroundColor: "#9003fc",
-            buttonColor: "#f1f1f1",
-            selectedLabelColor: "#FFFFFF",
-            unselectedLabelColor: "#FFFFFF",
-          }}
-        />
-        <SearchBar
-          placeholder="Search for book here.."
-          onChangeText={setSearchTerm}
-          value={searchTerm}
-          onSubmitEditing={handleSearch}
-        />
-        <Button title="Search" onPress={handleSearch} />
-        <Button
-          title="Add book manually"
-          onPress={() => navigation.navigate("CreateListing")}
-        />
-        <ScrollView>
-          <View style={styles.marginBottom}>
-            <View style={styles.container}>
-              {searchResults.map((item) => {
-                console.log(item)
-                return (
-                  <View style={styles.item} key={item.id}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        handleSelectBook(item);
-                      }}
-                    >
-                      <View
-                        style={[
-                          styles.container,
-                          {
-                            borderTopWidth: 1,
-                            borderBottomWidth: 1,
-                            borderColor: "black",
-                          },
-                        ]}
-                      >
-                        <Text style={styles.bookTitle}>
-                          {item.volumeInfo.title}
-                        </Text>
-                        <Text style={styles.author}>
-                          Written by{" "}
-                          {item.volumeInfo.authors &&
-                            item.volumeInfo.authors.join(", ")}
-                        </Text>
-                        <Image
-                          source={
-                            item.volumeInfo.imageLinks !== undefined
-                              ? { uri: item.volumeInfo.imageLinks.smallThumbnail }
-                              : {
-                                  uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
-                                }
-                          }
-                          style={[styles.image, { width: 100, height: 100 }]}
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                );
-              })}
-              {hasSearched && (
-                <View style={styles.button}>
-                  <Button
-                    title="Previous"
-                    onPress={() => {
-                      setPage((prevPage) => prevPage - 1);
-                    }}
-                    disabled={page === 1}
-                  />
-                  <Text>Page: {page}</Text>
-                  <Button
-                    title="Next"
-                    onPress={() => {
-                      setPage((prevPage) => prevPage + 1);
-                    }}
-                    disabled={page === totalPages}
-                  />
-                </View>
-              )}
-            </View>
-          </View>
-        </ScrollView>
-      </View>
-    </ScrollView>
-  );
+	return (
+		<ScrollView style={styles.scrollview}>
+			<SafeAreaView style={styles.safeArea}>
+				<View style={styles.container}>
+					<Text style={styles.header}>Find a Book</Text>
+					<Text style={styles.sortBy}>Sort by</Text>
+					<SegmentedButtons
+						value={searchType}
+						onValueChange={setSearchType}
+						buttons={[
+							{ label: "Title", value: "title" },
+							{ label: "Author", value: "author" },
+						]}
+						style={{
+							width: "60%",
+						}}
+					/>
+					<Searchbar
+						placeholder="Search for a book here..."
+						onChangeText={setSearchTerm}
+						value={searchTerm}
+						onSubmitEditing={handleSearch}
+						style={styles.searchbar}
+					/>
+					<Pressable title="Search" onPress={handleSearch} style={styles.button}>
+						<Text style={{ color: "white", fontFamily: "JosefinSans_400Regular" }}>
+							Search
+						</Text>
+					</Pressable>
+					<Pressable
+						title="Add book manually"
+						onPress={() => navigation.navigate("CreateListing")}
+						style={styles.button}
+					>
+						<Text style={{ color: "white", fontFamily: "JosefinSans_400Regular" }}>
+							Add book manually
+						</Text>
+					</Pressable>
+					{hasSearched && totalPages > 1 && (
+						<FlatList
+							data={searchResults}
+							keyExtractor={(item) => item.id}
+							ListFooterComponent={() => (
+								<>
+									<Pressable
+										onPress={() => setPage((prevPage) => prevPage - 1)}
+										disabled={page === 1}
+										style={styles.paginationButtons}
+									>
+										<Text style={{ color: "white", fontFamily: "JosefinSans_400Regular" }}> Previous </Text>
+									</Pressable>
+									<Text style={{ color: "white", fontFamily: "JosefinSans_400Regular", fontSize: 13 }}> Page: {page} </Text>
+									<Pressable
+										onPress={() => setPage((prevPage) => prevPage + 1)}
+										disabled={page === totalPages}
+										style={styles.paginationButtons}
+									>
+										<Text style={{ color: "white", fontFamily: "JosefinSans_400Regular" }}> Next </Text>
+									</Pressable>
+								</>
+							)}
+							renderItem={({ item }) => (
+								<LinearGradient
+									colors={["#307361", "rgba(169, 169, 169, 0.10)"]}
+									start={{ x: 0, y: 0 }}
+									end={{ x: 1, y: 1 }}
+									style={{
+										alignItems: "center",
+										backgroundColor: "rgba(169, 169, 169, 0.15)",
+										padding: 16,
+										width: Dimensions.get("window").width - 32,
+										borderRadius: 30,
+										overflow: "hidden",
+										marginBottom: 25,
+									}}
+								>
+									<Text style={styles.titleText}>{item.volumeInfo.title}</Text>
+									<Text style={styles.authorText}>
+										Written by{" "}
+										{item.volumeInfo.authors && item.volumeInfo.authors.join(", ")}
+									</Text>
+									<Image
+										source={
+											item.volumeInfo.imageLinks !== undefined
+												? { uri: item.volumeInfo.imageLinks.smallThumbnail }
+												: {
+														uri: "https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-no-image-available-icon-flatvector-illustration-pic-design-profile-vector-png-image_40966566.jpg",
+												  }
+										}
+										style={styles.image}
+									/>
+									<Pressable onPress={() => handleSelectBook(item)} style={styles.paginationButtons}>
+										<Text
+											style={{
+												color: "white",
+												fontFamily: "JosefinSans_400Regular",
+												fontSize: 18,
+												marginVertical: 10,
+											}}
+										>
+											Select Book
+										</Text>
+									</Pressable>
+								</LinearGradient>
+							)}
+						/>
+					)}
+				</View>
+			</SafeAreaView>
+		</ScrollView>
+	);
 };
+
 const styles = StyleSheet.create({
-  marginBottom: {
-    marginBottom: screenHeight * 0.11,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF",
-  },
-  item: {
-    flex: 1,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    margin: 0,
-  },
-  bookTitle: {
-    fontSize: 25,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  author: {
-    fontSize: 16,
-  },
-  image: {
-    margin: 20,
-    borderRadius: 20,
-  },
-  button: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 10, // add some padding
-    paddingVertical: 20, // add some vertical padding
-  },
+	safeArea: {
+		flex: 1,
+		backgroundColor: "#272727",
+	},
+	container: {
+		justifyContent: "center",
+		alignItems: "center",
+		marginBottom: Dimensions.get("window").height * 0.09,
+		backgroundColor: "#272727",
+	},
+	header: {
+		fontSize: 28,
+		fontWeight: "bold",
+		textAlign: "center",
+		color: "white",
+		fontFamily: "JosefinSans_400Regular",
+		marginTop: 20,
+		marginBottom: 40,
+	},
+	sortBy: {
+		textAlign: "left",
+		fontFamily: "JosefinSans_400Regular",
+		fontSize: 17,
+		marginBottom: 10,
+		marginTop: 10,
+		color: "white",
+	},
+	searchbar: {
+		width: "80%",
+		marginBottom: 20,
+		marginTop: 50,
+	},
+	resultItem: {
+		flexDirection: "row",
+		alignItems: "center",
+		padding: 10,
+	},
+	titleText: {
+		fontSize: 20,
+		fontWeight: "bold",
+		flex: 1,
+		justifyContent: "center",
+		alignContent: "center",
+		textAlign: "center",
+		fontFamily: "JosefinSans_400Regular",
+		color: "white",
+		paddingTop: 10,
+		paddingBottom: 5,
+	},
+	authorText: {
+		fontSize: 15,
+		color: "white",
+		flex: 1,
+		justifyContent: "center",
+		alignContent: "center",
+		textAlign: "center",
+		paddingBottom: 10,
+		fontFamily: "JosefinSans_400Regular",
+	},
+	image: {
+		alignItems: "center",
+		height: 180,
+		width: 120,
+		borderRadius: 16,
+		marginBottom: 10,
+		marginTop: 10,
+		resizeMode: "cover",
+	},
+	button: {
+		backgroundColor: "#06A77D",
+		fontSize: 18,
+		fontWeight: "bold",
+		borderRadius: 15,
+		marginTop: 7,
+		marginBottom: 7,
+		textAlign: "center",
+		justifyContent: "center",
+		alignItems: "center",
+		width: 150,
+		height: 45,
+	},
+	paginationButtons: {
+		backgroundColor: "#06A77D",
+		fontSize: 18,
+		fontWeight: "bold",
+		borderRadius: 15,
+		marginTop: 7,
+		marginBottom: 7,
+		textAlign: "center",
+		justifyContent: "center",
+		alignItems: "center",
+		width: 150,
+		height: 45,
+	},
+	scrollview: {
+		backgroundColor: "#272727",
+	},
 });
 
 export default Search_Existing_Book;

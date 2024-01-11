@@ -4,6 +4,13 @@ import { Button } from "react-native-elements";
 import supabase from "../config/supabaseClient";
 import { StyleSheet } from "react-native-web";
 import DropDownPicker from "react-native-dropdown-picker";
+import { useFonts } from "expo-font";
+import {
+	VollkornSC_400Regular,
+	Bellefair_400Regular,
+	CormorantGaramond_400Regular,
+	JosefinSans_400Regular,
+} from "@expo-google-fonts/dev";
 
 const CreateListing = ({ route, navigation }) => {
   const { currTitle, authors, currDescription, imgUrl, book_id } = route.params;
@@ -83,8 +90,18 @@ const CreateListing = ({ route, navigation }) => {
     }
   };
 
+  const [fontsLoaded] = useFonts({
+		VollkornSC_400Regular,
+		Bellefair_400Regular,
+		CormorantGaramond_400Regular,
+		JosefinSans_400Regular,
+	});
+
+	if (!fontsLoaded) {
+		return <Text>Loading...</Text>;
+	}
+
   return (
-    // <ScrollView>
       <ScrollView style={styles.container}>
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Title</Text>
@@ -161,14 +178,13 @@ const CreateListing = ({ route, navigation }) => {
           />
         </View>
       </ScrollView>
-    // </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#272727",
     flex: 1,
   },
 
@@ -177,9 +193,10 @@ const styles = StyleSheet.create({
   },
 
   label: {
-    fontSize: 16,
+    fontSize: 18,
     marginBottom: 5,
-    color: "black",
+    color: "white",
+    fontFamily: 'JosefinSans_400Regular'
   },
 
   input: {
@@ -188,19 +205,21 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderWidth: 1,
     paddingHorizontal: 15,
-    fontSize: 16,
-    color: "#333",
+    fontSize: 14,
+    backgroundColor: '#EBEBEB'
   },
 
   multilineInput: {
     height: 100,
     paddingTop: 10,
+    fontSize: 14,
   },
 
   submitButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#06A77D",
     borderRadius: 8,
     paddingVertical: 15,
+    marginTop: 20,
   },
 
   submitButtonText: {
@@ -209,7 +228,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   formElementWithMargin: {
-    marginTop: 200, // adjust this value as needed
+    marginTop: 200,
   },
 });
 
