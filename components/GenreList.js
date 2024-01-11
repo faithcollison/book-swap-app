@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         fontFamily: 'JosefinSans_400Regular',
         fontSize: 28,
         fontWeight: 'bold',
-        marginBottom: 16,
+        margin: 16,
         color: 'white',
     },
 
