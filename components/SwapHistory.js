@@ -1,6 +1,8 @@
+
 import { React, useCallback, useEffect, useState } from 'react';
 import supabase from '../config/supabaseClient';
 import { Text, View, Image, StyleSheet, ScrollView, Dimensions, RefreshControl, Pressable } from 'react-native';
+
 
 const SwapHistory = ({ session }) => {
     const [userID, setUserID] = useState('');
