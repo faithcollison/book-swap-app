@@ -2,56 +2,37 @@ import { Text, StyleSheet, Pressable, View } from "react-native";
 import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { Dimensions } from "react-native";
 
-/*
-
-User 1 - Has the book 
-User 2 - Requests the book 
-User 1 Picks a book from users 2 library
-
-
-*/
-export default function ListedBook({ route }) {
+export default function ListedBook({ route, username }) {
   const navigation = useNavigation();
-  const { session, listing } = route.params
-  const [userName, setUserName] = useState();
+  const { session, listing } = route;
   const [swapState, setSwapState] = useState(false);
+  const [swapRequestMade, setSwapRequestMade] = useState(false);
+  
 
 
 
-  useEffect(() => {
-    async function checkSwapExists() {
-      const { data, error } = await supabase
-        .from("Pending_Swaps")
-        .select()
-        .eq("user1_id", listing.user_id)
-        .eq("user2_id", session.user.id)
-        .eq("user1_listing_id", listing.book_id);
-      if (data.length > 0) {
-        setSwapState(true);
-      } else {
-        setSwapState(false);
-      }
-    }
-    checkSwapExists();
-  }, []);
-
-  // retrieves the username of the book lister
-  async function getBookOwner() {
+  async function checkSwapExists() {
     const { data, error } = await supabase
-      .from("Users")
-      .select("username")
-      .eq("user_id", listing.user_id);
-    setUserName(data[0].username);
+      .from("Pending_Swaps")
+      .select()
+      .eq("user1_id", listing.user_id)
+      .eq("user2_id", session.user.id)
+      .eq("user1_listing_id", listing.book_id);
+
+    if (data.length > 0) {
+      setSwapState(true);
+    } else {
+      setSwapState(false);
+    }
   }
-  getBookOwner();
 
   // inserts info into pending swaps
   const reqSwap = async () => {
     if (swapState) {
       return;
     }
-
     const { data, error } = await supabase
       .from("Pending_Swaps")
       .insert([
@@ -60,7 +41,7 @@ export default function ListedBook({ route }) {
           user1_book_title: listing.book_title,
           user1_listing_id: listing.book_id,
           user1_book_imgurl: listing.img_url,
-          user1_username: userName,
+          user1_username: username,
           user2_id: session.user.id,
           user2_username: session.user.user_metadata.username,
         },
@@ -68,10 +49,11 @@ export default function ListedBook({ route }) {
       .select("pending_swap_id");
 
     if (error) {
-      console.log(error);
+      console.error("Failed to make swap request: ", error);
+    } else {
+      console.log("Data inserted: ", data);
     }
     setSwapState(true);
-
     return data[0].pending_swap_id;
   };
 
@@ -79,7 +61,6 @@ export default function ListedBook({ route }) {
     if (swapState) {
       return;
     }
-
     const { data, error } = await supabase.from("Notifications").insert([
       {
         swap_offer_id: id,
@@ -91,17 +72,21 @@ export default function ListedBook({ route }) {
 
   return (
     <View>
-      <Text>{listing.listing_id}</Text>
-      <Pressable
-        style={styles.button}
+      <Pressable 
         onPress={() => {
-          reqSwap().then((id) => {
-            console.log("making swap");
-            sendNotification(id);
-          });
+          Promise.all([checkSwapExists(), reqSwap()]).then(
+            ([checkResults, reqResults]) => {
+              sendNotification(reqResults);
+            }
+          );
+          setSwapRequestMade(true)
         }}
+        style={styles.descriptionButton}
+       
       >
-        <Text>Button to request swap</Text>
+        <View >
+          <Text  style={swapRequestMade ? styles.requestSwapButtonPressed : styles.text}> {swapRequestMade? "Request Made": "Request swap"}</Text>
+        </View>
       </Pressable>
     </View>
   );
@@ -112,4 +97,30 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "blue",
   },
+  descriptionButton: {
+    backgroundColor: "#3B8D77",
+    fontSize: 10,
+    alignSelf: "center",
+    width: Dimensions.get("window").width * 0.33,
+    borderRadius: 15,
+    marginTop: 10,
+    textAlign: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  requestSwapButtonPressed: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "black",
+    fontSize: 16,
+    textAlign: "center",
+    padding: 10,
+  },
+  text: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    padding: 10,
+  },
+  
 });

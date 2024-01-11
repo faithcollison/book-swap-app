@@ -23,6 +23,8 @@ import SwapOffer from "./components/SwapOffer";
 import User2LibraryPage from "./components/User2Library";
 import GenreList from "./components/GenreList";
 import ReconsiderLibrary from "./components/ReconsiderLibrary";
+import ChatComponent from "./components/Messages";
+import ChatWindow from "./components/ChatWindow";
 
 const Stack = createNativeStackNavigator();
 
@@ -71,7 +73,8 @@ function App() {
 					/>
 					<Stack.Screen
 						name="Messages"
-						component={Messages}
+						component={ChatComponent}
+            			initialParams={{ session: session }}
 						options={{
 							headerTitle: "",
 							headerStyle: {
@@ -175,6 +178,7 @@ function App() {
 							},
 						}}
 					/>
+					<Stack.Screen name="ChatWindow" component={ChatWindow} />
 				</Stack.Navigator>
 			) : (
 				<Stack.Navigator>

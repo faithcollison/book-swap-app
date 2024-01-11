@@ -1,13 +1,14 @@
-import "react-native-gesture-handler";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import { useState, useEffect } from "react";
-import supabase from "../config/supabaseClient";
-import HomeScreen from "./Home";
-import WishList from "./WishList";
-import UserLibrary from "./UserLibrary";
-import SignOutScreen from "./SignOut";
-import SwapHistory from "./SwapHistory";
-import { Image } from "react-native-elements";
+import 'react-native-gesture-handler';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useState, useEffect } from 'react';
+import supabase from '../config/supabaseClient';
+import HomeScreen from './Home';
+import WishList from './WishList';
+import UserLibrary from './UserLibrary';
+import SignOutScreen from './SignOut';
+import SwapHistory from './SwapHistory';
+import ActiveSwaps from './ActiveSwaps';
+import { Image } from 'react-native-elements';
 import { Text } from "react-native-elements";
 import { useFonts } from "expo-font";
 import {
@@ -20,16 +21,16 @@ import {
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigator() {
-	const [session, setSession] = useState(null);
+    const [session, setSession] = useState(null);
 
-	useEffect(() => {
-		supabase.auth.getSession().then((session) => {
-			setSession(session);
-		});
-		supabase.auth.onAuthStateChange((event, session) => {
-			setSession(session);
-		});
-	}, []);
+    useEffect(() => {
+        supabase.auth.getSession().then(session => {
+            setSession(session);
+        });
+        supabase.auth.onAuthStateChange((event, session) => {
+            setSession(session);
+        });
+    }, []);
 
 	const logo = () => (
 		<Image
@@ -95,6 +96,17 @@ function DrawerNavigator() {
 			>
 				{(props) => <WishList {...props} session={session} />}
 			</Drawer.Screen>
+            <Drawer.Screen
+                name="Active Swaps"
+                options={{ headerTitleAlign: 'center' }}
+            >
+                {props => (
+                    <ActiveSwaps
+                        {...props}
+                        session={session}
+                    />
+                )}
+            </Drawer.Screen>
 			<Drawer.Screen
 				name="Swap History"
 				options={{ headerTitleAlign: "center", headerTitle: "" }}

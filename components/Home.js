@@ -18,40 +18,42 @@ const HomeScreen = ({ navigation }) => {
 	const [currSession, setCurrSession] = useState();
 	const [topTen, setTopTen] = useState([]);
 
-	useEffect(() => {
-		async function compareId(id) {
-			const { data, error } = await supabase
-				.from("Users")
-				.select("*")
-				.match({ user_id: id });
-			return data;
-		}
-		async function getData() {
-			const { data, error } = await supabase.auth.getSession();
-			const { session } = data;
-			setCurrSession(session.user.id);
-			return session.user.id;
-		}
-		getData()
-			.then((id) => {
-				return compareId(id);
-			})
-			.then((data) => {
-				if (data.length === 0) {
-					navigation.navigate("UserProfile");
-				}
-			});
-	}, []);
+  useEffect(() => {
+    async function compareId(id) {
+      const { data, error } = await supabase
+        .from("Users")
+        .select("*")
+        .match({ user_id: id });
+      return data;
+    }
+    async function getData() {
+      const { data, error } = await supabase.auth.getSession();
+      const { session } = data;
+      setCurrSession(session.user.id);
+      return session.user.id;
+    }
+    getData()
+      .then((id) => {
+        return compareId(id);
+      })
+      .then((data) => {
+        if (data.length === 0) {
+          navigation.navigate("UserProfile");
+        }
+      });
+  }, []);
 
-	useEffect(() => {
-		async function getCategories() {
-			const { data, error } = await supabase.from("Listings").select("Category");
-			const catArr = [];
-			data.forEach((obj) => {
-				if (!catArr.includes(obj.Category)) catArr.push(obj.Category);
-			});
-			setCategories(catArr);
-		}
+  useEffect(() => {
+    async function getCategories() {
+      const { data, error } = await supabase
+        .from("Listings")
+        .select("Category");
+      const catArr = [];
+      data.forEach((obj) => {
+        if (!catArr.includes(obj.Category)) catArr.push(obj.Category);
+      });
+      setCategories(catArr);
+    }
 
 		async function getTopTen(table) {
 			const { data, error } = await supabase
