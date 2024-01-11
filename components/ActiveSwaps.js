@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Text, View, Image, StyleSheet, ScrollView, Dimensions, RefreshControl, Pressable, Platform } from 'react-native';
 import SwapCard from './SwapCard';
 
-const screenHeight = Dimensions.get('screen').height;
+const {height, width} = Dimensions.get('screen');
 
 const ActiveSwaps = ({ session }) => {
     const navigation = useNavigation();
@@ -14,6 +14,7 @@ const ActiveSwaps = ({ session }) => {
     const [sentSwaps, setSentSwaps] = useState([]);
     const [receivedSwaps, setReceivedSwaps] = useState([]);
     const [activeSwaps, setActiveSwaps] = useState([]);
+
 
     useEffect(() => {
         if (session) {
@@ -27,9 +28,8 @@ const ActiveSwaps = ({ session }) => {
             .select('*')
             .or(`user1_id.eq.${userID},user2_id.eq.${userID}`);
         setUserData(data);
-        console.log(data[0], '<<<<<')
-        setSentSwaps(data.filter(swap => swap.user1_listing_id !== userID && !swap.user2_listing_id));
-        setReceivedSwaps(data.filter(swap => swap.user1_listing_id === userID && !swap.user2_listing_id));
+        setSentSwaps(data.filter(swap => swap.user1_id !== userID && !swap.user2_listing_id));
+        setReceivedSwaps(data.filter(swap => swap.user1_id === userID && !swap.user2_listing_id));
         setActiveSwaps(data.filter(swap => swap.user1_listing_id && swap.user2_listing_id));
     };
 
@@ -49,22 +49,30 @@ const ActiveSwaps = ({ session }) => {
             : {...styles.pageContainer, ...styles.webFix}
         }>
             <Text style={styles.title}>Active Swaps</Text>
+            <View style={styles.hr} />
 
-            <Text style={styles.heading}>New Swap Requests</Text>
-            {receivedSwaps.length ? 
-            receivedSwaps.map(swap => <SwapCard swap={swap} type={'received'}/>) :
-            <Text style={styles.antiText}>You have no swap requests!</Text>}
+            <View style={styles.section}>
+                <Text style={styles.heading}>New Swap Requests</Text>
+                {receivedSwaps.length ? 
+                receivedSwaps.map(swap => {
+                    return <SwapCard swap={swap} type={'received'}/>
+                }) :
+                <Text style={styles.antiText}>You have no new swap requests!</Text>}
+            </View>
             
+            <View style={styles.section}>
+                <Text style={styles.heading}>Active Swaps</Text>
+                {activeSwaps.length ? 
+                activeSwaps.map(swap => <SwapCard swap={swap} type={swap.user1_id === userID ? 'activeReceived' : 'activeSent'} userID={userID}/>) :
+                <Text style={styles.antiText}>You have no active swap negotiations!</Text>}
+            </View>
 
-            <Text style={styles.heading}>Active Swaps</Text>
-            {activeSwaps.length ? 
-            activeSwaps.map(swap => <SwapCard swap={swap} type={'active'}/>) :
-            <Text style={styles.antiText}>You have no active swap negotiations!</Text>}
-
-            <Text style={styles.heading}>Sent Swap Requests</Text>
-            {sentSwaps.length ? 
-            sentSwaps.map(swap => <SwapCard swap={swap} type={'sent'}/>) :
-            <Text style={styles.antiText}>You have no sent swap requests pending!</Text>}
+            <View style={styles.section}>
+                <Text style={styles.heading}>Sent Swap Requests</Text>
+                {sentSwaps.length ? 
+                sentSwaps.map(swap => <SwapCard swap={swap} type={'sent'}/>) :
+                <Text style={styles.antiText}>You have no sent swap requests pending!</Text>}
+            </View>
         </ScrollView>
     );
 };
@@ -72,14 +80,38 @@ const ActiveSwaps = ({ session }) => {
 const styles = StyleSheet.create({
     pageContainer: {
         backgroundColor: '#272727',
-        padding: 16,
+        width: width,
+        flex: 1,
     },
     webFix: {
-        marginBottom: screenHeight * 0.09,
+        marginBottom: height * 0.09,
     },
     title: {
-
-    }
+        width: width * 0.9,
+        alignSelf: 'center',
+        fontWeight: 'bold',
+        fontSize: 24,
+        color: 'white',
+        marginVertical: 15,
+    },
+    heading: {
+        width: width * 0.9,
+        alignSelf: 'center',
+        fontWeight: 'bold',
+        fontSize: 20,
+        color: 'white',
+        marginBottom: 5,
+    },
+    section: {
+        marginVertical: 25,
+    },
+    hr: {
+        width: width * 0.9,
+        alignSelf: 'center',
+        borderBottomWidth: 1,
+        borderColor: 'white',
+        marginBottom: 25,
+    },
 });
 
 export default ActiveSwaps;
