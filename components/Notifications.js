@@ -167,6 +167,7 @@ const Notifications = ({ route }) => {
                         } else {
                           navigation.navigate("SwapOffer", {
                             info: notification.swapData,
+                            notification: notification,
                           });
                         }
                       }}

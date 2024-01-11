@@ -9,6 +9,7 @@ export default function ListedBook({ route, username }) {
   const { session, listing } = route;
   const [swapState, setSwapState] = useState(false);
   const [swapRequestMade, setSwapRequestMade] = useState(false);
+  console.log(username)
   
 
 

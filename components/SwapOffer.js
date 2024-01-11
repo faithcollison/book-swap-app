@@ -5,12 +5,12 @@ import { useState, useEffect } from "react";
 import { Entypo, Ionicons } from '@expo/vector-icons';
 
 export default function SwapOffer({ route }) {
-  const { info, session } = route.params;
+  const { info, session, notification } = route.params;
   const navigation = useNavigation();
   const [user1ProfilePic, setUser1ProfilePic] = useState()
   const [user2ProfilePic, setUser2ProfilePic] = useState()
 
-  console.log(info)
+  console.log(info, notification)
 
   // MVP ONLY - NEEDS REFACTORING TO BE SCALABLE! 
   useEffect(() => {
@@ -90,7 +90,7 @@ export default function SwapOffer({ route }) {
               style={styles.user1Profile}
               />
             <Text style={styles.profileName} >
-              {info.user1_username}
+              {session.user.user_metadata.username}
             </Text>
           </View>
           <Ionicons

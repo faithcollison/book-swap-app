@@ -100,6 +100,7 @@ export default function User2LibraryPage({ route }) {
               navigation.navigate("SwapNegotiationPage", {
                 user1_book: info,
                 user2_book: book,
+                info: info,
               });
               updateSwapInfo(book).then((res) => {
                 sendNotification(book, res);

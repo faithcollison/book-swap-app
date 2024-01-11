@@ -13,7 +13,7 @@ export default function SwapNegotiationPage({ route }) {
 
   const { user1_book, user2_book, info, session } = route.params;
 
-  console.log(session, info)
+  console.log(info)
 
   // MVP ONLY - NEEDS REFACTORING TO BE SCALABLE! 
   useEffect(() => {
