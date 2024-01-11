@@ -153,6 +153,7 @@ function App() {
 						component={User2LibraryPage}
 						initialParams={{ session: session }}
 						options={{
+							headerTitle: "",
 							headerTintColor: "#000",
 							headerStyle: {
 								backgroundColor: "#06A77D",
@@ -163,7 +164,9 @@ function App() {
 						name="GenreList"
 						component={GenreList}
 						options={{
+							headerTitle: "",
 							headerStyle: {
+								
 								backgroundColor: "#06A77D",
 							},
 						}}
@@ -173,6 +176,7 @@ function App() {
 						component={ReconsiderLibrary}
 						initialParams={{ session: session }}
 						options={{
+							headerTitle: "",
 							headerStyle: {
 								backgroundColor: "#06A77D",
 							},
