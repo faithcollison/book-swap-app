@@ -113,6 +113,7 @@ function DrawerNavigator() {
 			>
 				{(props) => <SwapHistory {...props} session={session} />}
 			</Drawer.Screen>
+	
 			<Drawer.Screen
 				name="Sign Out"
 				component={SignOutScreen}

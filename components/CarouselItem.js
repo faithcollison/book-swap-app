@@ -5,22 +5,6 @@ const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
 
 export default function CarouselItem ({item}) {
-    // const useImageColors = () => {
-    //     const [colors, setColors] = React.useState(null)
-
-    //     React.useEffect(() => {
-    //         const url = item.img_url;
-
-    //         getColors(url, {
-    //         fallback: '#228B22',
-    //         cache: true,
-    //         key: url,
-    //         }).then(setColors)
-    //     }, [])
-
-    //     return colors
-    // }
-
     return (
         <View style={styles.container}>
             <View style={styles.card}>
@@ -54,7 +38,7 @@ const styles = StyleSheet.create({
         width: screenWidth,
     },
     card: {
-        // backgroundColor: '#FFA351FF',
+        backgroundColor: '#FFA351FF',
         // backgroundColor: '#77AB5F',
         backgroundColor: '#EBEBEB',
         borderRadius: 20,
