@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
 
     container: {
         backgroundColor: '#272727',
-        padding: 16,
         flex: 1,
     },
     bookList: {
