@@ -51,7 +51,7 @@ const ActiveSwaps = ({ session }) => {
                 <Text style={styles.heading}>New Swap Requests</Text>
                 {receivedSwaps.length ? 
                 receivedSwaps.map(swap => {
-                    return <SwapCard swap={swap} type={'received'}/>
+                    return <SwapCard swap={swap} type={'received'} session={session} navigation={navigation}/>
                 }) :
                 <Text style={styles.antiText}>You have no new swap requests!</Text>}
             </View>
@@ -59,14 +59,14 @@ const ActiveSwaps = ({ session }) => {
             <View style={styles.section}>
                 <Text style={styles.heading}>Active Swaps</Text>
                 {activeSwaps.length ? 
-                activeSwaps.map(swap => <SwapCard swap={swap} type={swap.user1_id === userID ? 'activeReceived' : 'activeSent'} userID={userID}/>) :
+                activeSwaps.map(swap => <SwapCard swap={swap} type={swap.user1_id === userID ? 'activeReceived' : 'activeSent'} userID={userID} session={session} navigation={navigation}/>) :
                 <Text style={styles.antiText}>You have no active swap negotiations!</Text>}
             </View>
 
             <View style={styles.section}>
                 <Text style={styles.heading}>Sent Swap Requests</Text>
                 {sentSwaps.length ? 
-                sentSwaps.map(swap => <SwapCard swap={swap} type={'sent'}/>) :
+                sentSwaps.map(swap => <SwapCard swap={swap} type={'sent'} session={session} navigation={navigation}/>) :
                 <Text style={styles.antiText}>You have no sent swap requests pending!</Text>}
             </View>
         </ScrollView>

@@ -24,7 +24,7 @@ const Notifications = ({ route }) => {
         loadNotifications().then(res => {
             setNotifications(res);
         });
-    }, [notifications]);
+    }, []);
 
     async function getNotifications(length) {
         const { data, error } = await supabase.from('Notifications').select().eq('user_id', session.user.id);
@@ -111,68 +111,89 @@ const Notifications = ({ route }) => {
                             case 'Swap_Request':
                                 if (notification.swapData) {
                                     return (
-                                        <Pressable
-                                            style={styles.notCard}
-                                            onPress={() => {
-                                                if (Object.entries(notification.swapData).every(([key, value]) => !!value)) {
-                                                    navigation.navigate('SwapNegotiationPage', {
-                                                        info: notification.swapData,
-                                                        user1_book: notification.swapData,
-                                                        user2_book: notification.swapData,
-                                                    });
-                                                } else {
-                                                    navigation.navigate('SwapOffer', {
-                                                        info: notification.swapData,
-                                                    });
-                                                }
-                                            }}
-                                        >
-                                            <Text>{daysSince(notification.created_at)} days ago</Text>
-                                            <View style={styles.contentsMain}>
+                                        <View style={styles.notificationContainer}>
+                                            <Pressable
+                                                style={styles.notCard}
+                                                onPress={() => {
+                                                    if (Object.entries(notification.swapData).every(([key, value]) => !!value)) {
+                                                        navigation.navigate('SwapNegotiationPage', {
+                                                            info: notification.swapData,
+                                                            user1_book: notification.swapData,
+                                                            user2_book: notification.swapData,
+                                                        });
+                                                    } else {
+                                                        navigation.navigate('SwapOffer', {
+                                                            info: notification.swapData,
+                                                        });
+                                                    }
+                                                }}
+                                            >
                                                 <Image
                                                     source={{
                                                         uri: notification.swapData.user1_book_imgurl,
                                                     }}
-                                                    style={styles.bookImage}
+                                                    style={styles.bookImg}
                                                 />
-                                                <View style={styles.textContainer}>
-                                                    <Text style={styles.notText}>{notification.swapData.user2_username + ' wants to swap ' + notification.swapData.user1_book_title}</Text>
+                                                <View style={styles.textContent}>
+                                                    <View style={styles.header}>
+                                                        <Text style={styles.headerText}>{daysSince(notification.created_at)} days ago</Text>
+                                                        <Entypo
+                                                            name="circle-with-cross"
+                                                            size={24}
+                                                            color="#C1514B"
+                                                            onPress={() => deleteNotification(notification.id)}
+                                                        />
+                                                    </View>
+                                                    <View style={styles.messageBorder}>
+                                                        <Text style={styles.message}>
+                                                            <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user2_username}</Text> wants to swap <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user1_book_title}</Text>
+                                                        </Text>
+                                                    </View>
                                                 </View>
-                                            </View>
-                                            <Entypo
-                                                name="circle-with-cross"
-                                                size={24}
-                                                color="#C2C2C2"
-                                                onPress={() => deleteNotification(notification.id)}
-                                                style={styles.deleteButton}
-                                            />
-                                        </Pressable>
+                                            </Pressable>
+                                        </View>
                                     );
                                 }
                                 break;
                             case 'Chosen_Book':
                                 if (notification.swapData) {
                                     return (
-                                        <Pressable
-                                            style={styles.notCard}
-                                            onPress={() => {
-                                                navigation.navigate('SwapNegotiationPage', {
-                                                    info: notification.swapData,
-                                                });
-                                            }}
-                                        >
-                                            <Text style={styles.date}>{daysSince(notification.created_at)} days ago</Text>
-                                            <View style={styles.contentsMain}>
-                                                <Text style={styles.notText}>{`${notification.username} has chosen ${notification.swapData.user2_book_title} from your library`}</Text>
-                                            </View>
-                                            <Entypo
-                                                name="circle-with-cross"
-                                                size={24}
-                                                color="#C2C2C2"
-                                                onPress={() => deleteNotification(notification.id)}
-                                                style={styles.deleteButton}
-                                            />
-                                        </Pressable>
+                                        <View style={styles.notificationContainer}>
+                                            <Pressable
+                                                style={styles.notCard}
+                                                onPress={() => {
+                                                    navigation.navigate('SwapNegotiationPage', {
+                                                        info: notification.swapData,
+                                                    });
+                                                }}
+                                            >
+                                                <Image
+                                                    source={{
+                                                        uri: notification.swapData.user2_book_imgurl,
+                                                    }}
+                                                    style={styles.bookImg}
+                                                />
+                                                <View style={styles.textContent}>
+                                                    <View style={styles.header}>
+                                                        <Text style={styles.headerText}>{daysSince(notification.created_at)} days ago</Text>
+                                                        <Entypo
+                                                            name="circle-with-cross"
+                                                            size={24}
+                                                            color="#C1514B"
+                                                            onPress={() => deleteNotification(notification.id)}
+                                                            style={styles.deleteButton}
+                                                        />
+                                                    </View>
+                                                    <View style={{flex: 1, justifyContent: 'center',}}>
+                                                        <View style={styles.messageBorder}>
+                                                            <Text style={styles.message}>
+                                                                <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user1_username}</Text> has chosen <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user2_book_title}</Text> from your library!
+                                                            </Text>
+                                                        </View>
+                                                    </View>
+                                                </View>
+                                            </Pressable>
+                                        </View>
                                     );
                                 }
                                 break;
@@ -196,6 +217,12 @@ const styles = StyleSheet.create({
     },
     notificationsList: {
         width: width * 0.9,
+    },
+    notificationContainer: {
+        width: width,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 10,
     },
     notCard: {
         flex: 1,
@@ -221,11 +248,12 @@ const styles = StyleSheet.create({
         height: 90,
         maxWidth: width * 0.9 - 20,
     },
-    bookImage: {
-        height: 90,
-        width: 60,
-        borderRadius: 6,
-        // marginRight: 20,
+    bookImg: {
+        height: 120,
+        width: 80,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: 'white',
     },
     notText: {
         color: '#C2C2C2',
@@ -235,16 +263,39 @@ const styles = StyleSheet.create({
         flex: 1,
         marginLeft: 10,
     },
-    deleteButton: {
-        position: 'absolute',
-        right: 8,
-        top: 7,
+    textContent: {
+        flex: 1,
     },
-    date: {
-        color: '#C2C2C2',
-        position: 'absolute',
-        left: 8,
-        top: 7,
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 18,
+    },
+    headerText: {
+        textAlign: 'right',
+        color: 'white',
+        fontSize: 15,
+    },
+    message: {
+        flex: 1,
+        fontSize: 15,
+        color: 'white',
+        marginHorizontal: 10,
+    },
+    messageBorder: {
+        padding: 10,
+        marginHorizontal: 10,
+        borderColor: 'white',
+        borderWidth: 1,
+        borderRadius: 10,
+        backgroundColor: '#06A77D',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
     },
 });
 
