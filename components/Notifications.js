@@ -64,13 +64,22 @@ const Notifications = ({ route }) => {
 
     supabase.channel('Notifications').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Notifications' }, handlePostgresChanges).subscribe();
 
-    function daysSince(dateString) {
-        const notificationDate = new Date(dateString);
-        const currentDate = new Date();
-        const timeDifference = currentDate - notificationDate;
-        const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-        return daysPassed;
-    }
+    supabase
+    .channel("Notifications")
+    .on(
+      "postgres_changes",
+      { event: "DELETE", schema: "public", table: "Notifications" },
+      handlePostgresChanges
+    )
+    .subscribe();
+
+  function daysSince(dateString) {
+    const notificationDate = new Date(dateString);
+    const currentDate = new Date();
+    const timeDifference = currentDate - notificationDate;
+    const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    return daysPassed;
+  }
 
     useEffect(() => {
         Promise.all(
