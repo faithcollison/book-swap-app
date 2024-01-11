@@ -98,7 +98,7 @@ function DrawerNavigator() {
 			</Drawer.Screen>
             <Drawer.Screen
                 name="Active Swaps"
-                options={{ headerTitleAlign: 'center' }}
+                options={{ headerTitle: "", headerTitleAlign: 'center' }}
             >
                 {props => (
                     <ActiveSwaps

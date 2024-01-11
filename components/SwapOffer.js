@@ -3,16 +3,19 @@ import { Text, Pressable, StyleSheet, View, Image, Dimensions } from "react-nati
 import { ScreenWidth, ScreenHeight, color } from "react-native-elements/dist/helpers";
 import { useState, useEffect } from "react";
 import { Entypo, Ionicons } from '@expo/vector-icons';
+import { JosefinSans_400Regular } from "@expo-google-fonts/dev";
 
 export default function SwapOffer({ route }) {
-  const { info, session } = route.params;
+  const { info, session, notification } = route.params;
   const navigation = useNavigation();
   const [user1ProfilePic, setUser1ProfilePic] = useState()
   const [user2ProfilePic, setUser2ProfilePic] = useState()
 
+  console.log(info, notification)
+
   // MVP ONLY - NEEDS REFACTORING TO BE SCALABLE! 
   useEffect(() => {
-    switch (info.user1_id) {
+    switch (session.user.id) {
       case "10240ee4-1b43-4749-afbe-1356c83af4da": 
         setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Nav.jpg'));
         break;
@@ -32,30 +35,30 @@ export default function SwapOffer({ route }) {
         setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Faith.jpg'));
         break;
     }
-  }, [info.user1_id]);
+  }, []);
   
   useEffect(() => {
     switch (info.user2_id) {
       case "10240ee4-1b43-4749-afbe-1356c83af4da": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Nav.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Nav.jpg'));
         break;
       case "a4624164-bbbb-4cb6-b199-06b2fdd6f14a": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Jake.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Jake.jpg'));
         break;
       case "c563d513-b021-42f2-a3b3-77067b8547af": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Jay.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Jay.jpg'));
         break;
       case "ce083d4c-a1e8-45d0-9f93-6bc092f7155b": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Ana.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Ana.jpg'));
         break;
       case "2f71dabd-2f9c-48c3-8edd-4ae7495f59ce": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Alicia.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Alicia.jpg'));
         break;
       case "b45b3687-4e73-46e2-8474-da10e307691b": 
-        setUser1ProfilePic(require('../assets/ExampleUserProfilePictures/Faith.jpg'));
+        setUser2ProfilePic(require('../assets/ExampleUserProfilePictures/Faith.jpg'));
         break;
     }
-  }, [info.user2_id]);
+  }, []);
 
   async function rejectBook(info) {
     await Promise.all([
@@ -80,15 +83,20 @@ export default function SwapOffer({ route }) {
 
   return (
     <View style={styles.page}>
+      <View>
+        <Text style={styles.heading}>
+          Your Offer
+        </Text>
+      </View>
       <View style={styles.booksAndProfilePics}>
         <View  style={styles.profilePics}>
           <View style={styles.picAndName}>
             <Image
-              source={user1ProfilePic ? user1ProfilePic : null}
+              source={user1ProfilePic}
               style={styles.user1Profile}
               />
-            <Text style={styles.profileName} >
-              {info.user1_username}
+            <Text style={styles.body} >
+              {session.user.user_metadata.username}
             </Text>
           </View>
           <Ionicons
@@ -106,10 +114,10 @@ export default function SwapOffer({ route }) {
 				  />
           <View style={styles.picAndName}>
             <Image
-              source={user2ProfilePic ? user2ProfilePic : null}
+              source={user2ProfilePic}
               style={styles.user2Profile}
               />
-            <Text style={styles.profileName} >
+            <Text style={styles.body} >
               {info.user2_username}
             </Text>
           </View>
@@ -128,7 +136,7 @@ export default function SwapOffer({ route }) {
               navigation.navigate("User2Library", { info: info });
             }}
             >
-            <Text style={{color: "white"}}>
+            <Text style={styles.body}>
               Select a book
             </Text>
           </Pressable>
@@ -139,7 +147,7 @@ export default function SwapOffer({ route }) {
               rejectBook(res);
             });
           }}>
-            <Text style={{color: "white"}}>
+            <Text style={styles.body}>
               Reject Offer
             </Text>
           </Pressable>
@@ -152,6 +160,12 @@ export default function SwapOffer({ route }) {
 
 
 const styles = StyleSheet.create({
+  heading: {
+    fontSize: 28,
+    fontWeight: "bold",
+    fontFamily: JosefinSans_400Regular,
+    color: "white",
+  },
   page: {
     backgroundColor: "#272727",
     flex: 0.91,
@@ -226,9 +240,11 @@ const styles = StyleSheet.create({
   picAndName: {
     justifyContent: "center",
   },
-  profileName: {
-    paddingTop: 5,
+  body: {
     textAlign: "center",
+    color: "white",
+    fontSize: 16,
+    fontFamily: JosefinSans_400Regular,
     color: "white",
   },
   icon: {

@@ -4,10 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 import supabase from '../config/supabaseClient';
 
 export default function ReconsiderLibrary({ route }) {
-    const navigation = useNavigation();
-    const [books, setBooks] = useState([]);
-    const [refreshing, setRefreshing] = useState(false);
-    const { info, session } = route.params;
+  const navigation = useNavigation();
+  const [books, setBooks] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const { info, session, setReconsidered, setKey } = route.params;
 
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
@@ -87,49 +87,47 @@ export default function ReconsiderLibrary({ route }) {
         ]);
     }
 
-    return (
-        <ScrollView
-            contentContainerStyle={styles.container}
-            refreshControl={
-                <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                />
-            }
-        >
-            <Text style={styles.headerText}>
-                {info.user2_id === session.user.id ? info.user1_username : info.user2_username}
-                's Library
-            </Text>
-            {books.map(book => (
-                <View
-                    key={book.book_id}
-                    style={styles.bookContainer}
-                >
-                    <Text style={styles.titleText}>{book.book_title}</Text>
-                    <Text style={styles.authorText}>{book.author}</Text>
-                    <Image
-                        source={{ uri: book.img_url }}
-                        style={styles.image}
-                    />
-                    <Text style={styles.descriptionText}>{book.description}</Text>
-                    <Pressable
-                        onPress={() => {
-                            navigation.navigate('SwapNegotiationPage', {
-                                user1_book: info,
-                                user2_book: book,
-                            });
-                            updateSwapInfo(book).then(res => {
-                                sendNotification(book, res);
-                            });
-                        }}
-                    >
-                        <Text style={styles.buttonContainer}>Choose book</Text>
-                    </Pressable>
-                </View>
-            ))}
-        </ScrollView>
-    );
+  return (
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      <Text style={styles.headerText}>
+        {info.user2_id === session.user.id
+          ? info.user1_username
+          : info.user2_username}
+        's Library
+      </Text>
+      {books.map((book) => (
+        <View key={book.book_id} style={styles.bookContainer}>
+          <Text style={styles.titleText}>{book.book_title}</Text>
+          <Text style={styles.authorText}>{book.author}</Text>
+          <Image source={{ uri: book.img_url }} style={styles.image} />
+          <Text style={styles.descriptionText}>{book.description}</Text>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("SwapNegotiationPage", {
+                user1_book: info,
+                user2_book: book,
+                info: info,
+                user2_book_info: book,
+                user2_book_url: book.img_url
+              });
+              updateSwapInfo(book).then((res) => {
+                setKey(Date.now());
+                setReconsidered(true);
+                sendNotification(book, res);
+              });
+            }}
+          >
+            <Text style={styles.buttonContainer}>Choose book</Text>
+          </Pressable>
+        </View>
+      ))}
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
