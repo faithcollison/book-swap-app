@@ -89,7 +89,6 @@ const UserLibrary = ({ session }) => {
 			refreshControl={
 				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 			}
-			style={{backgroundColor: "#272727"}}
 		>
 			<Text style={styles.headerText}>User Library</Text>
 			{books.map((book) => (
