@@ -34,18 +34,6 @@ export default function SignUp() {
 		}
 	}
 
-	async function signUpWithGoogle() {
-		const { data, error } = await supabase.auth.signInWithOAuth({
-			provider: "google",
-			options: {
-				queryParams: {
-					access_type: "offline",
-					prompt: "consent",
-				},
-			},
-		});
-	}
-
 	return (
 		<View style={styles.container}>
 			<View style={styles.inputContainer}>
@@ -89,11 +77,6 @@ export default function SignUp() {
 				<Button
 					title="Sign Up"
 					onPress={() => signUpWithEmail()}
-					buttonStyle={styles.button}
-				/>
-				<Button
-					title="Sign Up With Google"
-					onPress={() => signUpWithGoogle()}
 					buttonStyle={styles.button}
 				/>
 			</View>
