@@ -1,30 +1,26 @@
 import { useNavigation } from "@react-navigation/native";
-import { Text, Pressable, StyleSheet, View, Image } from "react-native";
+import { Text, Pressable, StyleSheet, View, Image, Dimensions } from "react-native";
+import { ScreenWidth } from "react-native-elements/dist/helpers";
 
 export default function SwapOffer({ route }) {
   const { info } = route.params;
   const navigation = useNavigation();
 
   return (
-    <View>
-      <Text>This is the page for a swap offer</Text>
-      <Pressable>
-        <Text>Go to chat button</Text>
-      </Pressable>
-      <View style={styles.wrappingContainer}>
-        <View style={styles.container}>
-          <Text>{info.user1_book_title}</Text>
+    <View style={styles.page}>
+      <View style={styles.bookAndProfilePics}>
+        <View style={styles.bookContainer}>
           <Image
             source={{ uri: info.user1_book_imgurl }}
-            style={styles.image}
-          />
+            style={styles.bookCard}
+            />
         </View>
-        <View style={styles.container}>
+        <View style={styles.bookContainer}>
           <Pressable
             onPress={() => {
               navigation.navigate("User2Library", { info: info });
             }}
-          >
+            >
             <Text style={styles.pick_book}>
               Select a book from {info.user2_username}'s library
             </Text>
@@ -36,28 +32,35 @@ export default function SwapOffer({ route }) {
 }
 
 const styles = StyleSheet.create({
-  wrappingContainer: {
-    display: "flex",
-    flexDirection: "column",
+  page: {
+    backgroundColor: "#272727",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  container: {
+  bookAndProfilePics: {
     margin: "auto",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderColor: "gray",
+    borderWidth: 2,
+    width: ScreenWidth*0.8,
+  },
+  bookContainer: {
+    margin: 0,
     borderColor: "gray",
     borderWidth: 2,
     alignItems: "center",
-    width: "80%",
-    borderRadius: 12,
+    justifyContent: "center",
+    height: 180,
+    width: 120,
+    borderRadius: 16,
   },
-  image: {
-    margin: "auto",
-    width: 100,
-    height: 100,
-    marginBottom: 8,
-    borderRadius: 4,
+  bookCard: {
+    borderRadius: 16,
+    height: 180,
+    width: 120,
     resizeMode: "contain",
-  },
-  pick_book: {
-    marginTop: 60,
-    height: 80,
   },
 });
