@@ -23,9 +23,7 @@ import Collapsible from "react-native-collapsible";
 const UserLibrary = ({ session }) => {
 	const [books, setBooks] = useState([]);
 	const [refreshing, setRefreshing] = useState(false);
-	const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(
-		Array(books.length).fill(true)
-	);
+	const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(true)
 
 	useEffect(() => {
 		if (session) getListings(session?.user?.user_metadata?.username);
