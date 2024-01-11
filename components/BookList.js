@@ -19,6 +19,8 @@ import {
 	Lora_400Regular,
 	JosefinSans_400Regular,
 } from "@expo-google-fonts/dev";
+import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -53,17 +55,17 @@ export default function BookList({ categoryName, id }) {
 
 	return (
 		<View style={styles.categoryContainer}>
-			<View style={styles.categoryHeader}>
-				<Text style={styles.categoryHeader}>{categoryName}</Text>
-				<Pressable onPress={() => navigation.navigate('GenreList', {genre: categoryName})}>
-					<Text style={styles.seemore}>See all</Text>
-				</Pressable>
-			</View>
+			<Text style={styles.categoryHeader}>{categoryName}</Text>
 			<View style={styles.categoryList}>
 				<ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
 					{bookList.map((listing) => {
 						return <BookListCard listing={listing} key={listing.book_id} id={id} />;
 					})}
+					<View style={styles.cardContainer}>
+						<Pressable style={styles.linkCard} onPress={() => navigation.navigate('GenreList', {genre: categoryName})}>
+							<Ionicons name="arrow-forward" size={30} color="white" />
+						</Pressable>
+					</View>
 				</ScrollView>
 			</View>
 		</View>
@@ -86,7 +88,7 @@ const styles = StyleSheet.create({
 		fontSize: 21,
 		// fontFamily: "Bellefair_400Regular",
 		fontFamily: "VollkornSC_400Regular",
-		fontWeight: '500',
+		fontWeight: 500,
 	},
 	categoryList: {
 		width: screenWidth,
@@ -95,13 +97,29 @@ const styles = StyleSheet.create({
 		// fontFamily: "CormorantGaramond_400Regular",
 		marginTop: 7,
 		marginBottom: 10,
-		marginLeft: 16,
+		// marginLeft: 16, //changed from anas
 	},
 	seemore: {
 		// fontFamily: "Lora_400Regular",
-		fontFamily: "Bellefair_400Regular",
+		// fontFamily: "Bellefair_400Regular",
+		fontFamily: 'JosefinSans_400Regular',
 		fontSize: 17,
-    fontWeight: '500',
+    fontWeight: 500,
 		color: "white",
+	},
+	cardContainer: {
+		flex: 1,
+		width: screenWidth / 3,
+		padding: 5,
+		justifyContent: "center",
+		alignItems: 'center',
+	},
+	linkCard: {
+		height: 70,
+		width: 70,
+		borderRadius: 35,
+		backgroundColor: '#06A77D',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });

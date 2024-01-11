@@ -72,7 +72,6 @@ export default function ChatWindow({ route }) {
         ref={scrollViewRef}
         style={{
           flex: 1,
-          paddingBottom: 50,
           marginBottom: Dimensions.get("window").height * 0.078,
         }}
         contentContainerStyle={{ flexGrow: 1 }}
@@ -83,20 +82,37 @@ export default function ChatWindow({ route }) {
             return null;
           }
           return message.sender_id === session.user.id ? (
-            <Text style={styles.senderMessage}>
-              {session.user.user_metadata.username}: {message.message}
-            </Text>
+            <View style={styles.senderMessage}>
+              <Text>{message.message}</Text>
+              {/* {session.user.user_metadata.username}: {message.message} */}
+            </View>
           ) : (
-            <Text style={styles.receiverMessage}>
-              {username}: {message.message}
-            </Text>
+            <View style={styles.receiverMessage}>
+              {/* {username}: {message.message} */}
+              <Text>{message.message}</Text>
+
+            </View>
           );
         })}
       </ScrollView>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ position: "absolute", bottom: 0, width: "100%" }}
-      >
+      {Platform.OS !== "web" && (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ position: "absolute", bottom: 0, width: "100%" }}
+        >
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Send a message ..."
+              onChangeText={setText}
+              value={text}
+              onSubmitEditing={sendMessage}
+              style={styles.input}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      )}
+      {Platform.OS === "web" && (
+       <View style={styles.footer}>
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Send a message ..."
@@ -105,8 +121,9 @@ export default function ChatWindow({ route }) {
             onSubmitEditing={sendMessage}
             style={styles.input}
           />
-        </View>
-      </KeyboardAvoidingView>
+        </View> 
+      </View> 
+      )}
     </View>
   );
 }
@@ -114,8 +131,31 @@ export default function ChatWindow({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#272727",
+    overflow: 'hidden',
   },
+  text: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  inputContainer: {
+    backgroundColor: "white",
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  footer: {
+    justifyContent: "flex-end",
+    marginBottom: Dimensions.get("window").height * 0.08,
+    height: 10,
+  },
+
   senderMessage: {
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "white",
+    fontSize: 16,
     alignSelf: "flex-end",
     padding: 5,
     borderColor: "gray",
@@ -124,8 +164,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     marginRight: 5,
+    maxWidth: '70%',
+    backgroundColor: "#2b88cf"
   },
   receiverMessage: {
+    backgroundColor: "#dadfe3",
+    fontFamily: "CormorantGaramond_400Regular",
+    color: "black",
+    fontSize: 16,
     alignSelf: "flex-start",
     padding: 5,
     borderColor: "gray",
@@ -134,17 +180,12 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     marginLeft: 5,
+    maxWidth: '70%',
   },
   input: {
     height: 40,
     paddingHorizontal: 10,
-    marginVertical: 10,
+    marginBottom: 15,
     fontSize: 16,
-  },
-  inputContainer: {
-    backgroundColor: "white",
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
   },
 });

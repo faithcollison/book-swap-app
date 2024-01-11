@@ -1,95 +1,74 @@
-import React, { useEffect, useRef, useState } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  Alert,
-  StyleSheet,
-  Image,
-  ScrollView,
-} from "react-native";
-import supabase from "../config/supabaseClient";
-import { useNavigation } from "@react-navigation/native";
+import { useEffect, useRef, useState } from 'react';
+import { View, Text, Pressable, Alert, StyleSheet, Image, ScrollView } from 'react-native';
+import supabase from '../config/supabaseClient';
+import { useNavigation } from '@react-navigation/native';
 import { Entypo } from '@expo/vector-icons';
-import { Dimensions } from "react-native";
+import { Dimensions } from 'react-native';
 
-const {width, height} = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen');
 
 const Notifications = ({ route }) => {
-  const [notifications, setNotifications] = useState([]);
-  const { session, setNewNotif } = route.params;
-  const [processedNotifications, setProcessedNotifications] = useState([]);
+    const [notifications, setNotifications] = useState([]);
+    const { session, setNewNotif } = route.params;
+    const [processedNotifications, setProcessedNotifications] = useState([]);
 
-  const navigation = useNavigation();
+    const navigation = useNavigation();
 
-  useEffect(() => {
-    setNewNotif(false);
-    async function loadNotifications() {
-      const { data, error } = await supabase
-        .from("Notifications")
-        .select()
-        .eq("user_id", session.user.id);
-      return data;
+    useEffect(() => {
+        setNewNotif(false);
+        async function loadNotifications() {
+            const { data, error } = await supabase.from('Notifications').select().eq('user_id', session.user.id);
+            return data;
+        }
+
+        loadNotifications().then(res => {
+            setNotifications(res);
+        });
+    }, []);
+
+    async function getNotifications(length) {
+        const { data, error } = await supabase.from('Notifications').select().eq('user_id', session.user.id);
+
+        if (data.length > length) {
+            setNewNotif(true);
+        }
+
+        return data;
     }
 
-    loadNotifications().then((res) => {
-      setNotifications(res);
-    });
-  }, [notifications]);
+    const deleteNotification = async notificationId => {
+        try {
+            const { error } = await supabase.from('Notifications').delete().eq('id', notificationId);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-  async function getNotifications(length) {
-    const { data, error } = await supabase
-      .from("Notifications")
-      .select()
-      .eq("user_id", session.user.id);
+    const handlePostgresChanges = async () => {
+        const length = notifications.length;
+        const res = await getNotifications(length);
+        setNotifications(res);
+    };
 
-    if (data.length > length) {
-      setNewNotif(true);
-    }
+    const getSwapInfo = async id => {
+        const { data, error } = await supabase.from('Pending_Swaps').select().eq('pending_swap_id', id);
 
-    return data;
-  }
+        return data[0];
+    };
 
-  const deleteNotification = async (notificationId) => {
-    try {
-      const { error } = await supabase
-        .from("Notifications")
-        .delete()
-        .eq("id", notificationId);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    const getUserInfo = async id => {
+        const { data, error } = await supabase.from('Users').select().eq('user_id', id);
 
-  const handlePostgresChanges = async () => {
-    const length = notifications.length;
-    const res = await getNotifications(length);
-    setNotifications(res);
-  };
+        return data[0];
+    };
 
-  const getSwapInfo = async (id) => {
-    const { data, error } = await supabase
-      .from("Pending_Swaps")
-      .select()
-      .eq("pending_swap_id", id);
+    supabase.channel('Notifications').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'Notifications' }, handlePostgresChanges).subscribe();
 
-    return data[0];
-  };
-
-  const getUserInfo = async (id) => {
-    const { data, error } = await supabase
-      .from("Users")
-      .select()
-      .eq("user_id", id);
-
-    return data[0];
-  };
-
-  supabase
+    supabase
     .channel("Notifications")
     .on(
       "postgres_changes",
-      { event: "INSERT", schema: "public", table: "Notifications" },
+      { event: "DELETE", schema: "public", table: "Notifications" },
       handlePostgresChanges
     )
     .subscribe();
@@ -102,171 +81,231 @@ const Notifications = ({ route }) => {
     return daysPassed;
   }
 
-  useEffect(() => {
-    Promise.all(
-      notifications.map(async (notification) => {
-        switch (notification.type) {
-          case "Swap_Request":
-            if (notification.swap_offer_id) {
-              const swapData = await getSwapInfo(notification.swap_offer_id);
-              return {
-                ...notification,
-                swapData,
-              };
-            }
-            break;
-          case "Chosen_Book":
-            if (notification.user_id) {
-              const swapData = await getUserInfo(notification.user_id);
-              return {
-                ...notification,
-                swapData,
-              };
-            }
-            break;
-          default:
-            return notification;
-        }
-      })
-    ).then((newNotifications) => {
-      setProcessedNotifications(newNotifications);
-    });
-  }, [notifications]);
-
-  return (
-    <ScrollView style={styles.scroll}>
-      <View style={styles.page}>
-        <View style={styles.notificationsList}>
-          {processedNotifications.map((notification) => {
-            switch (notification.type) {
-              case "Swap_Request":
-                if (notification.swapData) {
-                  return (
-                    <Pressable
-                      style={styles.notCard}
-                      onPress={() => {
-                        if (
-                          Object.entries(notification.swapData).every(
-                            ([key, value]) => !!value
-                          )
-                        ) {
-                          navigation.navigate("SwapNegotiationPage", {
-                            info: notification.swapData,
-                            user1_book: notification.swapData,
-                            user2_book: notification.swapData,
-                          });
-                        } else {
-                          navigation.navigate("SwapOffer", {
-                            info: notification.swapData,
-                          });
+    useEffect(() => {
+        Promise.all(
+            notifications.map(async notification => {
+                switch (notification.type) {
+                    case 'Swap_Request':
+                        if (notification.swap_offer_id) {
+                            const swapData = await getSwapInfo(notification.swap_offer_id);
+                            return {
+                                ...notification,
+                                swapData,
+                            };
                         }
-                      }}
-                    >
-                        {/* <Text>{daysSince(notification.created_at)} days ago</Text> */}
-                        <View key={notification.swapData.offer_date} style={styles.contentsMain}>
-                          <Image
-                            source={{
-                              uri: notification.swapData.user1_book_imgurl,
-                            }}
-                            style={styles.bookImage}
-                          />
-                          <Text style={styles.notText}>
-                            {notification.swapData.user2_username + " wants to swap " + notification.swapData.user1_book_title}
-                          </Text>
-                        </View>
-                        <Entypo name="circle-with-cross" size={24} color='#C2C2C2' onPress={() => deleteNotification(notification.id)} style={styles.deleteButton}/>
-                    </Pressable>
-                  );
+                        break;
+                    case 'Chosen_Book':
+                        if (notification.user_id) {
+                            const swapData = await getUserInfo(notification.user_id);
+                            return {
+                                ...notification,
+                                swapData,
+                            };
+                        }
+                        break;
+                    default:
+                        return notification;
                 }
-                break;
-              case "Chosen_Book":
-                if (notification) {
-                  return (
-                    <Pressable
-                      style={styles.container}
-                      onPress={() => {
-                        navigation.navigate("SwapNegotiationPage", {
-                          info: notification,
-                        });
-                      }}
-                    >
-                      <View>
-                        <Text>{daysSince(notification.created_at)} days ago</Text>
-                        <Text style={styles.textBox}>
-                          <Text style={styles.notParaText}>
-                            {notification.username}{" "}
-                          </Text>
-                          <Image
-                            source={{ uri: notification.swapData }}
-                            class={styles.image}
-                          />
-                          <Text>has chosen a book from your library</Text>
-                          <Pressable
-                            onPress={() => deleteNotification(notification.id)}
-                            style={styles.deleteButton}
-                          >
-                            <Text style={{ color: "red" }}>Delete</Text>
-                          </Pressable>
-                        </Text>
-                      </View>
-                    </Pressable>
-                  );
-                }
-                break;
-              default:
-                return null;
-            }
-          })}
-        </View>
-      </View>
-    </ScrollView>
-  );
+            })
+        ).then(newNotifications => {
+            setProcessedNotifications(newNotifications);
+        });
+    }, [notifications]);
+
+    return (
+        <ScrollView style={styles.pageContainer}>
+                <View style={styles.notificationsList}>
+                    {processedNotifications.map(notification => {
+                        switch (notification.type) {
+                            case 'Swap_Request':
+                                if (notification.swapData) {
+                                    return (
+                                        <View style={styles.notificationContainer}>
+                                            <Pressable
+                                                style={styles.notCard}
+                                                onPress={() => {
+                                                    if (Object.entries(notification.swapData).every(([key, value]) => !!value)) {
+                                                        navigation.navigate('SwapNegotiationPage', {
+                                                            info: notification.swapData,
+                                                            user1_book: notification.swapData,
+                                                            user2_book: notification.swapData,
+                                                        });
+                                                    } else {
+                                                        navigation.navigate('SwapOffer', {
+                                                            info: notification.swapData,
+                                                        });
+                                                    }
+                                                }}
+                                            >
+                                                <Image
+                                                    source={{
+                                                        uri: notification.swapData.user1_book_imgurl,
+                                                    }}
+                                                    style={styles.bookImg}
+                                                />
+                                                <View style={styles.textContent}>
+                                                    <View style={styles.header}>
+                                                        <Text style={styles.headerText}>{daysSince(notification.created_at)} days ago</Text>
+                                                        <Entypo
+                                                            name="circle-with-cross"
+                                                            size={24}
+                                                            color="#C1514B"
+                                                            onPress={() => deleteNotification(notification.id)}
+                                                        />
+                                                    </View>
+                                                    <View style={styles.messageBorder}>
+                                                        <Text style={styles.message}>
+                                                            <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user2_username}</Text> wants to swap <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user1_book_title}</Text>
+                                                        </Text>
+                                                    </View>
+                                                </View>
+                                            </Pressable>
+                                        </View>
+                                    );
+                                }
+                                break;
+                            case 'Chosen_Book':
+                                if (notification.swapData) {
+                                    return (
+                                        <View style={styles.notificationContainer}>
+                                            <Pressable
+                                                style={styles.notCard}
+                                                onPress={() => {
+                                                    navigation.navigate('SwapNegotiationPage', {
+                                                        info: notification.swapData,
+                                                    });
+                                                }}
+                                            >
+                                                <Image
+                                                    source={{
+                                                        uri: notification.swapData.user2_book_imgurl,
+                                                    }}
+                                                    style={styles.bookImg}
+                                                />
+                                                <View style={styles.textContent}>
+                                                    <View style={styles.header}>
+                                                        <Text style={styles.headerText}>{daysSince(notification.created_at)} days ago</Text>
+                                                        <Entypo
+                                                            name="circle-with-cross"
+                                                            size={24}
+                                                            color="#C1514B"
+                                                            onPress={() => deleteNotification(notification.id)}
+                                                            style={styles.deleteButton}
+                                                        />
+                                                    </View>
+                                                    <View style={{flex: 1, justifyContent: 'center',}}>
+                                                        <View style={styles.messageBorder}>
+                                                            <Text style={styles.message}>
+                                                                <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user1_username}</Text> has chosen <Text style={{fontStyle: 'italic', fontWeight: 'bold'}}>{notification.swapData.user2_book_title}</Text> from your library!
+                                                            </Text>
+                                                        </View>
+                                                    </View>
+                                                </View>
+                                            </Pressable>
+                                        </View>
+                                    );
+                                }
+                                break;
+                            default:
+                                return null;
+                        }
+                    })}
+                </View>
+        </ScrollView>
+    );
 };
 
 const styles = StyleSheet.create({
-  scroll: {
-    backgroundColor: "#272727",
-  },
-  page: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  notificationsList: {
-    width: width * 0.9,
-  },
-  notCard: {
-    backgroundColor:"#464646",
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 16,
-    marginTop: 20,
-    padding: 10,
-  },
-  contentsMain: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: width * 0.9 - 20,
-    height: 90,
-  },
-  bookImage: {
-    height: 90,
-    width: 60,
-    borderRadius: 6,
-    // marginRight: 20,
-
-  },
-  notText: {
-    color: '#C2C2C2',
-    width: width * 0.9 * 0.9 * 0.8,
-  },
-  deleteButton: {
-    position: 'absolute',
-    right: 8,
-    top: 7,
-  }
+    pageContainer: {
+        backgroundColor: '#272727',
+        width: width,
+        flex: 1,
+    },
+    webFix: {
+        marginBottom: height * 0.09,
+    },
+    notificationsList: {
+        width: width * 0.9,
+    },
+    notificationContainer: {
+        width: width,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 10,
+    },
+    notCard: {
+        flex: 1,
+        flexDirection: 'row',
+        width: width * 0.9,
+        borderRadius: 20,
+        padding: 10,
+        backgroundColor: "#06A77D",
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+    },
+    contentsMain: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: width * 0.9 - 20,
+        height: 90,
+        maxWidth: width * 0.9 - 20,
+    },
+    bookImg: {
+        height: 120,
+        width: 80,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: 'white',
+    },
+    notText: {
+        color: '#C2C2C2',
+        width: width * 0.9 * 0.9 * 0.8,
+    },
+    textContainer: {
+        flex: 1,
+        marginLeft: 10,
+    },
+    textContent: {
+        flex: 1,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginHorizontal: 18,
+    },
+    headerText: {
+        textAlign: 'right',
+        color: 'white',
+        fontSize: 15,
+    },
+    message: {
+        flex: 1,
+        fontSize: 15,
+        color: 'white',
+        marginHorizontal: 10,
+    },
+    messageBorder: {
+        padding: 10,
+        marginHorizontal: 10,
+        borderColor: 'white',
+        borderWidth: 1,
+        borderRadius: 10,
+        backgroundColor: '#06A77D',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 3,
+    },
 });
 
 export default Notifications;

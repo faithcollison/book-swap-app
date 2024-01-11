@@ -9,6 +9,14 @@ import SignOutScreen from './SignOut';
 import SwapHistory from './SwapHistory';
 import ActiveSwaps from './ActiveSwaps';
 import { Image } from 'react-native-elements';
+import { Text } from "react-native-elements";
+import { useFonts } from "expo-font";
+import {
+	VollkornSC_400Regular,
+	Bellefair_400Regular,
+	CormorantGaramond_400Regular,
+	JosefinSans_400Regular,
+} from "@expo-google-fonts/dev";
 
 const Drawer = createDrawerNavigator();
 
@@ -24,19 +32,29 @@ function DrawerNavigator() {
         });
     }, []);
 
-    const logo = () => (
-        <Image
-            source={require('../assets/IMG_5454.png')}
-            style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                marginRight: 10,
-                marginBottom: 10,
-            }}
-        />
-    );
+	const logo = () => (
+		<Image
+			source={require("../assets/IMG_5454.png")}
+			style={{
+				width: 40,
+				height: 40,
+				borderRadius: 20,
+				marginRight: 10,
+				marginBottom: 10,
+			}}
+		/>
+	);
 
+	const [fontsLoaded] = useFonts({
+		VollkornSC_400Regular,
+		Bellefair_400Regular,
+		CormorantGaramond_400Regular,
+		JosefinSans_400Regular,
+	});
+
+	if (!fontsLoaded) {
+		return <Text>Loading...</Text>;
+	}
 
 	return (
 		<Drawer.Navigator
@@ -48,8 +66,16 @@ function DrawerNavigator() {
 				headerTitleStyle: {
 					fontWeight: "bold",
 					fontSize: 21,
+					fontFamily: "Bellefair_400Regular",
 				},
 				headerTitleAlign: "center",
+				drawerStyle: {
+					backgroundColor: "#272727",
+					// #307361 - muted green based on accent colour
+				},
+				drawerLabelStyle: {
+					color: "white",
+				},
 			}}
 		>
 			<Drawer.Screen
@@ -60,19 +86,34 @@ function DrawerNavigator() {
 			/>
 			<Drawer.Screen
 				name="User Library"
-				options={{ headerTitle: "",headerTitleAlign: "center", headerRight: logo }}
+				options={{ headerTitle: "", headerTitleAlign: "center", headerRight: logo }}
 			>
 				{(props) => <UserLibrary {...props} session={session} />}
 			</Drawer.Screen>
 			<Drawer.Screen
 				name="Wishlist"
-				options={{ headerTitle: "",headerTitleAlign: "center", headerRight: logo }}
+				options={{ headerTitle: "", headerTitleAlign: "center", headerRight: logo }}
 			>
 				{(props) => <WishList {...props} session={session} />}
 			</Drawer.Screen>
-			<Drawer.Screen name="Swap History" options={{ headerTitleAlign: "center" }}>
+            <Drawer.Screen
+                name="Active Swaps"
+                options={{ headerTitleAlign: 'center' }}
+            >
+                {props => (
+                    <ActiveSwaps
+                        {...props}
+                        session={session}
+                    />
+                )}
+            </Drawer.Screen>
+			<Drawer.Screen
+				name="Swap History"
+				options={{ headerTitleAlign: "center", headerTitle: "" }}
+			>
 				{(props) => <SwapHistory {...props} session={session} />}
 			</Drawer.Screen>
+	
 			<Drawer.Screen
 				name="Sign Out"
 				component={SignOutScreen}
