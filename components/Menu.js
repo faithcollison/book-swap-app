@@ -34,7 +34,8 @@ function DrawerNavigator() {
 
 	const logo = () => (
 		<Image
-			source={require("../assets/IMG_5454.png")}
+			// source={require("../assets/IMG_5454.png")}
+			source={{uri: "https://img.freepik.com/free-vector/hand-drawn-book-cartoon-illustration_52683-130773.jpg"}}
 			style={{
 				width: 40,
 				height: 40,
