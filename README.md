@@ -1,6 +1,6 @@
 # Book Swap App
 
-This is a book swapping app developed using React Native and Supabase. Users can list their books and trade them with other users to obtain different books.
+This is a book swapping app developed using React Native and Supabase. Users can list their books and trade them with other users to obtain different books, helping reduce the need to buy new, and connecting readers with other like-minded people.
 
 ## Features
 
@@ -9,8 +9,7 @@ This is a book swapping app developed using React Native and Supabase. Users can
 - Trade books: Users can request other users' books and initiate a swap.
 - Wishlist: Users can add a book to their wishlist, updating the most popular books in the database.
 - Real-time notifications, alerting user to new swap requests
-- Real-time chat, where users can chat with other users when a swap request has been confirmed, to discuss postage and delivery
-- 
+- Real-time chat, where users can chat with other users when a swap request has been confirmed, to discuss postage and delivery.
 
 ## Installation
 
@@ -26,7 +25,6 @@ This is a book swapping app developed using React Native and Supabase. Users can
     npm install
    ```
 
-3. Set up your Supabase project and get your Supabase URL and public anon key. Replace these in the `.env` file.
 
 ## Usage
 
@@ -37,4 +35,6 @@ This is a book swapping app developed using React Native and Supabase. Users can
 ```
 
  2. Open the app in your browser or on your mobile device.
+
+
 
