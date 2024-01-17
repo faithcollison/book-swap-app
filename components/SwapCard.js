@@ -35,7 +35,10 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
             marginBottom: 25,
           }}
         >
-          <View style={styles.card}>
+          <View style={Platform.OS === 'ios'
+            ? styles.cardMobile
+            : styles.card} >
+          
             <Image
               source={{ uri: swap.user1_book_imgurl }}
               style={styles.bookImg}
@@ -94,7 +97,9 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
             marginBottom: 25,
           }}
         >
-          <View style={styles.cardActive}>
+          <View style={Platform.OS === 'ios'
+            ? styles.cardActiveMobile
+            : styles.cardActive}>
             <View style={styles.textContent}>
               <View style={{ ...styles.header, marginHorizontal: 17 }}>
                 <Text style={styles.headerText}>
@@ -169,7 +174,9 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
             marginBottom: 25,
           }}
         >
-          <View style={styles.cardActive}>
+          <View style={Platform.OS === 'ios'
+            ? styles.cardActiveMobile
+            : styles.cardActive}>
             <View style={styles.textContent}>
               <View style={{ ...styles.header, marginHorizontal: 17 }}>
                 <Text style={styles.headerText}>
@@ -245,7 +252,9 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
             marginBottom: 25,
           }}
         >
-          <View style={styles.card}>
+          <View style={Platform.OS === 'ios'
+            ? styles.cardMobile
+            : styles.card}>
             <Image
               source={{ uri: swap.user1_book_imgurl }}
               style={styles.bookImg}
@@ -297,7 +306,24 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     borderRadius: 20,
     padding: 10,
-    // backgroundColor: "#06A77D",
+    // height: 200,
+    backgroundColor: "#06A77D",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+  },
+  cardMobile: {
+    // flex: 1,
+    flexDirection: "row",
+    width: width * 0.9,
+    borderRadius: 20,
+    padding: 10,
+    height: 200,
+    backgroundColor: "#06A77D",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -311,6 +337,22 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     borderRadius: 20,
     padding: 10,
+    // height: 200,
+    // backgroundColor: "#06A77D",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+  },
+  cardActiveMobile: {
+    // flex: 1,
+    width: width * 0.9,
+    borderRadius: 20,
+    padding: 10,
+    height: 300,
     // backgroundColor: "#06A77D",
     shadowColor: "#000",
     shadowOffset: {
