@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
-  Button,
   View,
   Text,
   Image,
   FlatList,
-  TouchableOpacity,
-  TextInput,
   StyleSheet,
   ScrollView,
   SafeAreaView,
-  Input,
   Dimensions,
   Pressable,
 } from "react-native";
@@ -18,9 +14,7 @@ import { SegmentedButtons } from "react-native-paper";
 import { Searchbar } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 
-const screenHeight = Dimensions.get("window").height;
-
-const Search_Existing_Book = ({ navigation }) => {
+export const Search_Existing_Book = ({ navigation }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedBook, setSelectedBook] = useState({});
@@ -345,9 +339,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 80,
     height: 45,
-	marginLeft: 10,
-	marginRight:10,
-	marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
   },
   selectButton: {
     backgroundColor: "#06A77D",
@@ -369,5 +363,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-export default Search_Existing_Book;

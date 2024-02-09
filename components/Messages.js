@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import { Text, View, Pressable, StyleSheet } from "react-native";
+
 import supabase from "../config/supabaseClient";
-import { useNavigation } from "@react-navigation/native";
 
 function getChatKey(chat) {
   const ids = [chat.sender_id, chat.receiver_id].sort();
   return ids.join("-");
 }
-export default function ChatComponent({ navigation, route }) {
+export function ChatComponent({ navigation, route }) {
   const [chats, setChats] = useState([]);
   const [uniqueChats, setUniqueChats] = useState([]);
   const { session } = route.params;
   const [usernames, setUsernames] = useState([]);
-
-  
 
   useEffect(() => {
     fetchChats().then(setChats);
@@ -94,13 +92,15 @@ export default function ChatComponent({ navigation, route }) {
                 sender: username[0].sender,
                 receiver: username[1].receiver,
                 username: username[2],
-                session: session
+                session: session,
               });
             }}
             key={username[2]}
             style={styles.listItem}
           >
-            <Text style={styles.text} key={username[2]}>{username[2]}</Text>
+            <Text style={styles.text} key={username[2]}>
+              {username[2]}
+            </Text>
           </Pressable>
         );
       })}
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomColor: "white",
     borderBottomWidth: 1,
-    padding:20,
+    padding: 20,
     margin: 3,
   },
   text: {
@@ -127,4 +127,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "left",
   },
-})
+});

@@ -9,9 +9,9 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 
-const { width, height } = Dimensions.get("screen");
+const { width } = Dimensions.get("screen");
 
-export default function SwapCard({ swap, type, userID, session, navigation }) {
+export function SwapCard({ swap, type, session, navigation }) {
   if (type === "received")
     return (
       <Pressable
@@ -35,10 +35,7 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
             marginBottom: 25,
           }}
         >
-          <View style={Platform.OS === 'ios'
-            ? styles.cardMobile
-            : styles.card} >
-          
+          <View style={Platform.OS === "ios" ? styles.cardMobile : styles.card}>
             <Image
               source={{ uri: swap.user1_book_imgurl }}
               style={styles.bookImg}
@@ -47,7 +44,12 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
               <View style={styles.header}>
                 <Text style={styles.headerText}>
                   From:{" "}
-                  <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontFamily: "JosefinSans_400Regular",
+                    }}
+                  >
                     {swap.user2_username}
                   </Text>
                 </Text>
@@ -58,11 +60,21 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
               <View style={{ flex: 1, justifyContent: "center" }}>
                 <View style={styles.messageBorder}>
                   <Text style={styles.message}>
-                    <Text style={{  fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontFamily: "JosefinSans_400Regular",
+                      }}
+                    >
                       {swap.user2_username}
                     </Text>{" "}
                     has requested to swap your copy of{" "}
-                    <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontFamily: "JosefinSans_400Regular",
+                      }}
+                    >
                       {swap.user1_book_title}
                     </Text>
                     !
@@ -97,14 +109,23 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
             marginBottom: 25,
           }}
         >
-          <View style={Platform.OS === 'ios'
-            ? styles.cardActiveMobile
-            : styles.cardActive}>
+          <View
+            style={
+              Platform.OS === "ios"
+                ? styles.cardActiveMobile
+                : styles.cardActive
+            }
+          >
             <View style={styles.textContent}>
               <View style={{ ...styles.header, marginHorizontal: 17 }}>
                 <Text style={styles.headerText}>
                   Active Swap With:{" "}
-                  <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontFamily: "JosefinSans_400Regular",
+                    }}
+                  >
                     {swap.user2_username}
                   </Text>
                 </Text>
@@ -115,15 +136,30 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
               <View style={{ flex: 1, justifyContent: "center" }}>
                 <View style={{ ...styles.messageBorder, marginVertical: 20 }}>
                   <Text style={styles.message}>
-                    <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontFamily: "JosefinSans_400Regular",
+                      }}
+                    >
                       {swap.user2_username}
                     </Text>{" "}
                     would Like your copy of{" "}
-                    <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontFamily: "JosefinSans_400Regular",
+                      }}
+                    >
                       {swap.user1_book_title}
                     </Text>
                     . You are currently offering{" "}
-                    <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontFamily: "JosefinSans_400Regular",
+                      }}
+                    >
                       {swap.user2_book_title}
                     </Text>{" "}
                     in return.
@@ -174,14 +210,23 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
             marginBottom: 25,
           }}
         >
-          <View style={Platform.OS === 'ios'
-            ? styles.cardActiveMobile
-            : styles.cardActive}>
+          <View
+            style={
+              Platform.OS === "ios"
+                ? styles.cardActiveMobile
+                : styles.cardActive
+            }
+          >
             <View style={styles.textContent}>
               <View style={{ ...styles.header, marginHorizontal: 17 }}>
                 <Text style={styles.headerText}>
                   Active Swap With:{" "}
-                  <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontFamily: "JosefinSans_400Regular",
+                    }}
+                  >
                     {swap.user1_username}
                   </Text>
                 </Text>
@@ -193,15 +238,30 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
                 <View style={{ ...styles.messageBorder, marginVertical: 20 }}>
                   <Text style={styles.message}>
                     You have made a swap request for{" "}
-                    <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontFamily: "JosefinSans_400Regular",
+                      }}
+                    >
                       {swap.user1_username}
                     </Text>
                     's copy of{" "}
-                    <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontFamily: "JosefinSans_400Regular",
+                      }}
+                    >
                       {swap.user1_book_title}
                     </Text>
                     . They would like{" "}
-                    <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontFamily: "JosefinSans_400Regular",
+                      }}
+                    >
                       {swap.user2_book_title}
                     </Text>{" "}
                     in return.
@@ -252,9 +312,7 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
             marginBottom: 25,
           }}
         >
-          <View style={Platform.OS === 'ios'
-            ? styles.cardMobile
-            : styles.card}>
+          <View style={Platform.OS === "ios" ? styles.cardMobile : styles.card}>
             <Image
               source={{ uri: swap.user1_book_imgurl }}
               style={styles.bookImg}
@@ -263,7 +321,12 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
               <View style={styles.header}>
                 <Text style={styles.headerText}>
                   To:{" "}
-                  <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      fontFamily: "JosefinSans_400Regular",
+                    }}
+                  >
                     {swap.user1_username}
                   </Text>
                 </Text>
@@ -275,11 +338,21 @@ export default function SwapCard({ swap, type, userID, session, navigation }) {
                 <View style={styles.messageBorder}>
                   <Text style={styles.message}>
                     You have made a swap request to{" "}
-                    <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontFamily: "JosefinSans_400Regular",
+                      }}
+                    >
                       {swap.user1_username}
                     </Text>{" "}
                     for their copy of{" "}
-                    <Text style={{ fontWeight: "bold", fontFamily: 'JosefinSans_400Regular' }}>
+                    <Text
+                      style={{
+                        fontWeight: "bold",
+                        fontFamily: "JosefinSans_400Regular",
+                      }}
+                    >
                       {swap.user1_book_title}
                     </Text>
                     !
@@ -306,7 +379,6 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     borderRadius: 20,
     padding: 10,
-    // height: 200,
     backgroundColor: "#06A77D",
     shadowColor: "#000",
     shadowOffset: {
@@ -317,7 +389,6 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   cardMobile: {
-    // flex: 1,
     flexDirection: "row",
     width: width * 0.9,
     borderRadius: 20,
@@ -337,8 +408,6 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     borderRadius: 20,
     padding: 10,
-    // height: 200,
-    // backgroundColor: "#06A77D",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -381,12 +450,12 @@ const styles = StyleSheet.create({
     textAlign: "right",
     color: "white",
     fontSize: 15,
-    fontFamily: 'JosefinSans_400Regular',
+    fontFamily: "JosefinSans_400Regular",
   },
   message: {
     flex: 1,
     fontSize: 15,
-    fontFamily: 'JosefinSans_400Regular',
+    fontFamily: "JosefinSans_400Regular",
     color: "white",
     textAlign: "justify",
     marginHorizontal: 10,

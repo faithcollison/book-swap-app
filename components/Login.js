@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { View, Text, ScrollView, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import { Button, Input } from "react-native-elements";
-import supabase from "../config/supabaseClient";
-import Ionicons from "@expo/vector-icons/Ionicons";
 
-export default function Login({ navigation }) {
+import supabase from "../config/supabaseClient";
+
+export function Login({ navigation }) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
@@ -86,4 +86,3 @@ const styles = StyleSheet.create({
 	},
 });
 
-//placeholder colour matches background - > change so it doesn't 'dissapear'

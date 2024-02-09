@@ -1,49 +1,37 @@
+import { useNavigation } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import {
   Text,
   StyleSheet,
   Pressable,
   View,
   Image,
-  ScrollView,
-  TouchableOpacity,
   FlatList,
   Platform,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import supabase from "../config/supabaseClient";
-import ListedBook from "./ListedBook";
-import Collapsible from "react-native-collapsible";
 import { LinearGradient } from "expo-linear-gradient";
-import { useFonts } from "expo-font";
-import Modal from "react-native-modal";
 import { Dimensions } from "react-native";
-import {
-  VollkornSC_400Regular,
-  Bellefair_400Regular,
-  CormorantGaramond_400Regular,
-  Lora_400Regular,
-  JosefinSans_400Regular,
-} from "@expo-google-fonts/dev";
+import Modal from "react-native-modal";
+
+import supabase from "../config/supabaseClient";
+import {ListedBook} from "./index";
+
 const screenHeight = Dimensions.get("window").height;
 const api = process.env.GOOGLE_BOOKS_API_KEY;
 
-export default function AvailableListings({ route }) {
-  const navigation = useNavigation();
+export function AvailableListings({ route }) {
   const { session, listing } = route.params;
   const [listings, setListings] = useState([]);
   const [userName, setUserName] = useState("");
   const [bookInfo, setBookInfo] = useState({});
-  const [isDescriptionCollapsed, setIsDescriptionCollapsed] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [swapRequestMade, setSwapRequestMade] = useState(false);
-  const [showCloseButton, setShowCloseButton] = useState(false);
 
   const googleID = route.params.listing.google_book_id;
+  const blurb = bookInfo.description;
+  let newBlurb;
 
   useEffect(() => {
     async function getBookInfo() {
-      // if googlebooks ID exists, will find info from API
       if (googleID) {
         try {
           const response = await fetch(
@@ -74,9 +62,7 @@ export default function AvailableListings({ route }) {
     getAllListings();
     getBookOwner();
   }, []);
-  // remove <p> and <br> from description
-  const blurb = bookInfo.description;
-  let newBlurb;
+
   if (blurb) {
     const regex = /<\/?[^>]+>/g;
     newBlurb = blurb.replace(regex, "");
@@ -125,21 +111,19 @@ export default function AvailableListings({ route }) {
 
                 <Modal isVisible={isModalVisible} backdropOpacity={2}>
                   <View style={styles.modal}>
-                    {/* <ScrollView> */}
-                      <View
-                        style={{ flexDirection: "column", alignItems: "left" }}
-                      >
-                        <Text style={styles.text}>{newBlurb}</Text>
-                        <View>
-                          <Pressable
-                            onPress={() => setIsModalVisible(false)}
-                            style={styles.closeButton}
-                          >
-                            <Text style={styles.text}>Close</Text>
-                          </Pressable>
-                        </View>
+                    <View
+                      style={{ flexDirection: "column", alignItems: "left" }}
+                    >
+                      <Text style={styles.text}>{newBlurb}</Text>
+                      <View>
+                        <Pressable
+                          onPress={() => setIsModalVisible(false)}
+                          style={styles.closeButton}
+                        >
+                          <Text style={styles.text}>Close</Text>
+                        </Pressable>
                       </View>
-                    {/* </ScrollView> */}
+                    </View>
                   </View>
                 </Modal>
               </View>
@@ -150,7 +134,7 @@ export default function AvailableListings({ route }) {
         </View>
       </View>
 
-      <View style={[styles.halfPage, {marginTop: 30}]}>
+      <View style={[styles.halfPage, { marginTop: 30 }]}>
         <Text style={styles.title}>Books listed by users:</Text>
         <FlatList
           data={listings}

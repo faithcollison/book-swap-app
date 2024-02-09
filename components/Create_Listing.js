@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, Platform, ScrollView} from "react-native";
+import { View, TextInput, Text, ScrollView } from "react-native";
 import { Button } from "react-native-elements";
-import supabase from "../config/supabaseClient";
 import { StyleSheet } from "react-native-web";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useFonts } from "expo-font";
 import {
-	VollkornSC_400Regular,
-	Bellefair_400Regular,
-	CormorantGaramond_400Regular,
-	JosefinSans_400Regular,
+  VollkornSC_400Regular,
+  Bellefair_400Regular,
+  CormorantGaramond_400Regular,
+  JosefinSans_400Regular,
 } from "@expo-google-fonts/dev";
 
-const CreateListing = ({ route, navigation }) => {
+import supabase from "../config/supabaseClient";
+
+export const CreateListing = ({ route, navigation }) => {
   const { currTitle, authors, currDescription, imgUrl, book_id } = route.params;
 
   const [title, setTitle] = useState(currTitle);
-  const [googleBookID, setGoogleBookID] = useState(book_id)
+  const [googleBookID, setGoogleBookID] = useState(book_id);
   const [author, setAuthor] = useState(authors);
   const [category, setCategory] = useState("");
   const [condition, setCondition] = useState("");
@@ -24,14 +25,6 @@ const CreateListing = ({ route, navigation }) => {
   const [currImgUrl, setcurrImgUrl] = useState(imgUrl);
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [conditionOpen, setConditionOpen] = useState(false);
-
-  //   setTitle(currTitle);
-  //   setAuthor(authors);
-  //   setDescription(currDescription);
-
-  // option to post listing V
-  // option to edit listing
-  // option to delete listing
 
   const conditions = [
     "New",
@@ -73,7 +66,7 @@ const CreateListing = ({ route, navigation }) => {
       .insert([
         {
           book_title: title,
-          google_book_id: googleBookID, 
+          google_book_id: googleBookID,
           author: author,
           Category: category,
           condition: condition,
@@ -91,93 +84,101 @@ const CreateListing = ({ route, navigation }) => {
   };
 
   const [fontsLoaded] = useFonts({
-		VollkornSC_400Regular,
-		Bellefair_400Regular,
-		CormorantGaramond_400Regular,
-		JosefinSans_400Regular,
-	});
+    VollkornSC_400Regular,
+    Bellefair_400Regular,
+    CormorantGaramond_400Regular,
+    JosefinSans_400Regular,
+  });
 
-	if (!fontsLoaded) {
-		return <Text>Loading...</Text>;
-	}
+  if (!fontsLoaded) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
-      <ScrollView style={styles.container}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Title</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Title"
-            onChangeText={setTitle}
-            value={title}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Author</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Author"
-            onChangeText={setAuthor}
-            value={author}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            style={[styles.input, styles.multilineInput]}
-            placeholder="Enter description"
-            onChangeText={setDescription}
-            value={description}
-            multiline
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Category</Text>
-          <DropDownPicker
-            open={categoryOpen}
-            value={category}
-            items={categories.map((categoryItem, index) => ({
-              label: categoryItem,
-              value: categoryItem,
-              key: index,
-            }))}
-            onOpen={() => setCategoryOpen(true)}
-            onClose={() => setCategoryOpen(false)}
-            setValue={setCategory}
-            style={{...styles.input, zIndex: 1}}
-            dropDownContainerStyle={styles.dropDownContainer}
-          />
-        </View>
-        <View style={categoryOpen ? styles.formElementWithMargin : styles.inputContainer}>
-          <Text style={styles.label}>Condition</Text>
-          <DropDownPicker
-            open={conditionOpen}
-            value={condition}
-            items={conditions.map((conditionItem, index) => ({
-              label: conditionItem,
-              value: conditionItem,
-              key: index,
-            }))}
-            onOpen={() => setConditionOpen(true)}
-            onClose={() => setConditionOpen(false)}
-            setValue={setCondition}
-            style={{...styles.input, zIndex: 1}}
-            dropDownContainerStyle={styles.dropDownContainer}
-          />
-        </View>
-      
-        <View style={conditionOpen ? styles.formElementWithMargin : styles.inputContainer}>
-          <Button
-            buttonStyle={styles.submitButton}
-            titleStyle={styles.submitButtonText}
-            title="Add Book"
-            onPress={() => {
-              handleSubmit();
-              navigation.navigate("Home");
-            }}
-          />
-        </View>
-      </ScrollView>
+    <ScrollView style={styles.container}>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Title</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Title"
+          onChangeText={setTitle}
+          value={title}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Author</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Author"
+          onChangeText={setAuthor}
+          value={author}
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Description</Text>
+        <TextInput
+          style={[styles.input, styles.multilineInput]}
+          placeholder="Enter description"
+          onChangeText={setDescription}
+          value={description}
+          multiline
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Category</Text>
+        <DropDownPicker
+          open={categoryOpen}
+          value={category}
+          items={categories.map((categoryItem, index) => ({
+            label: categoryItem,
+            value: categoryItem,
+            key: index,
+          }))}
+          onOpen={() => setCategoryOpen(true)}
+          onClose={() => setCategoryOpen(false)}
+          setValue={setCategory}
+          style={{ ...styles.input, zIndex: 1 }}
+          dropDownContainerStyle={styles.dropDownContainer}
+        />
+      </View>
+      <View
+        style={
+          categoryOpen ? styles.formElementWithMargin : styles.inputContainer
+        }
+      >
+        <Text style={styles.label}>Condition</Text>
+        <DropDownPicker
+          open={conditionOpen}
+          value={condition}
+          items={conditions.map((conditionItem, index) => ({
+            label: conditionItem,
+            value: conditionItem,
+            key: index,
+          }))}
+          onOpen={() => setConditionOpen(true)}
+          onClose={() => setConditionOpen(false)}
+          setValue={setCondition}
+          style={{ ...styles.input, zIndex: 1 }}
+          dropDownContainerStyle={styles.dropDownContainer}
+        />
+      </View>
+
+      <View
+        style={
+          conditionOpen ? styles.formElementWithMargin : styles.inputContainer
+        }
+      >
+        <Button
+          buttonStyle={styles.submitButton}
+          titleStyle={styles.submitButtonText}
+          title="Add Book"
+          onPress={() => {
+            handleSubmit();
+            navigation.navigate("Home");
+          }}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 5,
     color: "white",
-    fontFamily: 'JosefinSans_400Regular'
+    fontFamily: "JosefinSans_400Regular",
   },
 
   input: {
@@ -206,7 +207,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 15,
     fontSize: 14,
-    backgroundColor: '#EBEBEB'
+    backgroundColor: "#EBEBEB",
   },
 
   multilineInput: {
@@ -231,5 +232,3 @@ const styles = StyleSheet.create({
     marginTop: 200,
   },
 });
-
-export default CreateListing;

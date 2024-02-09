@@ -1,22 +1,11 @@
-import { View, StyleSheet, Text, Image, Dimensions } from "react-native";
-// import { useFonts } from "expo-font";
-// import {
-// 	JosefinSans_400Regular,
-// } from "@expo-google-fonts/dev";
+import { View, StyleSheet, Image, Dimensions } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 const screenWidth = Dimensions.get("screen").width;
 const screenHeight = Dimensions.get("screen").height;
 
-// const [fontsLoaded] = useFonts({
-//     JosefinSans_400Regular,
-// });
 
-// if (!fontsLoaded) {
-//     return <Text>Loading...</Text>;
-// }
-
-export default function CarouselItem({ item }) {
+export function CarouselItem({ item }) {
 	return (
 		<View style={styles.container}>
 			<LinearGradient
@@ -30,8 +19,6 @@ export default function CarouselItem({ item }) {
 			>
 				<View style={styles.card}>
 						<Image style={styles.image} source={{ uri: item.img_url }} />
-					{/* <Text style={styles.title}>{item.book_title}</Text>
-					<Text style={styles.author}>{item.author}</Text> */}
 				</View>
 			</LinearGradient>
 		</View>

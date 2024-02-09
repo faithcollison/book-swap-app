@@ -9,10 +9,11 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+
 import supabase from "../config/supabaseClient";
 
-export default function ChatWindow({ route }) {
-  const { sender, receiver, username, session } = route.params;
+export function ChatWindow({ route }) {
+  const { sender, receiver, session } = route.params;
   const [chatMessages, setChatMessages] = useState([]);
   const [text, setText] = useState("");
 
@@ -22,19 +23,8 @@ export default function ChatWindow({ route }) {
       .select()
       .in("sender_id", [sender, receiver])
       .in("receiver_id", [sender, receiver]);
-
     return data;
   }
-
-  useEffect(() => {
-    fetchChats().then(setChatMessages);
-  }, []);
-
-  const handlePostgresChanges = async () => {
-    const res = await fetchChats();
-    setChatMessages(res);
-  };
-
   async function sendMessage() {
     let sendData = {
       sender_id: receiver,
@@ -48,7 +38,7 @@ export default function ChatWindow({ route }) {
     const { data, error } = await supabase.from("Chats").insert([sendData]);
     setText("");
   }
-
+  
   supabase
     .channel("Chats")
     .on(
@@ -58,13 +48,20 @@ export default function ChatWindow({ route }) {
     )
     .subscribe();
 
+  const handlePostgresChanges = async () => {
+    const res = await fetchChats();
+    setChatMessages(res);
+  };
+  useEffect(() => {
+    fetchChats().then(setChatMessages);
+  }, []);
   const scrollViewRef = useRef();
-
   useEffect(() => {
     setTimeout(() => {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }, 500);
   }, [chatMessages]);
+
 
   return (
     <View style={styles.container}>
@@ -84,13 +81,10 @@ export default function ChatWindow({ route }) {
           return message.sender_id === session.user.id ? (
             <View style={styles.senderMessage}>
               <Text>{message.message}</Text>
-              {/* {session.user.user_metadata.username}: {message.message} */}
             </View>
           ) : (
             <View style={styles.receiverMessage}>
-              {/* {username}: {message.message} */}
               <Text>{message.message}</Text>
-
             </View>
           );
         })}
@@ -112,17 +106,17 @@ export default function ChatWindow({ route }) {
         </KeyboardAvoidingView>
       )}
       {Platform.OS === "web" && (
-       <View style={styles.footer}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder="Send a message ..."
-            onChangeText={setText}
-            value={text}
-            onSubmitEditing={sendMessage}
-            style={styles.input}
-          />
-        </View> 
-      </View> 
+        <View style={styles.footer}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              placeholder="Send a message ..."
+              onChangeText={setText}
+              value={text}
+              onSubmitEditing={sendMessage}
+              style={styles.input}
+            />
+          </View>
+        </View>
       )}
     </View>
   );
@@ -132,7 +126,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#272727",
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   text: {
     fontFamily: "CormorantGaramond_400Regular",
@@ -164,8 +158,8 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     marginRight: 5,
-    maxWidth: '70%',
-    backgroundColor: "#2b88cf"
+    maxWidth: "70%",
+    backgroundColor: "#2b88cf",
   },
   receiverMessage: {
     backgroundColor: "#dadfe3",
@@ -180,7 +174,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 5,
     marginLeft: 5,
-    maxWidth: '70%',
+    maxWidth: "70%",
   },
   input: {
     height: 40,

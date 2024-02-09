@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from "react";
 import {
   Text,
   StyleSheet,
@@ -9,10 +10,10 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useCallback, useEffect, useState } from "react";
+
 import supabase from "../config/supabaseClient";
 
-export default function User2LibraryPage({ route }) {
+export function User2LibraryPage({ route }) {
   const navigation = useNavigation();
   const [books, setBooks] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -101,7 +102,7 @@ export default function User2LibraryPage({ route }) {
                 user1_book: info,
                 user2_book_url: book.img_url,
                 info: info,
-                user2_book_info: book
+                user2_book_info: book,
               });
               updateSwapInfo(book).then((res) => {
                 sendNotification(book, res);

@@ -1,34 +1,30 @@
 import * as React from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Dimensions } from "react-native";
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedStyle,
+  Carousel,
 } from "react-native-reanimated";
-import Carousel from "react-native-reanimated-carousel";
 
 import SButton from "../carousel/SButton";
-import { ElementsText, window } from "../carousel/constants";
+import { ElementsText } from "../carousel/constants";
 import { withAnchorPoint } from "../carousel/utils/anchor-point";
 import { fruitItems } from "../carousel/utils/items";
 
 const colors = ["#fda282", "#fdba4e", "#800015"];
 
-const PAGE_WIDTH = window.width;
-const PAGE_HEIGHT = window.width * 1.2;
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
-function Index() {
+export function Index() {
   const [isAutoPlay, setIsAutoPlay] = React.useState(false);
 
   const baseOptions = {
     vertical: false,
-    // width: PAGE_WIDTH,
-    // height: PAGE_HEIGHT,
     width: windowWidth,
     height: windowHeight,
-  }
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -45,15 +41,11 @@ function Index() {
         autoPlayInterval={1500}
         data={colors}
         renderItem={({ index, animationValue }) => (
-          <Card
-            animationValue={animationValue}
-            key={index}
-            index={index}
-          />
+          <Card animationValue={animationValue} key={index} index={index} />
         )}
       />
       <SButton
-        children={'Hi this is a button'}
+        children={"Hi this is a button"}
         visible={true}
         onPress={() => {
           setIsAutoPlay(!isAutoPlay);
@@ -66,8 +58,6 @@ function Index() {
 }
 
 const Card = ({ index, animationValue }) => {
-  // const WIDTH = PAGE_WIDTH / 1.5;
-  // const HEIGHT = PAGE_HEIGHT / 1.5;
   const WIDTH = windowWidth / 2;
   const HEIGHT = windowHeight / 2;
 
@@ -76,13 +66,13 @@ const Card = ({ index, animationValue }) => {
       animationValue.value,
       [-0.1, 0, 1],
       [0.95, 1, 1],
-      Extrapolate.CLAMP,
+      Extrapolate.CLAMP
     );
 
     const translateX = interpolate(
       animationValue.value,
       [-1, -0.2, 0, 1],
-      [0, WIDTH * 0.3, 0, 0],
+      [0, WIDTH * 0.3, 0, 0]
     );
 
     const transform = {
@@ -95,7 +85,7 @@ const Card = ({ index, animationValue }) => {
             animationValue.value,
             [-1, 0, 0.4, 1],
             [30, 0, -25, -25],
-            Extrapolate.CLAMP,
+            Extrapolate.CLAMP
           )}deg`,
         },
       ],
@@ -105,7 +95,7 @@ const Card = ({ index, animationValue }) => {
       ...withAnchorPoint(
         transform,
         { x: 0.5, y: 0.5 },
-        { width: WIDTH, height: HEIGHT },
+        { width: WIDTH, height: HEIGHT }
       ),
     };
   }, [index]);
@@ -114,34 +104,25 @@ const Card = ({ index, animationValue }) => {
     const translateX = interpolate(
       animationValue.value,
       [-1, 0, 1],
-      [0, 60, 60],
+      [0, 60, 60]
     );
 
     const translateY = interpolate(
       animationValue.value,
       [-1, 0, 1],
-      [0, -40, -40],
+      [0, -40, -40]
     );
 
-    const rotateZ = interpolate(
-      animationValue.value,
-      [-1, 0, 1],
-      [0, 0, -25],
-    );
+    const rotateZ = interpolate(animationValue.value, [-1, 0, 1], [0, 0, -25]);
 
     return {
-      transform: [
-        { translateX },
-        { translateY },
-        { rotateZ: `${rotateZ}deg` },
-      ],
+      transform: [{ translateX }, { translateY }, { rotateZ: `${rotateZ}deg` }],
     };
   }, [index]);
 
   return (
     <Animated.View
       style={{
-        // flex: 1,
         justifyContent: "center",
         alignItems: "center",
       }}
@@ -173,8 +154,7 @@ const Card = ({ index, animationValue }) => {
         source={fruitItems[index % 3]}
         style={[
           {
-            // width: WIDTH * 0.8,
-            height: HEIGHT / 1.7 * 0.5,
+            height: (HEIGHT / 1.7) * 0.5,
             borderRadius: 16,
             justifyContent: "center",
             alignItems: "center",
@@ -188,5 +168,3 @@ const Card = ({ index, animationValue }) => {
     </Animated.View>
   );
 };
-
-export default Index;

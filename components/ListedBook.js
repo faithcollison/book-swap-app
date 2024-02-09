@@ -1,19 +1,15 @@
+import { useState } from "react";
 import { Text, StyleSheet, Pressable, View } from "react-native";
-import supabase from "../config/supabaseClient";
-import { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
 
-export default function ListedBook({ route, username }) {
-  const navigation = useNavigation();
+import supabase from "../config/supabaseClient";
+
+export function ListedBook({ route, username }) {
   const { session, listing } = route;
   const [swapState, setSwapState] = useState(false);
   const [swapRequestMade, setSwapRequestMade] = useState(false);
-  console.log(username)
+
   
-
-
-
   async function checkSwapExists() {
     const { data, error } = await supabase
       .from("Pending_Swaps")
@@ -29,7 +25,6 @@ export default function ListedBook({ route, username }) {
     }
   }
 
-  // inserts info into pending swaps
   const reqSwap = async () => {
     if (swapState) {
       return;
@@ -76,14 +71,13 @@ export default function ListedBook({ route, username }) {
       <Pressable 
         onPress={() => {
           Promise.all([checkSwapExists(), reqSwap()]).then(
-            ([checkResults, reqResults]) => {
+            ([reqResults]) => {
               sendNotification(reqResults);
             }
           );
           setSwapRequestMade(true)
         }}
         style={styles.descriptionButton}
-       
       >
         <View >
           <Text  style={swapRequestMade ? styles.requestSwapButtonPressed : styles.text}> {swapRequestMade? "Request Made": "Request swap"}</Text>
@@ -123,5 +117,4 @@ const styles = StyleSheet.create({
     textAlign: "center",
     padding: 10,
   },
-  
 });

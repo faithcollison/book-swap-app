@@ -1,11 +1,5 @@
 import React from "react";
 import { View, Text, Pressable } from "react-native";
-import { TouchableOpacity } from "react-native";
-
-// export const ISButtonProps = {
-//   visible: undefined,
-//   onPress: undefined,
-// }
 
 const SButton = (props) => {
   const { children, visible = true, onPress } = props;

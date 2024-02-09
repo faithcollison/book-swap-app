@@ -1,13 +1,13 @@
+import { useState } from "react";
 import { StyleSheet, View, Image, Pressable } from "react-native";
-import { ScreenWidth } from "react-native-elements/dist/helpers";
-import supabase from "../config/supabaseClient";
 import { useNavigation } from "@react-navigation/native";
-
+import { ScreenWidth } from "react-native-elements/dist/helpers";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { useState } from "react";
 
-export default function BookListCard({ listing, id }) {
+import supabase from "../config/supabaseClient";
+
+export function BookListCard({ listing, id }) {
   const [wishListed, setWishListed] = useState(false);
   const navigation = useNavigation();
 
@@ -25,28 +25,23 @@ export default function BookListCard({ listing, id }) {
         .eq("user_id", id);
       return data[0].wishlist;
     }
-
     async function updateUserWishList(res) {
-        if (res.includes(listing.book_title)) {
-          return;
-        }
-     
-    const updatedWishlist = [...res, listing.book_title];
-
-    const { data, error } = await supabase
-    .from("Users")
-    .update({ wishlist: updatedWishlist })
-    .eq("user_id", id);
-}
-
-async function removeItemFromWishList(res) {
-    const updatedWishlist = res.filter((item) => item !== listing.book_title);
-  
-    const { data, error } = await supabase
-      .from("Users")
-      .update({ wishlist: updatedWishlist })
-      .eq("user_id", id);
-  }
+      if (res.includes(listing.book_title)) {
+        return;
+      }
+      const updatedWishlist = [...res, listing.book_title];
+      const { data, error } = await supabase
+        .from("Users")
+        .update({ wishlist: updatedWishlist })
+        .eq("user_id", id);
+    }
+    async function removeItemFromWishList(res) {
+      const updatedWishlist = res.filter((item) => item !== listing.book_title);
+      const { data, error } = await supabase
+        .from("Users")
+        .update({ wishlist: updatedWishlist })
+        .eq("user_id", id);
+    }
 
     if (!wishListed) {
       setWishListed(true);
@@ -65,7 +60,11 @@ async function removeItemFromWishList(res) {
 
   return (
     <View style={styles.cardContainer}>
-      <Pressable onPress={() => navigation.navigate("AvailableListings", {listing: listing})}>
+      <Pressable
+        onPress={() =>
+          navigation.navigate("AvailableListings", { listing: listing })
+        }
+      >
         <Image style={styles.bookCard} source={{ uri: listing.img_url }} />
       </Pressable>
       <Pressable
@@ -110,7 +109,7 @@ const styles = StyleSheet.create({
     width: ScreenWidth / 3,
     padding: 5,
     justifyContent: "center",
-    alignItems: 'center',
+    alignItems: "center",
   },
   heartContainer: {
     position: "absolute",

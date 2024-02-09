@@ -1,4 +1,3 @@
-import { ScaledSize } from "react-native";
 import { Dimensions } from "react-native";
 
 import { isWeb } from "../utils";

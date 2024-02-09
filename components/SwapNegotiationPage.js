@@ -1,23 +1,13 @@
-import {
-  Text,
-  StyleSheet,
-  Pressable,
-  View,
-  Dimensions,
-  Image,
-} from "react-native";
-import {
-  ScreenWidth,
-  ScreenHeight,
-  color,
-} from "react-native-elements/dist/helpers";
-import { useNavigation } from "@react-navigation/native";
-import supabase from "../config/supabaseClient";
 import { useEffect, useState } from "react";
+import { Text, StyleSheet, Pressable, View, Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { ScreenWidth } from "react-native-elements/dist/helpers";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { JosefinSans_400Regular } from "@expo-google-fonts/dev";
 
-export default function SwapNegotiationPage({ route }) {
+import supabase from "../config/supabaseClient";
+
+export function SwapNegotiationPage({ route }) {
   const [title, setTitle] = useState([]);
   const navigation = useNavigation();
   const [user1ProfilePic, setUser1ProfilePic] = useState();
@@ -43,7 +33,6 @@ export default function SwapNegotiationPage({ route }) {
     setReconsidered(false);
   }, [reconsidered, user2_book_info, key]);
 
-  // MVP ONLY - NEEDS REFACTORING TO BE SCALABLE!
   useEffect(() => {
     switch (session.user.id) {
       case "10240ee4-1b43-4749-afbe-1356c83af4da":
@@ -126,43 +115,64 @@ export default function SwapNegotiationPage({ route }) {
     }
   }, [user2_book, user2BookUrl]);
 
-    async function getTransferData() {
-        const { data, error } = await supabase
-            .from('Pending_Swaps')
-            .select()
-            .eq('pending_swap_id', user1_book ? user1_book.pending_swap_id : info.swap_offer_id);
+  async function getTransferData() {
+    const { data, error } = await supabase
+      .from("Pending_Swaps")
+      .select()
+      .eq(
+        "pending_swap_id",
+        user1_book ? user1_book.pending_swap_id : info.swap_offer_id
+      );
 
-        return data[0];
-    }
+    return data[0];
+  }
 
-    async function updateSwapHistory(info) {
-        const { data, error } = await supabase.from('Swap_History').insert([info]);
-    }
+  async function updateSwapHistory(info) {
+    const { data, error } = await supabase.from("Swap_History").insert([info]);
+  }
 
-    async function removeData(infoResponse) {
-        await Promise.all([supabase.from('Pending_Swaps').delete().eq('pending_swap_id', infoResponse.pending_swap_id), supabase.from('Listings').delete().eq('book_id', infoResponse.user1_listing_id), supabase.from('Listings').delete().eq('book_id', infoResponse.user2_listing_id)]);
-    }
+  async function removeData(infoResponse) {
+    await Promise.all([
+      supabase
+        .from("Pending_Swaps")
+        .delete()
+        .eq("pending_swap_id", infoResponse.pending_swap_id),
+      supabase
+        .from("Listings")
+        .delete()
+        .eq("book_id", infoResponse.user1_listing_id),
+      supabase
+        .from("Listings")
+        .delete()
+        .eq("book_id", infoResponse.user2_listing_id),
+    ]);
+  }
 
-    async function rejectBook(info) {
-        await Promise.all([
-            supabase.from('Notifications').insert([
-                {
-                    type: 'Offer_Rejected',
-                    user_id: info.user1_id === session.user.id ? info.user2_id : info.user1_id,
-                    username: session.user.user_metadata.username,
-                },
-            ]),
-            supabase.from('Notifications').delete().eq('swap_offer_id', info.pending_swap_id),
-            supabase.from('Pending_Swaps').delete().eq('pending_swap_id', info.pending_swap_id),
-        ]);
-    }
+  async function rejectBook(info) {
+    await Promise.all([
+      supabase.from("Notifications").insert([
+        {
+          type: "Offer_Rejected",
+          user_id:
+            info.user1_id === session.user.id ? info.user2_id : info.user1_id,
+          username: session.user.user_metadata.username,
+        },
+      ]),
+      supabase
+        .from("Notifications")
+        .delete()
+        .eq("swap_offer_id", info.pending_swap_id),
+      supabase
+        .from("Pending_Swaps")
+        .delete()
+        .eq("pending_swap_id", info.pending_swap_id),
+    ]);
+  }
 
   return (
     <View style={styles.page}>
       <View>
-        <Text style={styles.heading}>
-          Your Offer
-        </Text>
+        <Text style={styles.heading}>Your Offer</Text>
       </View>
       <View style={styles.booksAndProfilePics}>
         <View style={styles.profilePics}>
@@ -203,8 +213,7 @@ export default function SwapNegotiationPage({ route }) {
           </Text>
           <Image
             source={{
-              uri:
-                user2BookUrl || user2_book_url 
+              uri: user2BookUrl || user2_book_url,
             }}
             style={styles.bookCard}
           />

@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-const Account = () => {
+export const Account = () => {
   return (
     <View>
       <Text>You're in the account screen!</Text>
@@ -9,4 +9,3 @@ const Account = () => {
   );
 };
 
-export default Account;

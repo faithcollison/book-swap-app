@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, Image } from "react-native";
 import { Input } from "react-native-elements";
 import SelectDropdown from "react-native-select-dropdown";
 
-const Form = ({ route }) => {
+export const Form = ({ route }) => {
   const { title, authors, description, imgUrl } = route.params || "";
-  const [category, setCategory] = useState("");
 
   const conditions = ["Good", "Excellent", "Fair", "Poor"];
   const categories = [
@@ -17,7 +16,7 @@ const Form = ({ route }) => {
     "Fantasy",
     "Thriller",
   ];
-  console.log(title ? false : true);
+  
   return (
     <View>
       <Text>You're in the Form screen!</Text>
@@ -51,4 +50,3 @@ const Form = ({ route }) => {
   );
 };
 
-export default Form;
